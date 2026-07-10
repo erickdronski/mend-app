@@ -53,8 +53,11 @@ export function Screen({
   const pad = padded ? { paddingHorizontal: 20, paddingTop: 16 } : null;
   const top = safeTop ? { paddingTop: insets.top + (padded ? 8 : 0) } : null;
   if (!scroll) {
+    // Keep bottom-anchored CTAs clear of the home indicator.
     return (
-      <View style={[{ flex: 1, backgroundColor: p.surface }, pad, top]}>{children}</View>
+      <View style={[{ flex: 1, backgroundColor: p.surface, paddingBottom: insets.bottom }, pad, top]}>
+        {children}
+      </View>
     );
   }
   return (

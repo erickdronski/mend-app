@@ -12,9 +12,36 @@ import {
   getProfile,
   getPulses,
   getSessions,
+  restoreLocal,
+  type BackupState,
 } from "./store";
 
 let lastBackup = 0;
+
+/**
+ * Pull the signed-in user's backup from Supabase into local storage. Called
+ * on sign-in when this device has no local profile (reinstall / new phone)
+ * so the account actually restores progress, as the onboarding copy promises.
+ * Returns true if a profile was restored.
+ */
+export async function restoreFromBackup(): Promise<boolean> {
+  try {
+    const { data: auth } = await supabase.auth.getSession();
+    const user = auth.session?.user;
+    if (!user) return false;
+    const { data } = await supabase
+      .from("mend_state")
+      .select("state")
+      .eq("user_id", user.id)
+      .maybeSingle();
+    const state = data?.state as BackupState | undefined;
+    if (!state || !state.profile) return false;
+    await restoreLocal(state);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 export async function backupIfSignedIn() {
   const now = Date.now();

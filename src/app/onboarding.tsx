@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 import { useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -104,6 +105,7 @@ export default function Onboarding() {
   if (step === "welcome") {
     return (
       <LinearGradient colors={["#24402c", "#38553f", "#2e4636"]} style={{ flex: 1 }}>
+        <StatusBar style="light" />
         <View style={{ flex: 1, paddingHorizontal: 28, paddingTop: insets.top + 80, paddingBottom: insets.bottom + 28 }}>
           <Rise>
             <Text style={{ fontSize: 56, fontWeight: "800", color: "#f4f4ee", letterSpacing: -1 }}>

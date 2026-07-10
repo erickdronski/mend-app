@@ -77,6 +77,28 @@ export async function clearAllLocal() {
   await AsyncStorage.multiRemove(Object.values(KEYS));
 }
 
+/** The full snapshot backed up to Supabase and restored on a new device. */
+export type BackupState = {
+  profile?: Profile | null;
+  sessions?: SessionRecord[];
+  plan?: Plan;
+  challengesDone?: string[];
+  pulses?: PulseEntry[];
+  journey?: JourneyState;
+};
+
+/** Write a backup snapshot into local storage (restore on sign-in / reinstall). */
+export async function restoreLocal(state: BackupState) {
+  const pairs: [string, string][] = [];
+  if (state.profile) pairs.push([KEYS.profile, JSON.stringify(state.profile)]);
+  if (state.sessions) pairs.push([KEYS.sessions, JSON.stringify(state.sessions)]);
+  if (state.plan) pairs.push([KEYS.plan, JSON.stringify(state.plan)]);
+  if (state.challengesDone) pairs.push([KEYS.challengesDone, JSON.stringify(state.challengesDone)]);
+  if (state.pulses) pairs.push([KEYS.pulses, JSON.stringify(state.pulses)]);
+  if (state.journey) pairs.push([KEYS.journey, JSON.stringify(state.journey)]);
+  if (pairs.length) await AsyncStorage.multiSet(pairs);
+}
+
 // ——— local daily answer (guests / solo, before a shared space exists) ———
 type LocalDaily = { date: string; answer: string };
 export async function getLocalDaily(dateKey: string): Promise<string | null> {

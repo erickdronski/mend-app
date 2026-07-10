@@ -23,9 +23,13 @@ function LockGate({ children }: { children: ReactNode }) {
   async function tryUnlock() {
     if (prompting.current) return;
     prompting.current = true;
-    const ok = await authenticate();
-    prompting.current = false;
-    if (ok) setLocked(false);
+    try {
+      if (await authenticate()) setLocked(false);
+    } finally {
+      // Always reset, even if authenticate() throws, so the Unlock button and
+      // the AppState re-prompt can never be permanently disabled.
+      prompting.current = false;
+    }
   }
 
   useEffect(() => {
@@ -80,12 +84,22 @@ function Gate({ children }: { children: ReactNode }) {
   const [hasProfile, setHasProfile] = useState<boolean | null>(null);
 
   useEffect(() => {
-    getProfile().then((p) => setHasProfile(Boolean(p)));
+    (async () => {
+      let p = await getProfile();
+      // Signed in on a device with no local profile (reinstall / new phone):
+      // pull the backup down before deciding where to route, so the account
+      // actually restores progress as promised.
+      if (!p && session) {
+        const { restoreFromBackup } = await import("@/lib/sync");
+        if (await restoreFromBackup()) p = await getProfile();
+      }
+      setHasProfile(Boolean(p));
+    })();
     getLanguage().then((lang) => {
       if (lang && lang !== i18n.language) i18n.changeLanguage(lang);
     });
-    // re-check when the route changes (onboarding just saved the profile)
-  }, [segments]);
+    // re-check when the route or session changes
+  }, [segments, session]);
 
   useEffect(() => {
     if (!ready || hasProfile === null) return;
@@ -93,13 +107,24 @@ function Gate({ children }: { children: ReactNode }) {
     const inAuth = first === "sign-in";
     const inOnboarding = first === "onboarding";
     const inSafety = first === "safety";
-    // Onboarding owns the whole first run (welcome, tour, deal, gate,
-    // account, names). Safety stays reachable from the gate step.
-    if (!hasProfile || (!session && !guest)) {
+
+    // Signed in but no profile on this device (reinstall / new phone, and the
+    // backup restore found nothing): force profile creation. Overrides even
+    // the sign-in screen so a returning user is never stranded there.
+    if (session && !hasProfile) {
+      if (!inOnboarding && !inSafety) router.replace("/onboarding");
+      return;
+    }
+    // Signed out and not a guest: onboarding owns first run, but /sign-in
+    // stays open (they may be signing in) and /safety stays reachable.
+    if (!session && !guest) {
       if (!inOnboarding && !inAuth && !inSafety) router.replace("/onboarding");
       return;
     }
-    if (inAuth || inOnboarding) router.replace("/");
+    // Fully set up (real session + profile, or guest + profile): leave
+    // onboarding for the app, and leave the sign-in screen only once a real
+    // session exists, so a guest can sit on /sign-in to upgrade to an account.
+    if (inOnboarding || (inAuth && session)) router.replace("/");
   }, [ready, session, guest, hasProfile, segments, router]);
 
   return <>{children}</>;

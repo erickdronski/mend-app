@@ -63,21 +63,23 @@ export default function Today() {
   const reload = useCallback(() => {
     (async () => {
       setMyId(session?.user.id ?? null);
-      const [profile, sessions, plan, challengesDone, pulses, journey] = await Promise.all([
+      // Local reads first, then paint. The screen never waits on the network.
+      const [profile, sessions, plan, challengesDone, pulses, journey, local] = await Promise.all([
         getProfile(),
         getSessions(),
         getPlan(),
         getChallengesDone(),
         getPulses(),
         getJourney(),
+        getLocalDaily(todayKey()),
       ]);
       setName(profile?.a?.trim() || "");
       setHereForYou(getSituation(profile?.situation)?.hereForYou ?? "");
-
-      // one next step from the journey engine (same logic as the Journey tab)
       computeNextStep({ profile, sessions, plan, challengesDone, pulses }, journey);
+      setLocalAnswer(local);
+      setLoaded(true);
 
-      // daily question: shared reveal if in a space, otherwise a local answer
+      // Shared space + today's answers load after first paint, in the background.
       if (session) {
         const s = await getMySpace();
         setSpace(s);
@@ -87,8 +89,6 @@ export default function Today() {
       } else {
         setSpace(null);
       }
-      setLocalAnswer(await getLocalDaily(todayKey()));
-      setLoaded(true);
     })().catch(() => setLoaded(true));
   }, [session]);
 
