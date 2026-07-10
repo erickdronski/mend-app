@@ -1,7 +1,7 @@
 import { Pressable, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { tracks } from "@/lib/content/tracks";
-import { Card, H1, H2, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Card, H1, H2, Muted, P, Screen, usePalette, pressFx } from "@/components/ui";
 
 export default function Tracks() {
   const p = usePalette();
@@ -16,7 +16,7 @@ export default function Tracks() {
       </P>
       <View style={{ marginTop: 18, gap: 12 }}>
         {tracks.map((t) => (
-          <Pressable key={t.slug} onPress={() => router.push(`/tracks/${t.slug}`)}>
+          <Pressable key={t.slug} onPress={() => router.push(`/tracks/${t.slug}`)} style={pressFx}>
             <Card>
               <H2>{t.title}</H2>
               <Muted style={{ marginTop: 2, color: p.mossDeep, fontWeight: "600" }}>{t.subtitle}</Muted>

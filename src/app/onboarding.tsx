@@ -29,7 +29,7 @@ export default function Onboarding() {
 
   if (step === "deal") {
     return (
-      <Screen>
+      <Screen safeTop>
         <Muted style={{ textTransform: "uppercase", letterSpacing: 2, fontWeight: "700", color: p.ember }}>
           Before anything else
         </Muted>
@@ -74,7 +74,7 @@ export default function Onboarding() {
 
   if (step === "gate") {
     return (
-      <Screen>
+      <Screen safeTop>
         <Muted style={{ textTransform: "uppercase", letterSpacing: 2, fontWeight: "700", color: p.ember }}>
           One honest question
         </Muted>
@@ -97,7 +97,7 @@ export default function Onboarding() {
   }
 
   return (
-    <Screen>
+    <Screen safeTop>
       <H1>Who's mending?</H1>
       <P style={{ marginTop: 10 }}>
         First names only. They label the timer and the games; nothing leaves this phone without

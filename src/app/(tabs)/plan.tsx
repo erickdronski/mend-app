@@ -27,10 +27,10 @@ export default function PlanScreen() {
     }, [])
   );
 
-  if (!plan) return <Screen scroll={false}>{null}</Screen>;
+  if (!plan) return <Screen scroll={false} safeTop>{null}</Screen>;
 
   return (
-    <Screen>
+    <Screen safeTop>
       <H1 style={{ marginTop: 12 }}>The game plan</H1>
       <P style={{ marginTop: 10 }}>
         Marriages aren&apos;t repaired in sessions. They&apos;re repaired between them: the rituals

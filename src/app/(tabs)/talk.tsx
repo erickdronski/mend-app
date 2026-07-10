@@ -231,7 +231,7 @@ export default function Talk() {
   // ————— setup —————
   if (phase === "setup") {
     return (
-      <Screen>
+      <Screen safeTop>
         <Muted style={{ marginTop: 8, textTransform: "uppercase", letterSpacing: 2, fontWeight: "700", color: p.mossDeep }}>
           New session
         </Muted>
@@ -365,7 +365,7 @@ export default function Talk() {
   // ————— rules —————
   if (phase === "rules") {
     return (
-      <Screen>
+      <Screen safeTop>
         <H1 style={{ marginTop: 8 }}>Five ground rules</H1>
         <Muted style={{ marginTop: 8 }}>
           Read them out loud: one of you reads the odd ones, the other the even. Yes, really.
@@ -388,7 +388,7 @@ export default function Talk() {
   // ————— checkin —————
   if (phase === "checkin") {
     return (
-      <Screen>
+      <Screen safeTop>
         <H1 style={{ marginTop: 8 }}>One word each</H1>
         <P style={{ marginTop: 10 }}>
           How are you arriving at this conversation? Tired, hopeful, nervous, guarded, ready. One
@@ -421,7 +421,7 @@ export default function Talk() {
     const r = 84;
     const C = 2 * Math.PI * r;
     return (
-      <Screen>
+      <Screen safeTop>
         <Muted style={{ marginTop: 8, textAlign: "center" }}>
           Round {round} of {rounds} · {source?.title}
         </Muted>
@@ -501,7 +501,7 @@ export default function Talk() {
   // ————— reflect —————
   if (phase === "reflect") {
     return (
-      <Screen>
+      <Screen safeTop>
         <Muted style={{ marginTop: 8, textTransform: "uppercase", letterSpacing: 2, fontWeight: "700", color: p.mossDeep }}>
           The floor passes back
         </Muted>
@@ -544,7 +544,7 @@ export default function Talk() {
   // ————— break —————
   if (phase === "break") {
     return (
-      <Screen>
+      <Screen safeTop>
         <Muted style={{ marginTop: 8, textAlign: "center", textTransform: "uppercase", letterSpacing: 2, fontWeight: "700", color: p.ember }}>
           A pause, not an exit
         </Muted>
@@ -581,7 +581,7 @@ export default function Talk() {
   // ————— ended kindly —————
   if (phase === "ended") {
     return (
-      <Screen>
+      <Screen safeTop>
         <H1 style={{ marginTop: 24, textAlign: "center" }}>Stopping was the right call</H1>
         <P style={{ marginTop: 12, textAlign: "center" }}>
           A conversation that ends kindly before it ends badly is a win, not a failure. Pick a
@@ -596,7 +596,7 @@ export default function Talk() {
   // ————— appreciate —————
   if (phase === "appreciate") {
     return (
-      <Screen>
+      <Screen safeTop>
         <H1 style={{ marginTop: 8 }}>One appreciation each</H1>
         <P style={{ marginTop: 10 }}>
           Something your partner did in this conversation (or this week) that you&apos;re grateful
@@ -626,7 +626,7 @@ export default function Talk() {
   // ————— commit —————
   if (phase === "commit") {
     return (
-      <Screen>
+      <Screen safeTop>
         <H1 style={{ marginTop: 8 }}>One small commitment each</H1>
         <P style={{ marginTop: 10 }}>
           Small and concrete beats grand and vague: &ldquo;I&apos;ll handle bedtime Tuesday&rdquo;
@@ -656,7 +656,7 @@ export default function Talk() {
 
   // ————— done —————
   return (
-    <Screen>
+    <Screen safeTop>
       <Muted style={{ marginTop: 20, textAlign: "center", textTransform: "uppercase", letterSpacing: 2, fontWeight: "700", color: p.mossDeep }}>
         Session complete
       </Muted>

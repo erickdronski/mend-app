@@ -1,6 +1,6 @@
 import { Linking, Pressable, Text, View } from "react-native";
 import { books, freeResources, podcasts } from "@/lib/content/library";
-import { Card, H1, H2, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Card, H1, H2, Muted, P, Screen, usePalette, pressFx } from "@/components/ui";
 
 export default function Library() {
   const p = usePalette();
@@ -32,7 +32,7 @@ export default function Library() {
       <H2 style={{ marginTop: 24 }}>Free and nearly free</H2>
       <View style={{ marginTop: 10, gap: 10 }}>
         {freeResources.map((r) => (
-          <Pressable key={r.name} onPress={() => Linking.openURL(r.url)}>
+          <Pressable key={r.name} onPress={() => Linking.openURL(r.url)} style={pressFx}>
             <Card>
               <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                 <Text style={{ fontWeight: "700", color: p.ink, fontSize: 15, flex: 1 }}>{r.name}</Text>

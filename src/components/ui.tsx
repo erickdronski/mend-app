@@ -27,29 +27,42 @@ export function Screen({
   children,
   scroll = true,
   padded = true,
+  safeTop = false,
 }: {
   children: ReactNode;
   scroll?: boolean;
   padded?: boolean;
+  /** For screens without a native header (tabs, auth, onboarding): keep
+   *  content clear of the notch / Dynamic Island. */
+  safeTop?: boolean;
 }) {
   const p = usePalette();
   const insets = useSafeAreaInsets();
   const pad = padded ? { paddingHorizontal: 20, paddingTop: 16 } : null;
+  const top = safeTop ? { paddingTop: insets.top + (padded ? 8 : 0) } : null;
   if (!scroll) {
     return (
-      <View style={[{ flex: 1, backgroundColor: p.surface }, pad]}>{children}</View>
+      <View style={[{ flex: 1, backgroundColor: p.surface }, pad, top]}>{children}</View>
     );
   }
   return (
     <ScrollView
       style={{ flex: 1, backgroundColor: p.surface }}
-      contentContainerStyle={[pad, { paddingBottom: insets.bottom + 40 }]}
+      contentContainerStyle={[pad, top, { paddingBottom: insets.bottom + 40 }]}
       keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="on-drag"
+      automaticallyAdjustKeyboardInsets
     >
       {children}
     </ScrollView>
   );
 }
+
+/** Standard pressed-state feedback for tappable cards and rows. */
+export const pressFx = ({ pressed }: { pressed: boolean }) => ({
+  opacity: pressed ? 0.85 : 1,
+  transform: [{ scale: pressed ? 0.995 : 1 }],
+});
 
 export function H1({ children, style }: { children: ReactNode; style?: StyleProp<TextStyle> }) {
   const p = usePalette();
@@ -162,6 +175,9 @@ export function Input(props: React.ComponentProps<typeof TextInput>) {
       style={[
         s.input,
         { backgroundColor: p.raised, borderColor: p.line, color: p.ink },
+        // iOS multiline inputs need explicit top padding + height to not
+        // render as a cramped single line
+        props.multiline && { paddingTop: 12, minHeight: 64, textAlignVertical: "top" as const },
         props.style,
       ]}
     />

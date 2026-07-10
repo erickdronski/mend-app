@@ -1,7 +1,7 @@
 import { Pressable, View } from "react-native";
 import { useRouter, type Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { Card, H1, H2, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Card, H1, H2, Muted, P, Screen, usePalette, pressFx } from "@/components/ui";
 
 const items: { href: Href; icon: keyof typeof Ionicons.glyphMap; title: string; body: string }[] = [
   {
@@ -28,7 +28,7 @@ export default function Play() {
   const p = usePalette();
   const router = useRouter();
   return (
-    <Screen>
+    <Screen safeTop>
       <H1 style={{ marginTop: 12 }}>Play your way back</H1>
       <P style={{ marginTop: 10 }}>
         Struggling couples don&apos;t just need harder conversations. They need easier ones:
@@ -37,7 +37,7 @@ export default function Play() {
       </P>
       <View style={{ marginTop: 20, gap: 12 }}>
         {items.map((it) => (
-          <Pressable key={String(it.href)} onPress={() => router.push(it.href)}>
+          <Pressable key={String(it.href)} onPress={() => router.push(it.href)} style={pressFx}>
             <Card>
               <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
                 <Ionicons name={it.icon} size={22} color={p.moss} />

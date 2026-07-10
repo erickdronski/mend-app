@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { stories, storiesNote } from "@/lib/content/stories";
-import { Card, H1, H2, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Card, H1, H2, Muted, P, Screen, usePalette, pressFx } from "@/components/ui";
 
 export default function Stories() {
   const p = usePalette();
@@ -24,7 +24,7 @@ export default function Stories() {
           const isOpen = open === s.id;
           return (
             <Card key={s.id}>
-              <Pressable onPress={() => setOpen(isOpen ? null : s.id)}>
+              <Pressable onPress={() => setOpen(isOpen ? null : s.id)} style={pressFx}>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", gap: 10 }}>
                   <H2 style={{ flex: 1 }}>{s.title}</H2>
                   <Muted>{s.years}</Muted>

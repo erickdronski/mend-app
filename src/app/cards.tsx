@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { decks, type Deck } from "@/lib/content/cards";
-import { Btn, Card, H1, H2, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Btn, Card, H1, H2, Muted, P, Screen, usePalette, pressFx } from "@/components/ui";
 
 function shuffle<T>(arr: T[]): T[] {
   const out = [...arr];
@@ -41,7 +41,7 @@ export default function Cards() {
         </P>
         <View style={{ marginTop: 18, gap: 12 }}>
           {decks.map((d) => (
-            <Pressable key={d.id} onPress={() => openDeck(d)}>
+            <Pressable key={d.id} onPress={() => openDeck(d)} style={pressFx}>
               <Card>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                   <H2 style={{ flex: 1 }}>{d.title}</H2>
@@ -97,7 +97,7 @@ export default function Cards() {
   return (
     <Screen scroll={false}>
       <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 8 }}>
-        <Pressable onPress={() => setDeck(null)}>
+        <Pressable onPress={() => setDeck(null)} style={pressFx}>
           <Muted>← All decks</Muted>
         </Pressable>
         <Muted>
@@ -119,7 +119,7 @@ export default function Cards() {
                 <P>{card.followUp}</P>
               </View>
             ) : (
-              <Pressable onPress={() => setShowFollowUp(true)}>
+              <Pressable onPress={() => setShowFollowUp(true)} style={pressFx}>
                 <Text style={{ color: p.ember, fontWeight: "600", marginTop: 14, textDecorationLine: "underline" }}>
                   There&apos;s a follow-up, when you&apos;re ready
                 </Text>

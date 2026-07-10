@@ -10,7 +10,7 @@ import {
   type LensId,
 } from "@/lib/content/quiz";
 import { getProfile, saveProfile } from "@/lib/store";
-import { Btn, Card, H1, H2, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Btn, Card, H1, H2, Muted, P, Screen, usePalette, pressFx } from "@/components/ui";
 
 type Stage = "intro" | "who" | "lens" | "conflict" | "result";
 
@@ -128,14 +128,14 @@ export default function Quiz() {
         <View style={{ marginTop: 16, gap: 10 }}>
           {isLens
             ? lensQuestions[qIndex].options.map((o, i) => (
-                <Pressable key={i} onPress={() => pickLens(o.lens)}>
+                <Pressable key={i} onPress={() => pickLens(o.lens)} style={pressFx}>
                   <Card style={{ paddingVertical: 14 }}>
                     <P style={{ fontSize: 14.5 }}>{o.text}</P>
                   </Card>
                 </Pressable>
               ))
             : conflictQuestions[qIndex].options.map((o, i) => (
-                <Pressable key={i} onPress={() => pickRole(o.role)}>
+                <Pressable key={i} onPress={() => pickRole(o.role)} style={pressFx}>
                   <Card style={{ paddingVertical: 14 }}>
                     <P style={{ fontSize: 14.5 }}>{o.text}</P>
                   </Card>

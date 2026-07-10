@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { memoryLane, partnerQuiz, wouldYouRather } from "@/lib/content/games";
 import { getProfile } from "@/lib/store";
-import { Btn, Card, H1, H2, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Btn, Card, H1, H2, Muted, P, Screen, usePalette, pressFx } from "@/components/ui";
 
 type Mode = "menu" | "quiz-setup" | "quiz-play" | "quiz-done" | "wyr" | "memory";
 const QUESTIONS_PER_GUESSER = 7;
@@ -67,7 +67,7 @@ export default function Games() {
           mood to start.
         </P>
         <View style={{ marginTop: 18, gap: 12 }}>
-          <Pressable onPress={() => setMode("quiz-setup")}>
+          <Pressable onPress={() => setMode("quiz-setup")} style={pressFx}>
             <Card tone="fern">
               <H2>Do you still know me?</H2>
               <Muted style={{ marginTop: 6 }}>
@@ -77,6 +77,7 @@ export default function Games() {
             </Card>
           </Pressable>
           <Pressable
+            style={pressFx}
             onPress={() => {
               setWyrList(shuffle(wouldYouRather));
               setWyrIndex(0);
@@ -92,6 +93,7 @@ export default function Games() {
             </Card>
           </Pressable>
           <Pressable
+            style={pressFx}
             onPress={() => {
               setMemIndex(0);
               setMode("memory");
@@ -113,7 +115,7 @@ export default function Games() {
   if (mode === "quiz-setup") {
     return (
       <Screen>
-        <Pressable onPress={() => setMode("menu")}>
+        <Pressable onPress={() => setMode("menu")} style={pressFx}>
           <Muted style={{ marginTop: 8 }}>← All games</Muted>
         </Pressable>
         <H1 style={{ marginTop: 10 }}>Do you still know me?</H1>
@@ -227,7 +229,7 @@ export default function Games() {
     return (
       <Screen scroll={false}>
         <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 8 }}>
-          <Pressable onPress={() => setMode("menu")}>
+          <Pressable onPress={() => setMode("menu")} style={pressFx}>
             <Muted>← All games</Muted>
           </Pressable>
           <Muted>
@@ -269,7 +271,7 @@ export default function Games() {
   return (
     <Screen scroll={false}>
       <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 8 }}>
-        <Pressable onPress={() => setMode("menu")}>
+        <Pressable onPress={() => setMode("menu")} style={pressFx}>
           <Muted>← All games</Muted>
         </Pressable>
         <Muted>

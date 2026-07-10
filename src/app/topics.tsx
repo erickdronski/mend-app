@@ -1,7 +1,7 @@
 import { Pressable, View } from "react-native";
 import { useRouter } from "expo-router";
 import { topicCategories, topics } from "@/lib/content/topics";
-import { Card, H1, H2, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Card, H1, H2, Muted, P, Screen, usePalette, pressFx } from "@/components/ui";
 import { Text } from "react-native";
 
 export default function Topics() {
@@ -24,7 +24,7 @@ export default function Topics() {
             {topics
               .filter((t) => t.category === cat)
               .map((t) => (
-                <Pressable key={t.id} onPress={() => router.push(`/talk?topic=${t.id}`)}>
+                <Pressable key={t.id} onPress={() => router.push(`/talk?topic=${t.id}`)} style={pressFx}>
                   <Card>
                     <H2>{t.title}</H2>
                     <Muted style={{ marginTop: 6 }}>{t.why}</Muted>

@@ -56,14 +56,14 @@ export default function JourneyScreen() {
 
   useFocusEffect(reload);
 
-  if (!ctx || !journey) return <Screen scroll={false}>{null}</Screen>;
+  if (!ctx || !journey) return <Screen scroll={false} safeTop>{null}</Screen>;
 
   // ——— graduated ———
   if (journey.graduatedAt) {
     const base = pulseAvg(ctx.pulses, 1, 0);
     const final = pulseAvg(ctx.pulses, 5, 0);
     return (
-      <Screen>
+      <Screen safeTop>
         <H1 style={{ marginTop: 24 }}>{t("journey.graduated")}</H1>
         <P style={{ marginTop: 12 }}>
           You did the unglamorous thing: showed up, week after week, for months. The rituals are
@@ -94,7 +94,7 @@ export default function JourneyScreen() {
   const names = ctx.profile ? [ctx.profile.a, ctx.profile.b].filter(Boolean).join(" & ") : "";
 
   return (
-    <Screen>
+    <Screen safeTop>
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: 8 }}>
         <Text style={{ fontSize: 24, fontWeight: "800", color: p.ink }}>
           Mend<Text style={{ color: p.ember }}>.</Text>

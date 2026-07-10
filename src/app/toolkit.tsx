@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { techniques } from "@/lib/content/techniques";
-import { Card, H1, H2, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Card, H1, H2, Muted, P, Screen, usePalette, pressFx } from "@/components/ui";
 
 export default function Toolkit() {
   const p = usePalette();
@@ -19,7 +19,7 @@ export default function Toolkit() {
           const isOpen = open === t.id;
           return (
             <Card key={t.id}>
-              <Pressable onPress={() => setOpen(isOpen ? null : t.id)}>
+              <Pressable onPress={() => setOpen(isOpen ? null : t.id)} style={pressFx}>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                   <H2 style={{ flex: 1 }}>{t.title}</H2>
                   <Text style={{ color: p.muted, fontSize: 20 }}>{isOpen ? "−" : "+"}</Text>

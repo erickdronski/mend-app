@@ -131,7 +131,7 @@ export default function SpaceHub() {
   }
 
   return (
-    <Screen>
+    <Screen safeTop>
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: 8 }}>
         <Text style={{ fontSize: 24, fontWeight: "800", color: p.ink }}>
           Mend<Text style={{ color: p.ember }}>.</Text>

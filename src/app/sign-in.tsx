@@ -29,15 +29,18 @@ export default function SignIn() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
       }
-    } catch {
-      setError(t("auth.authError"));
+    } catch (e) {
+      // Supabase's messages are actionable (e.g. the password policy);
+      // show them instead of a generic shrug
+      const msg = e instanceof Error && e.message ? e.message : "";
+      setError(msg || t("auth.authError"));
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <Screen scroll={false} padded={false}>
+    <Screen scroll={false} padded={false} safeTop>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1, justifyContent: "center", paddingHorizontal: 24 }}
