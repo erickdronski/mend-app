@@ -4,7 +4,8 @@ import { useFocusEffect, useRouter, type Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { getProfile } from "@/lib/store";
 import { getSituation, type SituationDef } from "@/lib/situation";
-import { Card, H1, IconChip, Muted, Screen, pressFx, usePalette } from "@/components/ui";
+import { Card, H1, IconChip, Muted, Screen, usePalette } from "@/components/ui";
+import { Press, Reveal } from "@/components/motion";
 
 type Row = { href: Href; icon: keyof typeof Ionicons.glyphMap; title: string; sub: string };
 type Section = { key: string; title: string; heavy?: boolean; rows: Row[] };
@@ -82,24 +83,26 @@ export default function Explore() {
 
       {/* Personalized track shortcut */}
       {sit?.track ? (
-        <Pressable onPress={() => router.push(`/tracks/${sit.track}` as Href)} style={pressFx}>
-          <Card tone="fern" style={{ marginTop: 16 }}>
-            <View style={{ flexDirection: "row", gap: 12, alignItems: "center" }}>
-              <IconChip name={sit.icon} tone="moss" size={44} />
-              <View style={{ flex: 1 }}>
-                <Muted style={{ textTransform: "uppercase", letterSpacing: 1.2, fontWeight: "700", color: p.mossDeep, fontSize: 11 }}>
-                  Your track
-                </Muted>
-                <Text style={{ marginTop: 3, fontSize: 16, fontWeight: "700", color: p.ink }}>{sit.trackTitle}</Text>
+        <Reveal index={0}>
+          <Press onPress={() => router.push(`/tracks/${sit.track}` as Href)}>
+            <Card tone="fern" style={{ marginTop: 16 }}>
+              <View style={{ flexDirection: "row", gap: 12, alignItems: "center" }}>
+                <IconChip name={sit.icon} tone="moss" size={44} />
+                <View style={{ flex: 1 }}>
+                  <Muted style={{ textTransform: "uppercase", letterSpacing: 1.2, fontWeight: "700", color: p.mossDeep, fontSize: 11 }}>
+                    Your track
+                  </Muted>
+                  <Text style={{ marginTop: 3, fontSize: 16, fontWeight: "700", color: p.ink }}>{sit.trackTitle}</Text>
+                </View>
+                <Ionicons name="chevron-forward" size={18} color={p.muted} />
               </View>
-              <Ionicons name="chevron-forward" size={18} color={p.muted} />
-            </View>
-          </Card>
-        </Pressable>
+            </Card>
+          </Press>
+        </Reveal>
       ) : null}
 
-      {ordered.map((section) => (
-        <View key={section.key} style={{ marginTop: 22 }}>
+      {ordered.map((section, si) => (
+        <Reveal key={section.key} index={si + 1} style={{ marginTop: 22 }}>
           <Muted style={{ textTransform: "uppercase", letterSpacing: 1.5, fontWeight: "700", color: p.mossDeep }}>
             {section.title}
           </Muted>
@@ -128,7 +131,7 @@ export default function Explore() {
               </Pressable>
             ))}
           </Card>
-        </View>
+        </Reveal>
       ))}
     </Screen>
   );

@@ -43,7 +43,7 @@ export default function Notes() {
       <Screen>
         <H1 style={{ marginTop: 8 }}>Little notes</H1>
         <P style={{ marginTop: 10 }}>
-          Notes live in your shared space. Set one up from the home tab and this becomes the
+          Notes live in your shared space. Set one up from the Today tab and this becomes the
           pinboard between your two phones.
         </P>
       </Screen>

@@ -27,7 +27,9 @@ import {
   type DailyAnswer,
   type Space,
 } from "@/lib/space";
-import { Btn, Card, IconChip, Input, Muted, P, Rise, Screen, pressFx, usePalette } from "@/components/ui";
+import Animated, { FadeIn } from "react-native-reanimated";
+import { Btn, Card, IconChip, Input, Muted, P, Rise, Screen, usePalette } from "@/components/ui";
+import { Press } from "@/components/motion";
 
 // The daily-question hero: deep forest, readable in both schemes
 const HERO = ["#2e4a38", "#233c2c"] as const;
@@ -190,10 +192,13 @@ export default function Today() {
               </View>
               {space ? (
                 theirs ? (
-                  <View style={{ backgroundColor: "rgba(244,244,238,0.12)", borderRadius: 12, padding: 12 }}>
+                  <Animated.View
+                    entering={FadeIn.duration(420)}
+                    style={{ backgroundColor: "rgba(244,244,238,0.12)", borderRadius: 12, padding: 12 }}
+                  >
                     <Text style={{ color: EMBER, fontWeight: "700", fontSize: 12 }}>{theirs.display_name}</Text>
                     <Text style={{ color: BONE, marginTop: 4 }}>{theirs.answer}</Text>
-                  </View>
+                  </Animated.View>
                 ) : (
                   <Text style={{ color: BONE, opacity: 0.75, fontSize: 13 }}>
                     {partner ? `Waiting on ${partner.display_name}. ` : ""}Yours is in, sealed until theirs arrives.
@@ -211,6 +216,25 @@ export default function Today() {
         </LinearGradient>
       </Rise>
 
+      {/* Space + notes access, when a space exists (keeps the invite code and
+          the notes board reachable, which the tour and copy promise). */}
+      {space && (
+        <View style={{ flexDirection: "row", gap: 8, marginTop: 10 }}>
+          <Press onPress={() => router.push("/space")} style={{ flex: 1 }}>
+            <Card style={{ paddingVertical: 12, flexDirection: "row", alignItems: "center", gap: 8 }}>
+              <Ionicons name="people-outline" size={18} color={p.moss} />
+              <Text style={{ color: p.ink, fontWeight: "600", fontSize: 14 }}>Our space</Text>
+            </Card>
+          </Press>
+          <Press onPress={() => router.push("/notes")} style={{ flex: 1 }}>
+            <Card style={{ paddingVertical: 12, flexDirection: "row", alignItems: "center", gap: 8 }}>
+              <Ionicons name="create-outline" size={18} color={p.moss} />
+              <Text style={{ color: p.ink, fontWeight: "600", fontSize: 14 }}>Notes</Text>
+            </Card>
+          </Press>
+        </View>
+      )}
+
       {/* 2. One next step */}
       {journeyDone ? (
         <Rise delay={80}>
@@ -221,7 +245,7 @@ export default function Today() {
         </Rise>
       ) : nextStep ? (
         <Rise delay={80}>
-          <Pressable onPress={() => router.push(nextStep.href as Href)} style={pressFx}>
+          <Press onPress={() => router.push(nextStep.href as Href)}>
             <Card style={{ marginTop: 12 }}>
               <Muted style={{ textTransform: "uppercase", letterSpacing: 1.2, fontWeight: "700", color: p.mossDeep, fontSize: 11 }}>
                 Your next step
@@ -233,7 +257,7 @@ export default function Today() {
                 <Ionicons name="arrow-forward" size={15} color={p.ember} style={{ marginLeft: 4 }} />
               </View>
             </Card>
-          </Pressable>
+          </Press>
         </Rise>
       ) : null}
 
@@ -253,12 +277,12 @@ export default function Today() {
       </Rise>
 
       {/* Browse everything */}
-      <Pressable onPress={() => router.push("/explore")} style={pressFx}>
+      <Press onPress={() => router.push("/explore")}>
         <View style={{ marginTop: 18, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, paddingVertical: 14, borderRadius: 14, borderWidth: 1, borderColor: p.line }}>
           <Ionicons name="compass-outline" size={18} color={p.muted} />
           <Text style={{ color: p.ink, fontWeight: "600", fontSize: 15 }}>Browse everything Mend offers</Text>
         </View>
-      </Pressable>
+      </Press>
 
       <Muted style={{ marginTop: 18, textAlign: "center", fontSize: 12 }}>
         Mend is designed to be deleted. The goal is a marriage that doesn&apos;t need it.

@@ -64,7 +64,7 @@ export default function SpaceScreen() {
         <H1 style={{ marginTop: 8 }}>Your shared space</H1>
         <P style={{ marginTop: 10 }}>
           {space.members.length === 2
-            ? "Both of you are in. The daily question and your notes live on the home tab, one place for two phones."
+            ? "Both of you are in. Answer the daily question on Today, and leave each other notes below."
             : "You're in. Your partner joins with the code below, and from then on you're answering into the same place."}
         </P>
 
@@ -100,6 +100,8 @@ export default function SpaceScreen() {
             style={{ marginTop: 12 }}
           />
         </Card>
+
+        <Btn label="Little notes between us" kind="ghost" onPress={() => router.push("/notes")} style={{ marginTop: 10 }} />
 
         <Divider />
         {confirmLeave ? (

@@ -71,6 +71,12 @@ async function write(key: string, value: unknown) {
 export const getProfile = () => read<Profile | null>(KEYS.profile, null);
 export const saveProfile = (p: Profile) => write(KEYS.profile, p);
 
+/** Wipe every Mend key from this device. Used on account deletion and on a
+ *  guest "erase everything" so no relationship data survives locally. */
+export async function clearAllLocal() {
+  await AsyncStorage.multiRemove(Object.values(KEYS));
+}
+
 // ——— local daily answer (guests / solo, before a shared space exists) ———
 type LocalDaily = { date: string; answer: string };
 export async function getLocalDaily(dateKey: string): Promise<string | null> {

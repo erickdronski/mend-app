@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import Svg, { Circle } from "react-native-svg";
 import { LinearGradient } from "expo-linear-gradient";
 import { Pressable, Text, View } from "react-native";
 import { Link, useFocusEffect, useRouter, type Href } from "expo-router";
@@ -26,6 +25,7 @@ import {
   type StepContext,
 } from "@/lib/journey";
 import { Btn, Card, H1, H2, Muted, P, Rise, Screen, usePalette } from "@/components/ui";
+import { ProgressRing } from "@/components/rings";
 
 /**
  * The Journey tab: the app's home. One current stage, its steps, the next
@@ -127,27 +127,17 @@ export default function JourneyScreen() {
                 {stage.arc}
               </Text>
             </View>
-            <View style={{ width: 84, height: 84 }}>
-              <Svg viewBox="0 0 84 84" style={{ transform: [{ rotate: "-90deg" }] }}>
-                <Circle cx="42" cy="42" r="36" fill="none" stroke="rgba(244,244,238,0.18)" strokeWidth="7" />
-                <Circle
-                  cx="42"
-                  cy="42"
-                  r="36"
-                  fill="none"
-                  stroke="#d9a057"
-                  strokeWidth="7"
-                  strokeLinecap="round"
-                  strokeDasharray={2 * Math.PI * 36}
-                  strokeDashoffset={2 * Math.PI * 36 * (1 - doneCount / stage.steps.length)}
-                />
-              </Svg>
-              <View style={{ position: "absolute", inset: 0, alignItems: "center", justifyContent: "center" }}>
-                <Text style={{ color: "#f4f4ee", fontWeight: "800", fontSize: 18 }}>
-                  {doneCount}/{stage.steps.length}
-                </Text>
-              </View>
-            </View>
+            <ProgressRing
+              progress={doneCount / stage.steps.length}
+              size={84}
+              stroke={7}
+              trackColor="rgba(244,244,238,0.18)"
+              color="#d9a057"
+            >
+              <Text style={{ color: "#f4f4ee", fontWeight: "800", fontSize: 18 }}>
+                {doneCount}/{stage.steps.length}
+              </Text>
+            </ProgressRing>
           </View>
           <Text style={{ color: "#f4f4ee", opacity: 0.55, fontSize: 12, marginTop: 12 }}>{stage.weeksHint}</Text>
         </LinearGradient>

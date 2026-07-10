@@ -39,13 +39,7 @@
         }
       ],
       "expo-localization",
-      "expo-local-authentication",
-      [
-        "expo-notifications",
-        {
-          "color": "#38553f"
-        }
-      ]
+      "expo-local-authentication"
     ],
     "experiments": {
       "typedRoutes": true,

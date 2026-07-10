@@ -16,9 +16,19 @@ import {
   type ViewStyle,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import Animated, {
+  FadeInDown,
+  useAnimatedStyle,
+  useReducedMotion,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 import { palettes, type Palette } from "@/lib/theme";
+import { springs, timings } from "@/lib/motion";
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export function usePalette(): Palette {
   const scheme = useColorScheme();
@@ -187,25 +197,37 @@ export function Btn({
   style?: StyleProp<ViewStyle>;
 }) {
   const p = usePalette();
+  const reduce = useReducedMotion();
   const bg = kind === "primary" ? p.ink : kind === "moss" ? p.moss : "transparent";
   const fg = kind === "ghost" ? p.ink : p.surface;
+  const scale = useSharedValue(1);
+  const press = useSharedValue(0);
+  const animStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+    opacity: disabled ? 0.4 : 1 - press.value * 0.12,
+  }));
   return (
-    <Pressable
+    <AnimatedPressable
       onPress={onPress}
       disabled={disabled}
-      style={({ pressed }) => [
+      onPressIn={() => {
+        if (reduce) return;
+        scale.value = withSpring(0.97, springs.snappy);
+        press.value = withTiming(1, timings.quick);
+      }}
+      onPressOut={() => {
+        scale.value = withSpring(1, springs.bouncy);
+        press.value = withTiming(0, timings.quick);
+      }}
+      style={[
         s.btn,
-        {
-          backgroundColor: bg,
-          borderColor: kind === "ghost" ? p.line : bg,
-          opacity: disabled ? 0.4 : pressed ? 0.85 : 1,
-          transform: [{ scale: pressed ? 0.98 : 1 }],
-        },
+        { backgroundColor: bg, borderColor: kind === "ghost" ? p.line : bg },
+        animStyle,
         style,
       ]}
     >
       <Text style={[s.btnLabel, { color: fg }]}>{label}</Text>
-    </Pressable>
+    </AnimatedPressable>
   );
 }
 

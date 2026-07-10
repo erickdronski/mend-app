@@ -61,6 +61,10 @@ export default function Settings() {
     try {
       const { error } = await supabase.functions.invoke("mend-delete-account", { method: "POST" });
       if (error) throw error;
+      // Also wipe everything on this device so no relationship data survives
+      // locally, matching the "permanently removes" promise.
+      const { clearAllLocal } = await import("@/lib/store");
+      await clearAllLocal();
       await signOut();
     } catch {
       setDeleteError("Deletion failed. Check your connection and try again, or email support.");
@@ -141,7 +145,12 @@ export default function Settings() {
       ) : (
         <View style={{ marginTop: 10 }}>
           <Muted>{guest ? t("auth.localOnly") : ""}</Muted>
-          <Btn label={t("auth.signIn")} kind="ghost" onPress={signOut} style={{ marginTop: 12 }} />
+          <Btn
+            label="Create an account or sign in"
+            kind="ghost"
+            onPress={() => router.push("/sign-in")}
+            style={{ marginTop: 12 }}
+          />
         </View>
       )}
 

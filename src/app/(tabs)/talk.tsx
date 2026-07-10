@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import Svg, { Circle } from "react-native-svg";
 import * as Haptics from "expo-haptics";
+import { BreathingCircle, ProgressRing } from "@/components/rings";
 import { getTopic, topics } from "@/lib/content/topics";
 import { getTrack } from "@/lib/content/tracks";
 import {
@@ -166,13 +166,14 @@ export default function Talk() {
         ],
       };
     }
+    // Spread the loaded profile so nothing (situation, lenses, roles) is
+    // dropped; only names change here. Reconstructing the object literal
+    // previously erased the onboarding situation on the first session.
     const prof: Profile = {
+      ...(profile ?? { safetyAck: true, createdAt: new Date().toISOString() }),
       a: names[0].trim(),
       b: names[1].trim(),
       safetyAck: true,
-      createdAt: profile?.createdAt ?? new Date().toISOString(),
-      lenses: profile?.lenses,
-      roles: profile?.roles,
     };
     saveProfile(prof);
     setProfile(prof);
@@ -418,8 +419,6 @@ export default function Talk() {
   // ————— floor —————
   if (phase === "floor") {
     const total = turnMinutes * 60;
-    const r = 84;
-    const C = 2 * Math.PI * r;
     return (
       <Screen safeTop>
         <Muted style={{ marginTop: 8, textAlign: "center" }}>
@@ -431,28 +430,19 @@ export default function Talk() {
         </Muted>
 
         <View style={{ alignItems: "center", marginTop: 20 }}>
-          <View style={{ width: 200, height: 200 }}>
-            <Svg viewBox="0 0 200 200" style={{ transform: [{ rotate: "-90deg" }] }}>
-              <Circle cx="100" cy="100" r={r} fill="none" stroke={p.line} strokeWidth="9" />
-              <Circle
-                cx="100"
-                cy="100"
-                r={r}
-                fill="none"
-                stroke={running ? p.moss : p.ember}
-                strokeWidth="9"
-                strokeLinecap="round"
-                strokeDasharray={C}
-                strokeDashoffset={C * (1 - secondsLeft / total)}
-              />
-            </Svg>
-            <View style={{ position: "absolute", inset: 0, alignItems: "center", justifyContent: "center" }}>
-              <Text style={{ fontSize: 44, fontWeight: "800", color: p.ink, fontVariant: ["tabular-nums"] }}>
-                {fmt(secondsLeft)}
-              </Text>
-              <Muted>{running ? "speaking" : "paused"}</Muted>
-            </View>
-          </View>
+          <ProgressRing
+            progress={secondsLeft / total}
+            size={200}
+            trackColor={p.line}
+            color={running ? p.moss : p.ember}
+            durationMs={running ? 1000 : 260}
+            breathing={running}
+          >
+            <Text style={{ fontSize: 44, fontWeight: "800", color: p.ink, fontVariant: ["tabular-nums"] }}>
+              {fmt(secondsLeft)}
+            </Text>
+            <Muted>{running ? "speaking" : "paused"}</Muted>
+          </ProgressRing>
         </View>
 
         <View style={{ flexDirection: "row", gap: 10, marginTop: 18 }}>
@@ -554,21 +544,12 @@ export default function Talk() {
           separate rooms, and please don&apos;t spend it rehearsing your comeback. Walk, breathe,
           water, music.
         </P>
-        <View style={{ alignItems: "center", marginTop: 28 }}>
-          <View
-            style={{
-              width: 150,
-              height: 150,
-              borderRadius: 75,
-              backgroundColor: p.fern,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Text style={{ fontSize: 34, fontWeight: "800", color: p.mossDeep, fontVariant: ["tabular-nums"] }}>
-              {fmt(breakLeft)}
-            </Text>
-          </View>
+        <View style={{ alignItems: "center", marginTop: 24 }}>
+          <BreathingCircle size={150} color={p.fern} labelColor={p.mossDeep} />
+          <Text style={{ fontSize: 28, fontWeight: "800", color: p.mossDeep, fontVariant: ["tabular-nums"], marginTop: 10 }}>
+            {fmt(breakLeft)}
+          </Text>
+          <Muted style={{ marginTop: 2 }}>Follow the circle. In as it grows, out as it settles.</Muted>
         </View>
         <View style={{ marginTop: 28, gap: 10 }}>
           <Btn label="We're both ready. Continue" onPress={() => setPhase(breakFrom.current)} />

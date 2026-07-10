@@ -118,7 +118,12 @@ function Shell() {
             headerTintColor: p.ink,
             headerTitleStyle: { fontWeight: "700" },
             headerShadowVisible: false,
+            headerBackButtonDisplayMode: "minimal",
             contentStyle: { backgroundColor: p.surface },
+            // Smooth, iOS-native slide with a soft duration. Detail screens
+            // glide in from the right; the whole app feels continuous.
+            animation: "slide_from_right",
+            animationDuration: 280,
           }}
         >
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

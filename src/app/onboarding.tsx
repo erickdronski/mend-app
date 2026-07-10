@@ -257,7 +257,12 @@ export default function Onboarding() {
             </Card>
           </Rise>
         </View>
-        <Btn label="We understand" onPress={() => setStep("gate")} style={{ marginTop: 24 }} />
+        <Muted style={{ marginTop: 20, fontSize: 12.5, lineHeight: 18 }}>
+          Mend is an educational tool, not therapy. It gives you structure and language; it does
+          not diagnose or treat, and it is not a substitute for a licensed marriage and family
+          therapist or crisis care.
+        </Muted>
+        <Btn label="We understand" onPress={() => setStep("gate")} style={{ marginTop: 16 }} />
       </Screen>
     );
   }
