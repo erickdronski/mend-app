@@ -15,10 +15,11 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { saveProfile } from "@/lib/store";
+import { situations, type Situation } from "@/lib/situation";
 import { whyGateMatters } from "@/lib/content/safety";
-import { Btn, Card, H1, H2, IconChip, Input, Label, Muted, P, Rise, Screen, usePalette } from "@/components/ui";
+import { Btn, Card, H1, H2, IconChip, Input, Label, Muted, P, pressFx, Rise, Screen, usePalette } from "@/components/ui";
 
-type Step = "welcome" | "tour" | "deal" | "gate" | "account" | "names";
+type Step = "welcome" | "tour" | "deal" | "gate" | "account" | "names" | "situation";
 
 const tour: { icon: keyof typeof Ionicons.glyphMap; title: string; body: string }[] = [
   {
@@ -65,6 +66,17 @@ export default function Onboarding() {
   const [a, setA] = useState("");
   const [b, setB] = useState("");
 
+  async function finishWith(situation: Situation) {
+    await saveProfile({
+      a: a.trim(),
+      b: b.trim(),
+      safetyAck: true,
+      createdAt: new Date().toISOString(),
+      situation,
+    });
+    router.replace("/");
+  }
+
   async function submitAccount() {
     setBusy(true);
     setError(null);
@@ -86,16 +98,6 @@ export default function Onboarding() {
     } finally {
       setBusy(false);
     }
-  }
-
-  async function finish() {
-    await saveProfile({
-      a: a.trim(),
-      b: b.trim(),
-      safetyAck: true,
-      createdAt: new Date().toISOString(),
-    });
-    router.replace("/");
   }
 
   // ————— welcome: the brand moment —————
@@ -349,29 +351,62 @@ export default function Onboarding() {
   }
 
   // ————— names —————
+  if (step === "names") {
+    return (
+      <Screen safeTop>
+        <Rise>
+          <H1 style={{ marginTop: 12 }}>Who&apos;s mending?</H1>
+          <P style={{ marginTop: 10 }}>
+            First names only. They label the timer and the games. On this phone they stay private;
+            {session ? " your account backs up your progress so you don't lose it." : " nothing syncs unless you make an account."}
+          </P>
+        </Rise>
+        <View style={{ marginTop: 22, gap: 14 }}>
+          <View>
+            <Label>Your name</Label>
+            <Input value={a} onChangeText={setA} placeholder="First name" autoComplete="off" />
+          </View>
+          <View>
+            <Label>Your partner&apos;s name</Label>
+            <Input value={b} onChangeText={setB} placeholder="First name" autoComplete="off" />
+          </View>
+          <Muted>
+            Starting alone? Put your partner&apos;s name in anyway. You can begin the first steps
+            on your own.
+          </Muted>
+          <Btn label="One last question" onPress={() => setStep("situation")} disabled={!a.trim() && !b.trim()} />
+        </View>
+      </Screen>
+    );
+  }
+
+  // ————— situation: what are you carrying —————
   return (
     <Screen safeTop>
       <Rise>
-        <H1 style={{ marginTop: 12 }}>Who&apos;s mending?</H1>
+        <Muted style={{ marginTop: 12, textTransform: "uppercase", letterSpacing: 2, fontWeight: "700", color: p.ember }}>
+          So we can meet you where you are
+        </Muted>
+        <H1 style={{ marginTop: 8 }}>What are you carrying?</H1>
         <P style={{ marginTop: 10 }}>
-          First names only. They label the timer and the games; nothing leaves this phone without
-          your say-so.
+          Pick the closest one. It shapes what Mend shows you first. Nothing gets locked away, and
+          you can change it any time in settings.
         </P>
       </Rise>
-      <View style={{ marginTop: 22, gap: 14 }}>
-        <View>
-          <Label>Partner A</Label>
-          <Input value={a} onChangeText={setA} placeholder="First name" autoComplete="off" />
-        </View>
-        <View>
-          <Label>Partner B</Label>
-          <Input value={b} onChangeText={setB} placeholder="First name" autoComplete="off" />
-        </View>
-        <Muted>
-          Starting alone? Put your partner&apos;s name in anyway. Stage one is built so one
-          willing person can begin.
-        </Muted>
-        <Btn label="Begin stage one" onPress={finish} disabled={!a.trim() && !b.trim()} />
+      <View style={{ marginTop: 20, gap: 10 }}>
+        {situations.map((s, i) => (
+          <Rise key={s.id} delay={i * 40}>
+            <Pressable onPress={() => finishWith(s.id)} style={pressFx}>
+              <Card>
+                <View style={{ flexDirection: "row", gap: 14, alignItems: "center" }}>
+                  <IconChip name={s.icon} tone={i % 2 === 0 ? "moss" : "ember"} size={44} />
+                  <Text style={{ flex: 1, fontSize: 16, fontWeight: "600", color: p.ink }}>{s.chip}</Text>
+                  <Ionicons name="chevron-forward" size={18} color={p.muted} />
+                </View>
+              </Card>
+            </Pressable>
+          </Rise>
+        ))}
       </View>
     </Screen>
   );

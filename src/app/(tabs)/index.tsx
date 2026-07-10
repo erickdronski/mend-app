@@ -1,140 +1,141 @@
-import { useCallback, useState } from "react";
-import { Pressable, Share, Text, View } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import { Pressable, Text, View } from "react-native";
 import { useFocusEffect, useRouter, type Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth";
 import { questionForDate } from "@/lib/content/daily";
-import { getProfile } from "@/lib/store";
+import { nudgeForDate } from "@/lib/content/nudges";
 import {
-  addNote,
+  getChallengesDone,
+  getJourney,
+  getLocalDaily,
+  getPlan,
+  getProfile,
+  getPulses,
+  getSessions,
+  saveLocalDaily,
+  type JourneyState,
+} from "@/lib/store";
+import { getStage, stepDone, type StepContext } from "@/lib/journey";
+import { getSituation } from "@/lib/situation";
+import {
   getMySpace,
   getTodayAnswers,
-  listNotes,
   submitAnswer,
+  todayKey,
   type DailyAnswer,
   type Space,
-  type SpaceNote,
 } from "@/lib/space";
-import { Btn, Card, H2, IconChip, Input, Muted, P, Rise, Screen, usePalette } from "@/components/ui";
+import { Btn, Card, IconChip, Input, Muted, P, Rise, Screen, pressFx, usePalette } from "@/components/ui";
 
 // The daily-question hero: deep forest, readable in both schemes
 const HERO = ["#2e4a38", "#233c2c"] as const;
 const BONE = "#f4f4ee";
 const EMBER = "#d9a057";
 
-type Row = { href: Href; icon: keyof typeof Ionicons.glyphMap; title: string; sub: string };
-
-const directory: { section: string; rows: Row[] }[] = [
-  {
-    section: "Talk it out",
-    rows: [
-      { href: "/talk", icon: "chatbubbles-outline", title: "Guided session", sub: "The timed floor: speak, be heard, close kindly" },
-      { href: "/topics", icon: "chatbox-ellipses-outline", title: "Conversation topics", sub: "Soft ways into the talks you keep not having" },
-    ],
-  },
-  {
-    section: "Play together",
-    rows: [
-      { href: "/cards", icon: "albums-outline", title: "Card decks", sub: "Six decks, from first steps back to real depth" },
-      { href: "/games", icon: "dice-outline", title: "Games", sub: "Guessing games, dilemmas, memory lane" },
-      { href: "/challenges", icon: "calendar-outline", title: "7-day challenges", sub: "One small act a day, plus micro-moves" },
-    ],
-  },
-  {
-    section: "Learn the craft",
-    rows: [
-      { href: "/toolkit", icon: "construct-outline", title: "Communication toolkit", sub: "The nine skills counselors actually teach" },
-      { href: "/quiz", icon: "help-circle-outline", title: "How you love & fight", sub: "Your attachment lens and conflict role" },
-      { href: "/stories", icon: "people-outline", title: "Stories", sub: "Couples who found a way through" },
-      { href: "/library", icon: "library-outline", title: "Library", sub: "Real books, free programs, podcasts" },
-    ],
-  },
-  {
-    section: "When it's heavy",
-    rows: [
-      { href: "/tracks", icon: "map-outline", title: "Healing tracks", sub: "The affair, the loss, the illness, the crisis" },
-      { href: "/safety", icon: "medkit-outline", title: "Get help now", sub: "Crisis lines and low-cost counseling, free" },
-    ],
-  },
-  {
-    section: "Your path",
-    rows: [
-      { href: "/journey", icon: "trail-sign-outline", title: "The Journey", sub: "Five stages from here to not needing this app" },
-      { href: "/pulse", icon: "pulse-outline", title: "Pulse check", sub: "Five honest numbers, both of you" },
-      { href: "/plan", icon: "heart-outline", title: "Our plan", sub: "Rituals, commitments, today's nudge" },
-    ],
-  },
-];
-
-export default function SpaceHub() {
+/**
+ * Today: the calm home. Three things and nothing else — the daily question,
+ * one next step, one gentle nudge — with everything else one tap away in
+ * Explore. First paint stays under ~120 words and a handful of tap targets.
+ */
+export default function Today() {
   const p = usePalette();
   const router = useRouter();
-  const { t } = useTranslation();
   const { session, guest } = useAuth();
   const [space, setSpace] = useState<Space | null>(null);
   const [answers, setAnswers] = useState<DailyAnswer[]>([]);
-  const [notes, setNotes] = useState<SpaceNote[]>([]);
+  const [localAnswer, setLocalAnswer] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
-  const [noteDraft, setNoteDraft] = useState("");
   const [busy, setBusy] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [myId, setMyId] = useState<string | null>(null);
+  const [name, setName] = useState<string>("");
+  const [hereForYou, setHereForYou] = useState<string>("");
+  const [nextStep, setNextStep] = useState<{ title: string; body: string; href: string; label: string } | null>(null);
+  const [journeyDone, setJourneyDone] = useState(false);
 
   const question = questionForDate(new Date());
+  const nudge = nudgeForDate(new Date());
 
   const reload = useCallback(() => {
     (async () => {
       setMyId(session?.user.id ?? null);
-      if (!session) {
+      const [profile, sessions, plan, challengesDone, pulses, journey] = await Promise.all([
+        getProfile(),
+        getSessions(),
+        getPlan(),
+        getChallengesDone(),
+        getPulses(),
+        getJourney(),
+      ]);
+      setName(profile?.a?.trim() || "");
+      setHereForYou(getSituation(profile?.situation)?.hereForYou ?? "");
+
+      // one next step from the journey engine (same logic as the Journey tab)
+      computeNextStep({ profile, sessions, plan, challengesDone, pulses }, journey);
+
+      // daily question: shared reveal if in a space, otherwise a local answer
+      if (session) {
+        const s = await getMySpace();
+        setSpace(s);
+        if (s) setAnswers(await getTodayAnswers(s));
+        const { backupIfSignedIn } = await import("@/lib/sync");
+        backupIfSignedIn();
+      } else {
         setSpace(null);
-        setLoaded(true);
-        return;
       }
-      const s = await getMySpace();
-      setSpace(s);
-      if (s) {
-        const [a, n] = await Promise.all([getTodayAnswers(s), listNotes(s, 3)]);
-        setAnswers(a);
-        setNotes(n);
-      }
+      setLocalAnswer(await getLocalDaily(todayKey()));
       setLoaded(true);
-      const { backupIfSignedIn } = await import("@/lib/sync");
-      backupIfSignedIn();
-    })();
+    })().catch(() => setLoaded(true));
   }, [session]);
 
-  useFocusEffect(reload);
+  // Load on mount too: useFocusEffect does not re-fire for the initial tab
+  // after SSR hydration on web, so the focus effect alone leaves Today blank.
+  useEffect(() => {
+    reload();
+  }, [reload]);
+
+  function computeNextStep(ctx: StepContext, journey: JourneyState) {
+    if (journey.graduatedAt) {
+      setJourneyDone(true);
+      setNextStep(null);
+      return;
+    }
+    const stage = getStage(Math.min(journey.stage, 5));
+    const step = stage?.steps.find((s) => !stepDone(s, ctx, journey));
+    if (step) {
+      setJourneyDone(false);
+      setNextStep({ title: step.title, body: step.body, href: step.href, label: step.hrefLabel });
+    } else {
+      setJourneyDone(false);
+      setNextStep({ title: "Stage complete", body: "You've finished this stage. Open your path to move on when you're both ready.", href: "/journey", label: "Open your path" });
+    }
+  }
 
   const mine = answers.find((a) => a.user_id === myId);
   const theirs = answers.find((a) => a.user_id !== myId);
   const partner = space?.members.find((m) => m.user_id !== myId);
-  const solo = Boolean(space && space.members.length < 2);
+  const answered = space ? Boolean(mine) : Boolean(localAnswer);
 
   async function send() {
-    if (!space || !draft.trim()) return;
+    if (!draft.trim()) return;
     setBusy(true);
     try {
-      await submitAnswer(space, question.text, draft);
+      if (space) {
+        await submitAnswer(space, question.text, draft);
+        setAnswers(await getTodayAnswers(space));
+      } else {
+        await saveLocalDaily(todayKey(), draft.trim());
+        setLocalAnswer(draft.trim());
+      }
       setDraft("");
-      setAnswers(await getTodayAnswers(space));
     } finally {
       setBusy(false);
     }
   }
 
-  async function sendNote() {
-    if (!space || !noteDraft.trim()) return;
-    setBusy(true);
-    try {
-      await addNote(space, noteDraft);
-      setNoteDraft("");
-      setNotes(await listNotes(space, 3));
-    } finally {
-      setBusy(false);
-    }
-  }
+  if (!loaded) return <Screen scroll={false} safeTop>{null}</Screen>;
 
   return (
     <Screen safeTop>
@@ -147,177 +148,121 @@ export default function SpaceHub() {
         </Pressable>
       </View>
 
-      {/* ——— Daily question / space state ——— */}
-      {!loaded ? null : !session ? (
-        <Card tone="fern" style={{ marginTop: 16 }}>
-          <H2>One space, two phones</H2>
-          <P style={{ marginTop: 8 }}>
-            Share a space with your partner: a question of the day you both answer from your own
-            phones, little notes back and forth, and everything in one place. It takes a free
-            account, so your space can find you both.
-          </P>
-          <Btn
-            label={guest ? "Create a free account" : t("auth.signIn")}
-            kind="moss"
-            onPress={() => router.push("/sign-in")}
-            style={{ marginTop: 14 }}
-          />
-        </Card>
-      ) : !space ? (
-        <Card tone="fern" style={{ marginTop: 16 }}>
-          <H2>Make it yours, together</H2>
-          <P style={{ marginTop: 8 }}>
-            Create your shared space and invite your partner with a six-letter code. From then on
-            you're answering the same daily question, from two phones, into one place.
-          </P>
-          <Btn label="Set up our space" kind="moss" onPress={() => router.push("/space")} style={{ marginTop: 14 }} />
-        </Card>
-      ) : (
-        <>
-          <Rise>
-          <LinearGradient colors={HERO} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ marginTop: 16, borderRadius: 20, padding: 20 }}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-              <Text style={{ textTransform: "uppercase", letterSpacing: 1.5, fontWeight: "700", color: EMBER, fontSize: 12 }}>
-                Today&apos;s question
-              </Text>
-              <Text style={{ fontSize: 11, textTransform: "capitalize", color: BONE, opacity: 0.6 }}>{question.category}</Text>
-            </View>
-            <Text style={{ marginTop: 10, fontSize: 21, lineHeight: 28, fontWeight: "800", color: BONE }}>
-              {question.text}
-            </Text>
+      {hereForYou ? <Muted style={{ marginTop: 10 }}>{hereForYou}</Muted> : null}
 
-            {!mine ? (
-              <View style={{ marginTop: 14 }}>
-                {theirs && (
-                  <Text style={{ marginBottom: 8, color: BONE, opacity: 0.75, fontSize: 13.5 }}>
-                    {theirs.display_name} answered already. Yours unlocks it.
-                  </Text>
-                )}
-                <Input
-                  value={draft}
-                  onChangeText={setDraft}
-                  placeholder="A sentence or three, honestly"
-                  multiline
-                  style={{ minHeight: 70 }}
-                />
-                <Btn label="Send mine in" kind="moss" onPress={send} disabled={busy || !draft.trim()} style={{ marginTop: 10 }} />
+      {/* 1. Today's question */}
+      <Rise>
+        <LinearGradient colors={HERO} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ marginTop: 14, borderRadius: 20, padding: 20 }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+            <Text style={{ textTransform: "uppercase", letterSpacing: 1.5, fontWeight: "700", color: EMBER, fontSize: 12 }}>
+              Today&apos;s question
+            </Text>
+            <Text style={{ fontSize: 11, textTransform: "capitalize", color: BONE, opacity: 0.6 }}>{question.category}</Text>
+          </View>
+          <Text style={{ marginTop: 10, fontSize: 21, lineHeight: 28, fontWeight: "800", color: BONE }}>
+            {question.text}
+          </Text>
+
+          {!answered ? (
+            <View style={{ marginTop: 12 }}>
+              {space && theirs && (
+                <Text style={{ color: BONE, opacity: 0.85, marginBottom: 8, fontSize: 13 }}>
+                  {theirs.display_name} answered already. Yours unlocks it.
+                </Text>
+              )}
+              <Input
+                value={draft}
+                onChangeText={setDraft}
+                placeholder="A sentence or three, honestly"
+                placeholderTextColor="rgba(244,244,238,0.5)"
+                multiline
+                style={{ minHeight: 64, backgroundColor: "rgba(244,244,238,0.1)", borderColor: "rgba(244,244,238,0.25)", color: BONE }}
+              />
+              <Pressable onPress={send} disabled={busy || !draft.trim()} style={({ pressed }) => ({ marginTop: 10, backgroundColor: BONE, borderRadius: 12, paddingVertical: 12, alignItems: "center", opacity: !draft.trim() ? 0.5 : pressed ? 0.85 : 1 })}>
+                <Text style={{ color: "#233c2c", fontWeight: "700" }}>Send mine in</Text>
+              </Pressable>
+            </View>
+          ) : (
+            <View style={{ marginTop: 12, gap: 10 }}>
+              <View style={{ backgroundColor: "rgba(244,244,238,0.12)", borderRadius: 12, padding: 12 }}>
+                <Text style={{ color: EMBER, fontWeight: "700", fontSize: 12 }}>You</Text>
+                <Text style={{ color: BONE, marginTop: 4 }}>{space ? mine?.answer : localAnswer}</Text>
               </View>
-            ) : (
-              <View style={{ marginTop: 14, gap: 10 }}>
-                <View style={{ backgroundColor: "rgba(244,244,238,0.12)", borderRadius: 12, padding: 12 }}>
-                  <Text style={{ fontWeight: "700", color: EMBER, fontSize: 12.5 }}>You</Text>
-                  <Text style={{ marginTop: 4, color: BONE, fontSize: 14.5, lineHeight: 21 }}>{mine.answer}</Text>
-                </View>
-                {theirs ? (
+              {space ? (
+                theirs ? (
                   <View style={{ backgroundColor: "rgba(244,244,238,0.12)", borderRadius: 12, padding: 12 }}>
-                    <Text style={{ fontWeight: "700", color: EMBER, fontSize: 12.5 }}>{theirs.display_name}</Text>
-                    <Text style={{ marginTop: 4, color: BONE, fontSize: 14.5, lineHeight: 21 }}>{theirs.answer}</Text>
+                    <Text style={{ color: EMBER, fontWeight: "700", fontSize: 12 }}>{theirs.display_name}</Text>
+                    <Text style={{ color: BONE, marginTop: 4 }}>{theirs.answer}</Text>
                   </View>
                 ) : (
-                  <Text style={{ color: BONE, opacity: 0.75, fontSize: 13.5, lineHeight: 20 }}>
-                    {partner ? `Waiting on ${partner.display_name}. ` : ""}Yours is in, safe and
-                    sealed until theirs arrives.
+                  <Text style={{ color: BONE, opacity: 0.75, fontSize: 13 }}>
+                    {partner ? `Waiting on ${partner.display_name}. ` : ""}Yours is in, sealed until theirs arrives.
                   </Text>
-                )}
-              </View>
-            )}
-          </LinearGradient>
-          </Rise>
-
-          {solo && (
-            <Card style={{ marginTop: 10, borderColor: p.ember }}>
-              <Muted style={{ fontWeight: "700", color: p.emberDeep }}>Your invite code</Muted>
-              <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: 6 }}>
-                <Text style={{ fontSize: 26, fontWeight: "800", letterSpacing: 5, color: p.ink }}>
-                  {space.invite_code}
-                </Text>
-                <Btn
-                  label="Share it"
-                  kind="ghost"
-                  onPress={() =>
-                    Share.share({
-                      message: `Join me on Mend, our shared space for us: download the app and enter code ${space.invite_code}`,
-                    })
-                  }
-                />
-              </View>
-              <Muted style={{ marginTop: 6 }}>
-                When your partner enters this code, their answers land here next to yours.
-              </Muted>
-            </Card>
+                )
+              ) : (
+                <Pressable onPress={() => router.push(session ? "/space" : "/sign-in")}>
+                  <Text style={{ color: EMBER, fontWeight: "600", fontSize: 13 }}>
+                    {session ? "Answer these together: set up your space" : "Answer these together: make a free account"} →
+                  </Text>
+                </Pressable>
+              )}
+            </View>
           )}
+        </LinearGradient>
+      </Rise>
 
-          {/* ——— Notes ——— */}
-          <Card style={{ marginTop: 10 }}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-              <H2>Little notes</H2>
-              <Pressable onPress={() => router.push("/notes")}>
-                <Text style={{ color: p.ember, fontWeight: "600", fontSize: 14 }}>All notes →</Text>
-              </Pressable>
-            </View>
-            {notes.length === 0 ? (
-              <Muted style={{ marginTop: 8 }}>
-                The pinboard between your phones. Leave the first one; it doesn&apos;t have to be
-                poetry.
+      {/* 2. One next step */}
+      {journeyDone ? (
+        <Rise delay={80}>
+          <Card tone="fern" style={{ marginTop: 12 }}>
+            <Text style={{ fontWeight: "700", color: p.ink, fontSize: 16 }}>You graduated</Text>
+            <Muted style={{ marginTop: 6 }}>The rituals are yours now. Come back only if a hard season needs a referee again.</Muted>
+          </Card>
+        </Rise>
+      ) : nextStep ? (
+        <Rise delay={80}>
+          <Pressable onPress={() => router.push(nextStep.href as Href)} style={pressFx}>
+            <Card style={{ marginTop: 12 }}>
+              <Muted style={{ textTransform: "uppercase", letterSpacing: 1.2, fontWeight: "700", color: p.mossDeep, fontSize: 11 }}>
+                Your next step
               </Muted>
-            ) : (
-              <View style={{ marginTop: 10, gap: 8 }}>
-                {notes.map((n) => (
-                  <View key={n.id} style={{ backgroundColor: p.panel, borderRadius: 10, padding: 10 }}>
-                    <P style={{ fontSize: 14 }}>{n.body}</P>
-                    <Muted style={{ marginTop: 4, fontSize: 11 }}>{n.display_name}</Muted>
-                  </View>
-                ))}
+              <Text style={{ marginTop: 6, fontSize: 16.5, fontWeight: "700", color: p.ink }}>{nextStep.title}</Text>
+              <Muted style={{ marginTop: 6 }}>{nextStep.body}</Muted>
+              <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}>
+                <Text style={{ color: p.ember, fontWeight: "600", fontSize: 14 }}>{nextStep.label}</Text>
+                <Ionicons name="arrow-forward" size={15} color={p.ember} style={{ marginLeft: 4 }} />
               </View>
-            )}
-            <View style={{ flexDirection: "row", gap: 8, marginTop: 10 }}>
-              <Input
-                value={noteDraft}
-                onChangeText={setNoteDraft}
-                placeholder="Leave a note for them"
-                style={{ flex: 1 }}
-              />
-              <Btn label="Pin it" onPress={sendNote} disabled={busy || !noteDraft.trim()} />
+            </Card>
+          </Pressable>
+        </Rise>
+      ) : null}
+
+      {/* 3. One gentle extra */}
+      <Rise delay={140}>
+        <Card tone="panel" style={{ marginTop: 12 }}>
+          <View style={{ flexDirection: "row", gap: 12, alignItems: "flex-start" }}>
+            <IconChip name="sparkles-outline" tone="ember" size={40} />
+            <View style={{ flex: 1 }}>
+              <Muted style={{ textTransform: "uppercase", letterSpacing: 1.2, fontWeight: "700", fontSize: 11 }}>
+                A small move for today
+              </Muted>
+              <Text style={{ marginTop: 4, fontSize: 15, lineHeight: 21, color: p.ink }}>{nudge}</Text>
             </View>
-          </Card>
-        </>
-      )}
+          </View>
+        </Card>
+      </Rise>
 
-      {/* ——— Everything, organized ——— */}
-      {directory.map((group, gi) => (
-        <View key={group.section} style={{ marginTop: 22 }}>
-          <Muted style={{ textTransform: "uppercase", letterSpacing: 1.5, fontWeight: "700", color: p.mossDeep }}>
-            {group.section}
-          </Muted>
-          <Card style={{ marginTop: 8, paddingVertical: 6, paddingHorizontal: 6 }}>
-            {group.rows.map((row, i) => (
-              <Pressable
-                key={String(row.href)}
-                onPress={() => router.push(row.href)}
-                style={({ pressed }) => ({
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 12,
-                  padding: 12,
-                  borderRadius: 12,
-                  backgroundColor: pressed ? p.panel : "transparent",
-                  borderTopWidth: i === 0 ? 0 : 1,
-                  borderTopColor: p.line,
-                })}
-              >
-                <IconChip name={row.icon} size={34} tone={gi % 2 === 0 ? "moss" : "ember"} />
-                <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: 15, fontWeight: "600", color: p.ink }}>{row.title}</Text>
-                  <Muted style={{ fontSize: 12.5, marginTop: 1 }}>{row.sub}</Muted>
-                </View>
-                <Ionicons name="chevron-forward" size={16} color={p.muted} />
-              </Pressable>
-            ))}
-          </Card>
+      {/* Browse everything */}
+      <Pressable onPress={() => router.push("/explore")} style={pressFx}>
+        <View style={{ marginTop: 18, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, paddingVertical: 14, borderRadius: 14, borderWidth: 1, borderColor: p.line }}>
+          <Ionicons name="compass-outline" size={18} color={p.muted} />
+          <Text style={{ color: p.ink, fontWeight: "600", fontSize: 15 }}>Browse everything Mend offers</Text>
         </View>
-      ))}
+      </Pressable>
 
-      <Muted style={{ marginTop: 24, textAlign: "center" }}>{t("journey.designedToEnd")}</Muted>
+      <Muted style={{ marginTop: 18, textAlign: "center", fontSize: 12 }}>
+        Mend is designed to be deleted. The goal is a marriage that doesn&apos;t need it.
+      </Muted>
     </Screen>
   );
 }

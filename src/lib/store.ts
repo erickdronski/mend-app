@@ -5,12 +5,15 @@
  */
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { LensId, ConflictRole } from "./content/quiz";
+import type { Situation } from "./situation";
 
 export type Profile = {
   a: string;
   b: string;
   safetyAck: boolean;
   createdAt: string;
+  /** what the couple is carrying, chosen at onboarding; personalizes the app */
+  situation?: Situation;
   lenses?: { a?: LensId; b?: LensId };
   roles?: { a?: ConflictRole; b?: ConflictRole };
 };
@@ -44,6 +47,7 @@ const KEYS = {
   pulses: "mend.pulses",
   journey: "mend.journey",
   language: "mend.language",
+  localDaily: "mend.localDaily",
 } as const;
 
 async function read<T>(key: string, fallback: T): Promise<T> {
@@ -66,6 +70,15 @@ async function write(key: string, value: unknown) {
 // ——— profile ———
 export const getProfile = () => read<Profile | null>(KEYS.profile, null);
 export const saveProfile = (p: Profile) => write(KEYS.profile, p);
+
+// ——— local daily answer (guests / solo, before a shared space exists) ———
+type LocalDaily = { date: string; answer: string };
+export async function getLocalDaily(dateKey: string): Promise<string | null> {
+  const d = await read<LocalDaily | null>(KEYS.localDaily, null);
+  return d && d.date === dateKey ? d.answer : null;
+}
+export const saveLocalDaily = (dateKey: string, answer: string) =>
+  write(KEYS.localDaily, { date: dateKey, answer });
 
 // ——— sessions ———
 export const getSessions = () => read<SessionRecord[]>(KEYS.sessions, []);

@@ -45,6 +45,11 @@ const bothPulsed = (ctx: StepContext, stage: number) =>
   ctx.pulses.some((p) => p.stage === stage && p.who === 0) &&
   ctx.pulses.some((p) => p.stage === stage && p.who === 1);
 
+// Stage 1 is the "one willing person can begin" stage: a single baseline pulse
+// completes it. Deeper stages still need both partners on the record.
+const onePulsed = (ctx: StepContext, stage: number) =>
+  ctx.pulses.some((p) => p.stage === stage);
+
 export const PULSE_QUESTIONS = [
   "I felt heard by my partner this week.",
   "We handled problems as teammates, not opponents.",
@@ -63,11 +68,11 @@ export const stages: Stage[] = [
     steps: [
       {
         id: "s1-pulse",
-        title: "Take your baseline pulse, both of you",
-        body: "Five statements, rated honestly and separately. This is the 'before' photo. Nobody fixes anything today; you just tell the truth about where you're starting.",
+        title: "Take your baseline pulse",
+        body: "Five statements, rated honestly. This is the 'before' photo. If your partner isn't here yet, take yours alone; theirs joins later. Nobody fixes anything today.",
         href: "/pulse",
         hrefLabel: "Take the pulse check",
-        auto: (ctx) => bothPulsed(ctx, 1),
+        auto: (ctx) => onePulsed(ctx, 1),
       },
       {
         id: "s1-deck",

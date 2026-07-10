@@ -5,7 +5,9 @@
     "play": "Spielen",
     "learn": "Lernen",
     "plan": "Plan",
-    "space": "Raum"
+    "space": "Raum",
+    "today": "Heute",
+    "explore": "Entdecken"
   },
   "common": {
     "back": "Zurück",

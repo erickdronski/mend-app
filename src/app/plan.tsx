@@ -27,10 +27,10 @@ export default function PlanScreen() {
     }, [])
   );
 
-  if (!plan) return <Screen scroll={false} safeTop>{null}</Screen>;
+  if (!plan) return <Screen scroll={false}>{null}</Screen>;
 
   return (
-    <Screen safeTop>
+    <Screen>
       <H1 style={{ marginTop: 12 }}>The game plan</H1>
       <P style={{ marginTop: 10 }}>
         Marriages aren&apos;t repaired in sessions. They&apos;re repaired between them: the rituals
@@ -139,7 +139,8 @@ export default function PlanScreen() {
       )}
 
       <Muted style={{ marginTop: 24 }}>
-        Everything on this page lives on this phone, private by design.
+        Private to the two of you. If you have an account it backs up so you don&apos;t lose it;
+        either way, no one outside your space can see it.
       </Muted>
     </Screen>
   );

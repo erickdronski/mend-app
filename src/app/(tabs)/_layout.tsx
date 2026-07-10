@@ -19,8 +19,8 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: t("tabs.space"),
-          tabBarIcon: ({ color, size }) => <Ionicons name="home-outline" size={size} color={color} />,
+          title: t("tabs.today"),
+          tabBarIcon: ({ color, size }) => <Ionicons name="today-outline" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -38,17 +38,10 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="play"
+        name="explore"
         options={{
-          title: t("tabs.play"),
-          tabBarIcon: ({ color, size }) => <Ionicons name="dice-outline" size={size} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="plan"
-        options={{
-          title: t("tabs.plan"),
-          tabBarIcon: ({ color, size }) => <Ionicons name="heart-outline" size={size} color={color} />,
+          title: t("tabs.explore"),
+          tabBarIcon: ({ color, size }) => <Ionicons name="compass-outline" size={size} color={color} />,
         }}
       />
     </Tabs>

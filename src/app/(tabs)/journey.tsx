@@ -19,7 +19,6 @@ import {
 import {
   getStage,
   pulseAvg,
-  pulseConcern,
   readyToGraduate,
   stageComplete,
   stages,
@@ -90,7 +89,6 @@ export default function JourneyScreen() {
   const complete = stageComplete(stage, ctx, journey);
   const doneCount = stage.steps.filter((s) => stepDone(s, ctx, journey)).length;
   const nextStep = stage.steps.find((s) => !stepDone(s, ctx, journey));
-  const concern = pulseConcern(ctx, stage.n);
   const graduating = journey.stage >= 5 && complete;
   const canGraduate = readyToGraduate(ctx, journey);
   const names = ctx.profile ? [ctx.profile.a, ctx.profile.b].filter(Boolean).join(" & ") : "";
@@ -162,18 +160,11 @@ export default function JourneyScreen() {
         </Card>
       </Rise>
 
-      {/* low pulse: point at humans, gently */}
-      {concern && (
-        <Card style={{ marginTop: 12, borderColor: p.ember }}>
-          <H2>A pulse this low deserves more than an app</H2>
-          <P style={{ marginTop: 8 }}>
-            One of you rated this season very low. Keep going here if it helps, and please also
-            look at real support: the resources page lists free and low-cost ways to reach
-            licensed counselors.
-          </P>
-          <Btn label={t("common.getHelp")} kind="ghost" onPress={() => router.push("/safety")} style={{ marginTop: 12 }} />
-        </Card>
-      )}
+      {/* The low-pulse support offer is intentionally NOT shown here. Surfacing
+          "one of you rated this low" on the shared Journey screen would out
+          whichever partner scored low, breaking the pulse's privacy promise.
+          The offer now appears privately inside the pulse flow, only to the
+          person who just answered low, on their own turn. */}
 
       {/* next step, big */}
       {nextStep && !complete && (

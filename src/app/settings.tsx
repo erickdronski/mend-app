@@ -7,6 +7,9 @@ import i18n, { LANGUAGES, type LanguageCode } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { getProfile, saveLanguage, saveProfile, type Profile } from "@/lib/store";
+import { isLockEnabled, lockAvailable, setLockEnabled } from "@/lib/lock";
+import { notifyEnabled, notifyHour, setNotify } from "@/lib/notify";
+import { situations } from "@/lib/situation";
 import { Btn, Card, Divider, H1, H2, Input, Label, Muted, P, Screen, usePalette } from "@/components/ui";
 
 const SITE = "https://mend-drab-pi.vercel.app";
@@ -28,6 +31,29 @@ export default function Settings() {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [lockOn, setLockOn] = useState(false);
+  const [lockAvail, setLockAvail] = useState(false);
+  const [notifOn, setNotifOn] = useState(false);
+  const [notifH, setNotifH] = useState(19);
+
+  async function toggleLock() {
+    if (!lockOn && !(await lockAvailable())) {
+      setLockAvail(false);
+      return;
+    }
+    await setLockEnabled(!lockOn);
+    setLockOn(!lockOn);
+  }
+
+  async function toggleNotify() {
+    const ok = await setNotify(!notifOn, notifH);
+    setNotifOn(ok);
+  }
+
+  async function setReminderHour(h: number) {
+    setNotifH(h);
+    if (notifOn) await setNotify(true, h);
+  }
 
   async function deleteAccount() {
     setDeleting(true);
@@ -47,6 +73,10 @@ export default function Settings() {
       setProfile(prof);
       if (prof) setNames([prof.a, prof.b]);
     });
+    isLockEnabled().then(setLockOn);
+    lockAvailable().then(setLockAvail);
+    notifyEnabled().then(setNotifOn);
+    notifyHour().then(setNotifH);
   }, []);
 
   async function changeLanguage(code: LanguageCode) {
@@ -58,6 +88,13 @@ export default function Settings() {
   async function saveNames() {
     if (!profile) return;
     const next = { ...profile, a: names[0].trim(), b: names[1].trim() };
+    await saveProfile(next);
+    setProfile(next);
+  }
+
+  async function changeSituation(id: Profile["situation"]) {
+    if (!profile) return;
+    const next = { ...profile, situation: id };
     await saveProfile(next);
     setProfile(next);
   }
@@ -130,6 +167,86 @@ export default function Settings() {
           />
         </View>
       </View>
+
+      <Divider />
+
+      {/* Situation */}
+      <H2>What you&apos;re carrying</H2>
+      <Muted style={{ marginTop: 6, fontSize: 13 }}>Shapes what Mend shows you first. Change it whenever things shift.</Muted>
+      <View style={{ marginTop: 10, gap: 8 }}>
+        {situations.map((s) => (
+          <Pressable key={s.id} onPress={() => changeSituation(s.id)}>
+            <Card style={{ flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 12, borderColor: profile?.situation === s.id ? p.moss : p.line }}>
+              <Ionicons name={s.icon} size={18} color={profile?.situation === s.id ? p.moss : p.muted} />
+              <Text style={{ flex: 1, color: p.ink, fontSize: 14.5, fontWeight: profile?.situation === s.id ? "700" : "400" }}>{s.chip}</Text>
+              {profile?.situation === s.id && <Ionicons name="checkmark-circle" size={18} color={p.moss} />}
+            </Card>
+          </Pressable>
+        ))}
+      </View>
+
+      <Divider />
+
+      {/* Privacy */}
+      <H2>Privacy</H2>
+      <Pressable onPress={toggleLock} style={{ marginTop: 10 }}>
+        <Card style={{ flexDirection: "row", alignItems: "center", gap: 12, borderColor: lockOn ? p.moss : p.line }}>
+          <Ionicons name="lock-closed-outline" size={20} color={lockOn ? p.moss : p.muted} />
+          <View style={{ flex: 1 }}>
+            <Text style={{ color: p.ink, fontSize: 15, fontWeight: "600" }}>Require Face ID or passcode</Text>
+            <Muted style={{ marginTop: 2, fontSize: 12.5 }}>
+              {lockAvail
+                ? "Lock Mend so only you can open it, even on an unlocked phone."
+                : "Set up Face ID or a passcode on your device to use this."}
+            </Muted>
+          </View>
+          <View style={{ width: 46, height: 28, borderRadius: 14, backgroundColor: lockOn ? p.moss : p.line, justifyContent: "center", padding: 3 }}>
+            <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: "#fff", alignSelf: lockOn ? "flex-end" : "flex-start" }} />
+          </View>
+        </Card>
+      </Pressable>
+      <Card tone="panel" style={{ marginTop: 10 }}>
+        <Text style={{ color: p.ink, fontWeight: "600", fontSize: 14 }}>What your partner can see</Text>
+        <Muted style={{ marginTop: 6, fontSize: 13 }}>
+          In a shared space, your partner sees your daily answers (after you both send them) and
+          your notes. They never see your pulse-check numbers or your quiz answers: those are
+          yours alone. Everything else stays on this phone unless you both act on it.
+        </Muted>
+      </Card>
+
+      <Divider />
+
+      {/* Reminders */}
+      <H2>Daily reminder</H2>
+      <Pressable onPress={toggleNotify} style={{ marginTop: 10 }}>
+        <Card style={{ flexDirection: "row", alignItems: "center", gap: 12, borderColor: notifOn ? p.moss : p.line }}>
+          <Ionicons name="notifications-outline" size={20} color={notifOn ? p.moss : p.muted} />
+          <View style={{ flex: 1 }}>
+            <Text style={{ color: p.ink, fontSize: 15, fontWeight: "600" }}>One gentle nudge a day</Text>
+            <Muted style={{ marginTop: 2, fontSize: 12.5 }}>A quiet reminder to answer the daily question. Off by default.</Muted>
+          </View>
+          <View style={{ width: 46, height: 28, borderRadius: 14, backgroundColor: notifOn ? p.moss : p.line, justifyContent: "center", padding: 3 }}>
+            <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: "#fff", alignSelf: notifOn ? "flex-end" : "flex-start" }} />
+          </View>
+        </Card>
+      </Pressable>
+      {notifOn && (
+        <View style={{ flexDirection: "row", gap: 8, marginTop: 10 }}>
+          {[
+            { h: 9, label: "Morning" },
+            { h: 13, label: "Midday" },
+            { h: 19, label: "Evening" },
+          ].map((o) => (
+            <Pressable
+              key={o.h}
+              onPress={() => setReminderHour(o.h)}
+              style={{ flex: 1, paddingVertical: 10, borderRadius: 10, borderWidth: 1, borderColor: notifH === o.h ? p.moss : p.line, backgroundColor: notifH === o.h ? p.fern : "transparent", alignItems: "center" }}
+            >
+              <Text style={{ color: p.ink, fontWeight: "600", fontSize: 13.5 }}>{o.label}</Text>
+            </Pressable>
+          ))}
+        </View>
+      )}
 
       <Divider />
 

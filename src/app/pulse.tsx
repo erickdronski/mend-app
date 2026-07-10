@@ -6,7 +6,7 @@ import { addPulse, getJourney, getProfile, getPulses } from "@/lib/store";
 import { PULSE_QUESTIONS, pulseAvg } from "@/lib/journey";
 import { Btn, Card, H1, H2, Muted, P, Screen, usePalette } from "@/components/ui";
 
-type Step = "who" | "rate" | "handoff" | "done";
+type Step = "who" | "rate" | "handoff" | "done" | "support";
 
 /**
  * The pulse check: five statements, rated 1-5, separately by each partner.
@@ -22,6 +22,7 @@ export default function Pulse() {
   const [qIndex, setQIndex] = useState(0);
   const [scores, setScores] = useState<number[]>([]);
   const [tookBoth, setTookBoth] = useState(false);
+  const [afterSupport, setAfterSupport] = useState<Step>("handoff");
   const [prevAvg, setPrevAvg] = useState<number | null>(null);
 
   useEffect(() => {
@@ -47,11 +48,17 @@ export default function Pulse() {
     if (stage > 1) setPrevAvg(pulseAvg(pulses, stage - 1, who));
     setScores([]);
     setQIndex(0);
-    if (otherDone) {
-      setTookBoth(true);
-      setStep("done");
+    const dest = otherDone ? "done" : "handoff";
+    if (otherDone) setTookBoth(true);
+    // If THIS person's own answers were low, offer real support privately, on
+    // their turn, before the phone is handed on. It never surfaces on a shared
+    // screen, so it can't out who scored low.
+    const selfAvg = next.reduce((a, b) => a + b, 0) / next.length;
+    if (selfAvg <= 2) {
+      setAfterSupport(dest);
+      setStep("support");
     } else {
-      setStep("handoff");
+      setStep(dest);
     }
   }
 
@@ -116,6 +123,29 @@ export default function Pulse() {
           Answer for the season, not for today's mood. And answer for yourself; your partner
           can't see this screen.
         </Muted>
+      </Screen>
+    );
+  }
+
+  if (step === "support") {
+    return (
+      <Screen>
+        <Muted style={{ textTransform: "uppercase", letterSpacing: 2, fontWeight: "700", color: p.ember }}>
+          Just for you, {names[who]}
+        </Muted>
+        <H1 style={{ marginTop: 8 }}>This season is landing hard</H1>
+        <P style={{ marginTop: 10 }}>
+          Your answers were honest, and they were low. That is worth more than an app can hold.
+          Keep going here if it helps, and please also look at real support. This is on your
+          screen only; your partner will not see it.
+        </P>
+        <Btn label="Show me help" onPress={() => router.push("/safety")} style={{ marginTop: 20 }} />
+        <Btn
+          label="Continue"
+          kind="ghost"
+          onPress={() => setStep(afterSupport)}
+          style={{ marginTop: 10 }}
+        />
       </Screen>
     );
   }
