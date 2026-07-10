@@ -11,7 +11,9 @@ on:
 jobs:
   build-and-submit:
     runs-on: macos-26
-    timeout-minutes: 90
+    # Nalee's identical eas-local build proved ~18 min; macOS bills 10x, so a
+    # hang at 90 would bill ~900 min. 60 keeps 3x headroom for the first run.
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
 
@@ -50,11 +52,13 @@ jobs:
             --path "$RUNNER_TEMP/mend.ipa" \
             --non-interactive
 
+      # Only keep the .ipa when something failed (for debugging a bad submit) —
+      # on success TestFlight already has the binary, and artifact storage bills.
       - name: Upload ipa artifact
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: mend-ipa
           path: ${{ runner.temp }}/mend.ipa
           if-no-files-found: ignore
-          retention-days: 7
+          retention-days: 2
