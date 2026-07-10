@@ -1,4 +1,6 @@
 import { useCallback, useState } from "react";
+import Svg, { Circle } from "react-native-svg";
+import { LinearGradient } from "expo-linear-gradient";
 import { Pressable, Text, View } from "react-native";
 import { Link, useFocusEffect, useRouter, type Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -24,7 +26,7 @@ import {
   stepDone,
   type StepContext,
 } from "@/lib/journey";
-import { Btn, Card, H1, H2, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Btn, Card, H1, H2, Muted, P, Rise, Screen, usePalette } from "@/components/ui";
 
 /**
  * The Journey tab: the app's home. One current stage, its steps, the next
@@ -104,34 +106,61 @@ export default function JourneyScreen() {
         </Pressable>
       </View>
 
-      {names ? <Muted style={{ marginTop: 14 }}>{names}</Muted> : null}
-      <H1 style={{ marginTop: 4 }}>
-        {t("journey.stage")} {stage.n}: {stage.title}
-      </H1>
-      <Muted style={{ marginTop: 6 }}>{stage.arc}</Muted>
-
-      {/* stage progress rail */}
-      <View style={{ flexDirection: "row", gap: 6, marginTop: 16 }}>
-        {stages.map((s) => (
-          <View
-            key={s.n}
-            style={{
-              flex: 1,
-              height: 5,
-              borderRadius: 3,
-              backgroundColor: s.n < stage.n ? p.moss : s.n === stage.n ? p.ember : p.line,
-            }}
-          />
-        ))}
-      </View>
-      <Muted style={{ marginTop: 8 }}>
-        {doneCount} {t("common.of")} {stage.steps.length} · {stage.weeksHint}
-      </Muted>
+      {/* stage hero: deep forest with a progress ring */}
+      <Rise>
+        <LinearGradient
+          colors={["#2e4a38", "#233c2c"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{ marginTop: 16, borderRadius: 20, padding: 20 }}
+        >
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 16 }}>
+            <View style={{ flex: 1 }}>
+              {names ? (
+                <Text style={{ color: "#f4f4ee", opacity: 0.6, fontSize: 12.5 }}>{names}</Text>
+              ) : null}
+              <Text style={{ color: "#d9a057", fontWeight: "700", fontSize: 12, textTransform: "uppercase", letterSpacing: 1.5, marginTop: 4 }}>
+                {t("journey.stage")} {stage.n} {t("common.of")} {stages.length}
+              </Text>
+              <Text style={{ color: "#f4f4ee", fontSize: 25, fontWeight: "800", letterSpacing: -0.4, marginTop: 4, lineHeight: 30 }}>
+                {stage.title}
+              </Text>
+              <Text style={{ color: "#f4f4ee", opacity: 0.75, fontSize: 13.5, marginTop: 6, lineHeight: 19 }}>
+                {stage.arc}
+              </Text>
+            </View>
+            <View style={{ width: 84, height: 84 }}>
+              <Svg viewBox="0 0 84 84" style={{ transform: [{ rotate: "-90deg" }] }}>
+                <Circle cx="42" cy="42" r="36" fill="none" stroke="rgba(244,244,238,0.18)" strokeWidth="7" />
+                <Circle
+                  cx="42"
+                  cy="42"
+                  r="36"
+                  fill="none"
+                  stroke="#d9a057"
+                  strokeWidth="7"
+                  strokeLinecap="round"
+                  strokeDasharray={2 * Math.PI * 36}
+                  strokeDashoffset={2 * Math.PI * 36 * (1 - doneCount / stage.steps.length)}
+                />
+              </Svg>
+              <View style={{ position: "absolute", inset: 0, alignItems: "center", justifyContent: "center" }}>
+                <Text style={{ color: "#f4f4ee", fontWeight: "800", fontSize: 18 }}>
+                  {doneCount}/{stage.steps.length}
+                </Text>
+              </View>
+            </View>
+          </View>
+          <Text style={{ color: "#f4f4ee", opacity: 0.55, fontSize: 12, marginTop: 12 }}>{stage.weeksHint}</Text>
+        </LinearGradient>
+      </Rise>
 
       {/* the why */}
-      <Card tone="panel" style={{ marginTop: 16 }}>
-        <P>{stage.why}</P>
-      </Card>
+      <Rise delay={120}>
+        <Card tone="panel" style={{ marginTop: 12 }}>
+          <P style={{ fontSize: 14 }}>{stage.why}</P>
+        </Card>
+      </Rise>
 
       {/* low pulse: point at humans, gently */}
       {concern && (

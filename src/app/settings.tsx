@@ -1,12 +1,21 @@
 import { useEffect, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Linking, Pressable, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 import i18n, { LANGUAGES, type LanguageCode } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
+import { supabase } from "@/lib/supabase";
 import { getProfile, saveLanguage, saveProfile, type Profile } from "@/lib/store";
-import { Btn, Card, Divider, H1, H2, Input, Label, Muted, Screen, usePalette } from "@/components/ui";
+import { Btn, Card, Divider, H1, H2, Input, Label, Muted, P, Screen, usePalette } from "@/components/ui";
+
+const SITE = "https://mend-drab-pi.vercel.app";
+
+const legalLinks = [
+  { label: "Privacy policy", url: `${SITE}/privacy` },
+  { label: "Terms of use", url: `${SITE}/terms` },
+  { label: "Support", url: `${SITE}/support` },
+];
 
 export default function Settings() {
   const p = usePalette();
@@ -16,6 +25,22 @@ export default function Settings() {
   const [lang, setLang] = useState<LanguageCode>((i18n.language as LanguageCode) ?? "en");
   const [profile, setProfile] = useState<Profile | null>(null);
   const [names, setNames] = useState<[string, string]>(["", ""]);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  async function deleteAccount() {
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      const { error } = await supabase.functions.invoke("mend-delete-account", { method: "POST" });
+      if (error) throw error;
+      await signOut();
+    } catch {
+      setDeleteError("Deletion failed. Check your connection and try again, or email support.");
+      setDeleting(false);
+    }
+  }
 
   useEffect(() => {
     getProfile().then((prof) => {
@@ -114,6 +139,63 @@ export default function Settings() {
         <H2>{t("settings.aboutTitle")}</H2>
         <Muted style={{ marginTop: 8 }}>{t("settings.aboutBody")}</Muted>
       </Card>
+
+      {/* Legal */}
+      <View style={{ marginTop: 16 }}>
+        {legalLinks.map((l) => (
+          <Pressable
+            key={l.url}
+            onPress={() => Linking.openURL(l.url)}
+            style={({ pressed }) => ({
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingVertical: 13,
+              borderBottomWidth: 1,
+              borderBottomColor: p.line,
+              opacity: pressed ? 0.7 : 1,
+            })}
+          >
+            <Text style={{ color: p.ink, fontSize: 15 }}>{l.label}</Text>
+            <Ionicons name="open-outline" size={16} color={p.muted} />
+          </Pressable>
+        ))}
+      </View>
+
+      {/* Danger zone */}
+      {session && (
+        <View style={{ marginTop: 24 }}>
+          {!confirmDelete ? (
+            <Pressable onPress={() => setConfirmDelete(true)}>
+              <Muted style={{ textDecorationLine: "underline", color: p.ember }}>
+                Delete my account and data
+              </Muted>
+            </Pressable>
+          ) : (
+            <Card style={{ borderColor: p.ember }}>
+              <H2>Delete everything?</H2>
+              <P style={{ marginTop: 8, fontSize: 14 }}>
+                This permanently removes your account, your backup, your daily answers, and your
+                notes. If you&apos;re the last member of a space, the space dissolves too. There
+                is no undo.
+              </P>
+              {deleteError && <Muted style={{ color: p.ember, marginTop: 8 }}>{deleteError}</Muted>}
+              <View style={{ flexDirection: "row", gap: 10, marginTop: 14 }}>
+                <Btn label="Keep my account" onPress={() => setConfirmDelete(false)} style={{ flex: 1 }} />
+                <Btn
+                  label={deleting ? "Deleting…" : "Delete forever"}
+                  kind="ghost"
+                  disabled={deleting}
+                  onPress={deleteAccount}
+                  style={{ flex: 1, borderColor: p.ember }}
+                />
+              </View>
+            </Card>
+          )}
+        </View>
+      )}
+
+      <Muted style={{ marginTop: 24, textAlign: "center", fontSize: 12 }}>Mend 1.0</Muted>
     </Screen>
   );
 }

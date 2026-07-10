@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { Pressable, Share, Text, View } from "react-native";
 import { useFocusEffect, useRouter, type Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth";
 import { questionForDate } from "@/lib/content/daily";
@@ -16,7 +17,12 @@ import {
   type Space,
   type SpaceNote,
 } from "@/lib/space";
-import { Btn, Card, H1, H2, Input, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Btn, Card, H2, IconChip, Input, Muted, P, Rise, Screen, usePalette } from "@/components/ui";
+
+// The daily-question hero: deep forest, readable in both schemes
+const HERO = ["#2e4a38", "#233c2c"] as const;
+const BONE = "#f4f4ee";
+const EMBER = "#d9a057";
 
 type Row = { href: Href; icon: keyof typeof Ionicons.glyphMap; title: string; sub: string };
 
@@ -168,21 +174,24 @@ export default function SpaceHub() {
         </Card>
       ) : (
         <>
-          <Card tone="fern" style={{ marginTop: 16 }}>
+          <Rise>
+          <LinearGradient colors={HERO} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ marginTop: 16, borderRadius: 20, padding: 20 }}>
             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-              <Muted style={{ textTransform: "uppercase", letterSpacing: 1.5, fontWeight: "700", color: p.mossDeep }}>
+              <Text style={{ textTransform: "uppercase", letterSpacing: 1.5, fontWeight: "700", color: EMBER, fontSize: 12 }}>
                 Today&apos;s question
-              </Muted>
-              <Muted style={{ fontSize: 11, textTransform: "capitalize" }}>{question.category}</Muted>
+              </Text>
+              <Text style={{ fontSize: 11, textTransform: "capitalize", color: BONE, opacity: 0.6 }}>{question.category}</Text>
             </View>
-            <H2 style={{ marginTop: 8 }}>{question.text}</H2>
+            <Text style={{ marginTop: 10, fontSize: 21, lineHeight: 28, fontWeight: "800", color: BONE }}>
+              {question.text}
+            </Text>
 
             {!mine ? (
-              <View style={{ marginTop: 12 }}>
+              <View style={{ marginTop: 14 }}>
                 {theirs && (
-                  <Muted style={{ marginBottom: 8 }}>
+                  <Text style={{ marginBottom: 8, color: BONE, opacity: 0.75, fontSize: 13.5 }}>
                     {theirs.display_name} answered already. Yours unlocks it.
-                  </Muted>
+                  </Text>
                 )}
                 <Input
                   value={draft}
@@ -194,25 +203,26 @@ export default function SpaceHub() {
                 <Btn label="Send mine in" kind="moss" onPress={send} disabled={busy || !draft.trim()} style={{ marginTop: 10 }} />
               </View>
             ) : (
-              <View style={{ marginTop: 12, gap: 10 }}>
-                <View style={{ backgroundColor: p.raised, borderRadius: 12, padding: 12, borderWidth: 1, borderColor: p.line }}>
-                  <Muted style={{ fontWeight: "700" }}>You</Muted>
-                  <P style={{ marginTop: 4 }}>{mine.answer}</P>
+              <View style={{ marginTop: 14, gap: 10 }}>
+                <View style={{ backgroundColor: "rgba(244,244,238,0.12)", borderRadius: 12, padding: 12 }}>
+                  <Text style={{ fontWeight: "700", color: EMBER, fontSize: 12.5 }}>You</Text>
+                  <Text style={{ marginTop: 4, color: BONE, fontSize: 14.5, lineHeight: 21 }}>{mine.answer}</Text>
                 </View>
                 {theirs ? (
-                  <View style={{ backgroundColor: p.raised, borderRadius: 12, padding: 12, borderWidth: 1, borderColor: p.moss }}>
-                    <Muted style={{ fontWeight: "700", color: p.mossDeep }}>{theirs.display_name}</Muted>
-                    <P style={{ marginTop: 4 }}>{theirs.answer}</P>
+                  <View style={{ backgroundColor: "rgba(244,244,238,0.12)", borderRadius: 12, padding: 12 }}>
+                    <Text style={{ fontWeight: "700", color: EMBER, fontSize: 12.5 }}>{theirs.display_name}</Text>
+                    <Text style={{ marginTop: 4, color: BONE, fontSize: 14.5, lineHeight: 21 }}>{theirs.answer}</Text>
                   </View>
                 ) : (
-                  <Muted>
+                  <Text style={{ color: BONE, opacity: 0.75, fontSize: 13.5, lineHeight: 20 }}>
                     {partner ? `Waiting on ${partner.display_name}. ` : ""}Yours is in, safe and
                     sealed until theirs arrives.
-                  </Muted>
+                  </Text>
                 )}
               </View>
             )}
-          </Card>
+          </LinearGradient>
+          </Rise>
 
           {solo && (
             <Card style={{ marginTop: 10, borderColor: p.ember }}>
@@ -274,7 +284,7 @@ export default function SpaceHub() {
       )}
 
       {/* ——— Everything, organized ——— */}
-      {directory.map((group) => (
+      {directory.map((group, gi) => (
         <View key={group.section} style={{ marginTop: 22 }}>
           <Muted style={{ textTransform: "uppercase", letterSpacing: 1.5, fontWeight: "700", color: p.mossDeep }}>
             {group.section}
@@ -295,7 +305,7 @@ export default function SpaceHub() {
                   borderTopColor: p.line,
                 })}
               >
-                <Ionicons name={row.icon} size={20} color={p.moss} />
+                <IconChip name={row.icon} size={34} tone={gi % 2 === 0 ? "moss" : "ember"} />
                 <View style={{ flex: 1 }}>
                   <Text style={{ fontSize: 15, fontWeight: "600", color: p.ink }}>{row.title}</Text>
                   <Muted style={{ fontSize: 12.5, marginTop: 1 }}>{row.sub}</Muted>

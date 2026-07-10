@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
+import { KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
@@ -74,6 +74,22 @@ export default function SignIn() {
 
           {error && <Muted style={{ color: p.ember }}>{error}</Muted>}
           {notice && <Muted style={{ color: p.moss }}>{notice}</Muted>}
+
+          {mode === "in" && (
+            <Pressable
+              onPress={async () => {
+                if (!email) {
+                  setError("Enter your email first, then tap forgot password.");
+                  return;
+                }
+                setError(null);
+                await supabase.auth.resetPasswordForEmail(email);
+                setNotice("If that email has an account, a reset link is on its way.");
+              }}
+            >
+              <Muted style={{ textDecorationLine: "underline" }}>Forgot password?</Muted>
+            </Pressable>
+          )}
 
           <Btn
             label={mode === "in" ? t("auth.signIn") : t("auth.signUp")}

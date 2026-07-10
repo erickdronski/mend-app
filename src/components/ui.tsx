@@ -16,6 +16,8 @@ import {
   type ViewStyle,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Animated, { FadeInDown } from "react-native-reanimated";
+import { Ionicons } from "@expo/vector-icons";
 import { palettes, type Palette } from "@/lib/theme";
 
 export function usePalette(): Palette {
@@ -63,6 +65,52 @@ export const pressFx = ({ pressed }: { pressed: boolean }) => ({
   opacity: pressed ? 0.85 : 1,
   transform: [{ scale: pressed ? 0.995 : 1 }],
 });
+
+/** Soft entrance for cards and lists. Subtle, never bouncy. */
+export function Rise({
+  children,
+  delay = 0,
+  style,
+}: {
+  children: ReactNode;
+  delay?: number;
+  style?: StyleProp<ViewStyle>;
+}) {
+  return (
+    <Animated.View entering={FadeInDown.duration(420).delay(delay)} style={style}>
+      {children}
+    </Animated.View>
+  );
+}
+
+/** Tinted rounded-square icon, iOS-Settings style. Kills the text-wall feel. */
+export function IconChip({
+  name,
+  tone = "moss",
+  size = 36,
+}: {
+  name: keyof typeof Ionicons.glyphMap;
+  tone?: "moss" | "ember" | "fern";
+  size?: number;
+}) {
+  const p = usePalette();
+  const bg = tone === "ember" ? p.ember : tone === "fern" ? p.fern : p.moss;
+  const fg = tone === "fern" ? p.mossDeep : p.surface;
+  return (
+    <View
+      style={{
+        width: size,
+        height: size,
+        borderRadius: size * 0.3,
+        backgroundColor: bg,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Ionicons name={name} size={size * 0.55} color={fg} />
+    </View>
+  );
+}
 
 export function H1({ children, style }: { children: ReactNode; style?: StyleProp<TextStyle> }) {
   const p = usePalette();

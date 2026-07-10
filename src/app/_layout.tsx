@@ -32,12 +32,11 @@ function Gate({ children }: { children: ReactNode }) {
     const first = segments[0] as string | undefined;
     const inAuth = first === "sign-in";
     const inOnboarding = first === "onboarding";
-    if (!session && !guest) {
-      if (!inAuth) router.replace("/sign-in");
-      return;
-    }
-    if (!hasProfile) {
-      if (!inOnboarding) router.replace("/onboarding");
+    const inSafety = first === "safety";
+    // Onboarding owns the whole first run (welcome, tour, deal, gate,
+    // account, names). Safety stays reachable from the gate step.
+    if (!hasProfile || (!session && !guest)) {
+      if (!inOnboarding && !inAuth && !inSafety) router.replace("/onboarding");
       return;
     }
     if (inAuth || inOnboarding) router.replace("/");

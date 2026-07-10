@@ -1,21 +1,92 @@
-import { useState } from "react";
-import { View } from "react-native";
+import { useRef, useState } from "react";
+import {
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import { useRouter } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/lib/auth";
 import { saveProfile } from "@/lib/store";
 import { whyGateMatters } from "@/lib/content/safety";
-import { Btn, Card, H1, H2, Input, Label, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Btn, Card, H1, H2, IconChip, Input, Label, Muted, P, Rise, Screen, usePalette } from "@/components/ui";
 
-/**
- * Onboarding is the contract. A couple should leave it knowing exactly what
- * Mend asks of them, what it promises, and that it is honest about who it
- * is NOT for (relationships with violence, fear, or control).
- */
+type Step = "welcome" | "tour" | "deal" | "gate" | "account" | "names";
+
+const tour: { icon: keyof typeof Ionicons.glyphMap; title: string; body: string }[] = [
+  {
+    icon: "trail-sign",
+    title: "A journey, not a jar of tips",
+    body: "Five stages, from ten calm minutes to the hard rebuilding, paced by real progress. It ends with you deleting the app.",
+  },
+  {
+    icon: "chatbubbles",
+    title: "A timer that referees",
+    body: "One of you speaks, protected. The other proves they heard. The counselor's structure, free, at your kitchen table.",
+  },
+  {
+    icon: "dice",
+    title: "Play your way back",
+    body: "Card decks, guessing games, 7-day challenges. Easier conversations that make the harder ones possible.",
+  },
+  {
+    icon: "people",
+    title: "One space, two phones",
+    body: "A daily question you both answer, sealed until you've each sent yours. Little notes back and forth. One shared place.",
+  },
+];
+
 export default function Onboarding() {
   const router = useRouter();
   const p = usePalette();
-  const [step, setStep] = useState<"deal" | "gate" | "names">("deal");
+  const insets = useSafeAreaInsets();
+  const { session, guest, continueAsGuest } = useAuth();
+  const [step, setStep] = useState<Step>("welcome");
+  const [page, setPage] = useState(0);
+  const scrollRef = useRef<ScrollView>(null);
+  const width = Dimensions.get("window").width;
+
+  // account step
+  const [mode, setMode] = useState<"up" | "in">("up");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  // names step
   const [a, setA] = useState("");
   const [b, setB] = useState("");
+
+  async function submitAccount() {
+    setBusy(true);
+    setError(null);
+    setNotice(null);
+    try {
+      if (mode === "up") {
+        const { data, error } = await supabase.auth.signUp({ email, password });
+        if (error) throw error;
+        if (data.session) setStep("names");
+        else setNotice("Check your email to confirm your account, then come back and sign in.");
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        setStep("names");
+      }
+    } catch (e) {
+      const msg = e instanceof Error && e.message ? e.message : "";
+      setError(msg || "That didn't work. Check your email and password.");
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function finish() {
     await saveProfile({
@@ -27,65 +98,188 @@ export default function Onboarding() {
     router.replace("/");
   }
 
+  // ————— welcome: the brand moment —————
+  if (step === "welcome") {
+    return (
+      <LinearGradient colors={["#24402c", "#38553f", "#2e4636"]} style={{ flex: 1 }}>
+        <View style={{ flex: 1, paddingHorizontal: 28, paddingTop: insets.top + 80, paddingBottom: insets.bottom + 28 }}>
+          <Rise>
+            <Text style={{ fontSize: 56, fontWeight: "800", color: "#f4f4ee", letterSpacing: -1 }}>
+              Mend<Text style={{ color: "#d9a057" }}>.</Text>
+            </Text>
+          </Rise>
+          <Rise delay={150}>
+            <Text style={{ fontSize: 26, fontWeight: "700", color: "#f4f4ee", marginTop: 18, lineHeight: 34 }}>
+              Marriages rarely die of one big thing.
+            </Text>
+            <Text style={{ fontSize: 26, fontWeight: "700", color: "#d9a057", marginTop: 4, lineHeight: 34 }}>
+              They starve on unheard sentences.
+            </Text>
+          </Rise>
+          <Rise delay={300}>
+            <Text style={{ fontSize: 16, color: "#f4f4ee", opacity: 0.75, marginTop: 18, lineHeight: 24 }}>
+              A free, private mediator for the two of you. No ads, no fees, nothing sold. Just the
+              way back.
+            </Text>
+          </Rise>
+          <View style={{ flex: 1 }} />
+          <Rise delay={450}>
+            <Pressable
+              onPress={() => setStep("tour")}
+              style={({ pressed }) => ({
+                backgroundColor: "#f4f4ee",
+                borderRadius: 16,
+                paddingVertical: 17,
+                alignItems: "center",
+                opacity: pressed ? 0.9 : 1,
+              })}
+            >
+              <Text style={{ color: "#1f2721", fontWeight: "700", fontSize: 16 }}>Begin</Text>
+            </Pressable>
+            {!session && !guest && (
+              <Pressable onPress={() => router.push("/sign-in")} style={{ marginTop: 16, alignItems: "center" }}>
+                <Text style={{ color: "#f4f4ee", opacity: 0.7, fontSize: 14 }}>
+                  I already have an account
+                </Text>
+              </Pressable>
+            )}
+          </Rise>
+        </View>
+      </LinearGradient>
+    );
+  }
+
+  // ————— tour: four swipes —————
+  if (step === "tour") {
+    return (
+      <Screen scroll={false} padded={false} safeTop>
+        <ScrollView
+          ref={scrollRef}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          onMomentumScrollEnd={(e) => setPage(Math.round(e.nativeEvent.contentOffset.x / width))}
+          style={{ flex: 1 }}
+        >
+          {tour.map((t2, i) => (
+            <View key={t2.title} style={{ width, paddingHorizontal: 32, justifyContent: "center" }}>
+              <Rise delay={i === 0 ? 100 : 0}>
+                <IconChip name={t2.icon} tone={i % 2 === 0 ? "moss" : "ember"} size={72} />
+                <Text style={{ fontSize: 30, fontWeight: "800", color: p.ink, marginTop: 24, letterSpacing: -0.5, lineHeight: 36 }}>
+                  {t2.title}
+                </Text>
+                <P style={{ marginTop: 12, fontSize: 16.5, lineHeight: 25 }}>{t2.body}</P>
+              </Rise>
+            </View>
+          ))}
+        </ScrollView>
+        <View style={{ paddingHorizontal: 24, paddingBottom: insets.bottom + 20 }}>
+          <View style={{ flexDirection: "row", gap: 6, justifyContent: "center", marginBottom: 18 }}>
+            {tour.map((_, i) => (
+              <View
+                key={i}
+                style={{
+                  width: i === page ? 22 : 7,
+                  height: 7,
+                  borderRadius: 4,
+                  backgroundColor: i === page ? p.moss : p.line,
+                }}
+              />
+            ))}
+          </View>
+          <Btn
+            label={page < tour.length - 1 ? "Next" : "Here's the deal"}
+            onPress={() => {
+              if (page < tour.length - 1) {
+                scrollRef.current?.scrollTo({ x: (page + 1) * width, animated: true });
+                setPage(page + 1);
+              } else {
+                setStep("deal");
+              }
+            }}
+          />
+        </View>
+      </Screen>
+    );
+  }
+
+  // ————— the deal —————
   if (step === "deal") {
     return (
       <Screen safeTop>
-        <Muted style={{ textTransform: "uppercase", letterSpacing: 2, fontWeight: "700", color: p.ember }}>
-          Before anything else
-        </Muted>
-        <H1 style={{ marginTop: 8 }}>Here's the deal</H1>
-        <P style={{ marginTop: 12 }}>
-          Mend is a staged journey, not a bag of tips. It starts embarrassingly easy and gets
-          deeper as you get stronger, over months. Here's what it asks of you, and what it
-          promises back.
-        </P>
-
+        <Rise>
+          <H1 style={{ marginTop: 12 }}>Here&apos;s the deal</H1>
+          <Muted style={{ marginTop: 6 }}>Three promises between us, before anything starts.</Muted>
+        </Rise>
         <View style={{ marginTop: 20, gap: 12 }}>
-          <Card>
-            <H2>What it asks</H2>
-            <P style={{ marginTop: 8 }}>
-              Twenty honest minutes a week, together. Both of you, eventually (one of you can
-              start alone). Honesty on the pulse checks: this only works at the speed of truth.
-              And patience: real repair is measured in months, not moods.
-            </P>
-          </Card>
-          <Card>
-            <H2>What it promises</H2>
-            <P style={{ marginTop: 8 }}>
-              The structure and language of real counseling frameworks (the kind couples usually
-              pay hundreds a session to learn), one stage at a time: protected speaking time,
-              tools for how you fight, games that rebuild curiosity, and paths through the
-              heaviest seasons. Free, private, on your phone.
-            </P>
-          </Card>
-          <Card tone="fern">
-            <H2>How it ends</H2>
-            <P style={{ marginTop: 8 }}>
-              With you deleting it. Mend is designed to get you off the app and back into a
-              marriage that holds itself up. Graduation is the feature.
-            </P>
-          </Card>
+          <Rise delay={100}>
+            <Card>
+              <View style={{ flexDirection: "row", gap: 14, alignItems: "flex-start" }}>
+                <IconChip name="time" tone="moss" />
+                <View style={{ flex: 1 }}>
+                  <H2>What it asks</H2>
+                  <Muted style={{ marginTop: 6 }}>
+                    Twenty honest minutes a week, together. Honesty on the pulse checks. Patience
+                    measured in months, not moods. One of you can start alone.
+                  </Muted>
+                </View>
+              </View>
+            </Card>
+          </Rise>
+          <Rise delay={200}>
+            <Card>
+              <View style={{ flexDirection: "row", gap: 14, alignItems: "flex-start" }}>
+                <IconChip name="school" tone="ember" />
+                <View style={{ flex: 1 }}>
+                  <H2>What it gives</H2>
+                  <Muted style={{ marginTop: 6 }}>
+                    The structure and language of real counseling frameworks, the kind couples pay
+                    hundreds a session for. Staged, guided, free.
+                  </Muted>
+                </View>
+              </View>
+            </Card>
+          </Rise>
+          <Rise delay={300}>
+            <Card tone="fern">
+              <View style={{ flexDirection: "row", gap: 14, alignItems: "flex-start" }}>
+                <IconChip name="exit" tone="fern" />
+                <View style={{ flex: 1 }}>
+                  <H2>How it ends</H2>
+                  <Muted style={{ marginTop: 6 }}>
+                    With you deleting it. Mend is designed to get you off the app and back into a
+                    marriage that holds itself up. Graduation is the feature.
+                  </Muted>
+                </View>
+              </View>
+            </Card>
+          </Rise>
         </View>
-
         <Btn label="We understand" onPress={() => setStep("gate")} style={{ marginTop: 24 }} />
       </Screen>
     );
   }
 
+  // ————— safety gate —————
   if (step === "gate") {
     return (
       <Screen safeTop>
-        <Muted style={{ textTransform: "uppercase", letterSpacing: 2, fontWeight: "700", color: p.ember }}>
-          One honest question
-        </Muted>
-        <H1 style={{ marginTop: 8 }}>Is either of you afraid of the other?</H1>
-        <P style={{ marginTop: 12 }}>
-          Not "do we fight." Fights are why Mend exists. This is about violence, fear, or
-          control, physical or otherwise.
-        </P>
-        <Muted style={{ marginTop: 12 }}>{whyGateMatters}</Muted>
+        <Rise>
+          <Muted style={{ marginTop: 12, textTransform: "uppercase", letterSpacing: 2, fontWeight: "700", color: p.ember }}>
+            One honest question
+          </Muted>
+          <H1 style={{ marginTop: 8 }}>Is either of you afraid of the other?</H1>
+          <P style={{ marginTop: 12 }}>
+            Not &ldquo;do we fight.&rdquo; Fights are why Mend exists. This is about violence,
+            fear, or control, physical or otherwise.
+          </P>
+          <Muted style={{ marginTop: 12 }}>{whyGateMatters}</Muted>
+        </Rise>
         <View style={{ marginTop: 24, gap: 10 }}>
-          <Btn label="We're safe with each other. Continue" onPress={() => setStep("names")} />
+          <Btn
+            label="We're safe with each other. Continue"
+            onPress={() => setStep(session || guest ? "names" : "account")}
+          />
           <Btn
             label="I'm not sure, or I don't feel safe. Show me help"
             kind="ghost"
@@ -96,13 +290,74 @@ export default function Onboarding() {
     );
   }
 
+  // ————— account —————
+  if (step === "account") {
+    return (
+      <Screen scroll={false} padded={false} safeTop>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          style={{ flex: 1, paddingHorizontal: 24, justifyContent: "center" }}
+        >
+          <Rise>
+            <H1>Make it yours</H1>
+            <P style={{ marginTop: 10 }}>
+              A free account backs up your progress and unlocks the shared space with your
+              partner. Or skip it: everything else works right on this phone.
+            </P>
+          </Rise>
+          <View style={{ marginTop: 22, gap: 12 }}>
+            <View>
+              <Label>Email</Label>
+              <Input value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" autoComplete="email" />
+            </View>
+            <View>
+              <Label>Password</Label>
+              <Input value={password} onChangeText={setPassword} secureTextEntry autoComplete={mode === "up" ? "new-password" : "current-password"} />
+              {mode === "up" && (
+                <Muted style={{ marginTop: 4, fontSize: 12 }}>
+                  One lowercase, one uppercase, one number.
+                </Muted>
+              )}
+            </View>
+            {error && <Muted style={{ color: p.ember }}>{error}</Muted>}
+            {notice && <Muted style={{ color: p.moss }}>{notice}</Muted>}
+            <Btn
+              label={mode === "up" ? "Create account" : "Sign in"}
+              onPress={submitAccount}
+              disabled={busy || !email || password.length < 6}
+            />
+            <Btn
+              label={mode === "up" ? "I already have an account" : "I'm new here"}
+              kind="ghost"
+              onPress={() => setMode(mode === "up" ? "in" : "up")}
+            />
+            <Pressable
+              onPress={async () => {
+                await continueAsGuest();
+                setStep("names");
+              }}
+              style={{ alignItems: "center", marginTop: 6 }}
+            >
+              <Muted style={{ textDecorationLine: "underline" }}>
+                Skip for now, keep everything on this phone
+              </Muted>
+            </Pressable>
+          </View>
+        </KeyboardAvoidingView>
+      </Screen>
+    );
+  }
+
+  // ————— names —————
   return (
     <Screen safeTop>
-      <H1>Who's mending?</H1>
-      <P style={{ marginTop: 10 }}>
-        First names only. They label the timer and the games; nothing leaves this phone without
-        your say-so.
-      </P>
+      <Rise>
+        <H1 style={{ marginTop: 12 }}>Who&apos;s mending?</H1>
+        <P style={{ marginTop: 10 }}>
+          First names only. They label the timer and the games; nothing leaves this phone without
+          your say-so.
+        </P>
+      </Rise>
       <View style={{ marginTop: 22, gap: 14 }}>
         <View>
           <Label>Partner A</Label>
@@ -113,10 +368,10 @@ export default function Onboarding() {
           <Input value={b} onChangeText={setB} placeholder="First name" autoComplete="off" />
         </View>
         <Muted>
-          Starting alone? Put your partner's name in anyway. Stage one is built so one willing
-          person can begin.
+          Starting alone? Put your partner&apos;s name in anyway. Stage one is built so one
+          willing person can begin.
         </Muted>
-        <Btn label="Begin stage one" onPress={finish} />
+        <Btn label="Begin stage one" onPress={finish} disabled={!a.trim() && !b.trim()} />
       </View>
     </Screen>
   );
