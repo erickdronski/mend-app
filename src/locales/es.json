@@ -1,0 +1,64 @@
+{
+  "tabs": {
+    "journey": "Camino",
+    "talk": "Hablar",
+    "play": "Jugar",
+    "learn": "Aprender",
+    "plan": "Plan",
+    "space": "Espacio"
+  },
+  "common": {
+    "back": "Atrás",
+    "next": "Siguiente",
+    "done": "Hecho",
+    "cancel": "Cancelar",
+    "continue": "Continuar",
+    "start": "Empezar",
+    "save": "Guardar",
+    "of": "de",
+    "settings": "Ajustes",
+    "getHelp": "Ayuda urgente",
+    "markComplete": "Marcar como hecho",
+    "completed": "Completado",
+    "open": "Abrir"
+  },
+  "auth": {
+    "welcomeTitle": "Bienvenidos a Mend",
+    "welcomeBody": "Un mediador gratuito y privado para ustedes dos: tiempo protegido para hablar, herramientas para las épocas difíciles y un camino de regreso el uno al otro.",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "signIn": "Iniciar sesión",
+    "signUp": "Crear cuenta",
+    "signOut": "Cerrar sesión",
+    "guest": "Continuar sin cuenta",
+    "haveAccount": "Ya tengo una cuenta",
+    "noAccount": "Soy nuevo aquí",
+    "checkEmail": "Revisa tu correo para confirmar la cuenta y luego inicia sesión.",
+    "authError": "No funcionó. Revisa tu correo y contraseña.",
+    "account": "Cuenta",
+    "signedInAs": "Sesión iniciada como",
+    "localOnly": "Usando Mend sin cuenta. Todo se queda en este teléfono."
+  },
+  "settings": {
+    "title": "Ajustes",
+    "language": "Idioma",
+    "languageNote": "Las guías, los mazos de cartas y el contenido de las sesiones están solo en inglés por ahora. Las traducciones están en camino.",
+    "aboutTitle": "Acerca de Mend",
+    "aboutBody": "Mend es una herramienta educativa, no terapia. No puede reemplazar a un terapeuta matrimonial y familiar licenciado, y nunca diagnostica. Si hay violencia, miedo o control en tu relación, las conversaciones guiadas de pareja no son la herramienta segura. Gratuito, privado y hecho para ser eliminado.",
+    "safety": "Recursos de crisis",
+    "names": "Sus nombres",
+    "partnerA": "Pareja A",
+    "partnerB": "Pareja B"
+  },
+  "journey": {
+    "title": "Su camino",
+    "subtitle": "Una ruta por etapas desde donde están hoy hasta un matrimonio que no necesite esta app.",
+    "stage": "Etapa",
+    "pulseCheck": "Chequeo de pulso",
+    "nextStep": "Su próximo paso",
+    "stageComplete": "Etapa completada",
+    "advance": "Comenzar la siguiente etapa",
+    "graduated": "Lo lograron. Bórrennos.",
+    "designedToEnd": "Mend está diseñada para ser eliminada: la meta es un matrimonio que ya no la necesite."
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "tabs": {
+    "journey": "Weg",
+    "talk": "Reden",
+    "play": "Spielen",
+    "learn": "Lernen",
+    "plan": "Plan",
+    "space": "Raum"
+  },
+  "common": {
+    "back": "Zurück",
+    "next": "Weiter",
+    "done": "Fertig",
+    "cancel": "Abbrechen",
+    "continue": "Fortfahren",
+    "start": "Starten",
+    "save": "Speichern",
+    "of": "von",
+    "settings": "Einstellungen",
+    "getHelp": "Sofort Hilfe",
+    "markComplete": "Als erledigt markieren",
+    "completed": "Erledigt",
+    "open": "Öffnen"
+  },
+  "auth": {
+    "welcomeTitle": "Willkommen bei Mend",
+    "welcomeBody": "Ein kostenloser, privater Vermittler für euch beide: geschützte Redezeit, Werkzeuge für schwere Zeiten und ein Weg zurück zueinander.",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "signIn": "Anmelden",
+    "signUp": "Konto erstellen",
+    "signOut": "Abmelden",
+    "guest": "Ohne Konto fortfahren",
+    "haveAccount": "Ich habe bereits ein Konto",
+    "noAccount": "Ich bin neu hier",
+    "checkEmail": "Bestätige dein Konto per E-Mail und melde dich dann an.",
+    "authError": "Das hat nicht geklappt. Prüfe E-Mail und Passwort.",
+    "account": "Konto",
+    "signedInAs": "Angemeldet als",
+    "localOnly": "Mend ohne Konto: Alles bleibt auf diesem Telefon."
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "language": "Sprache",
+    "languageNote": "Leitfäden, Kartendecks und Sitzungsinhalte sind vorerst nur auf Englisch verfügbar. Übersetzungen folgen.",
+    "aboutTitle": "Über Mend",
+    "aboutBody": "Mend ist ein Bildungswerkzeug, keine Therapie. Es ersetzt keine lizenzierte Paar- und Familientherapie und stellt niemals Diagnosen. Wenn es in eurer Beziehung Gewalt, Angst oder Kontrolle gibt, sind angeleitete Paargespräche nicht das sichere Werkzeug. Kostenlos, privat und gebaut, um gelöscht zu werden.",
+    "safety": "Krisenhilfe",
+    "names": "Eure Namen",
+    "partnerA": "Partner A",
+    "partnerB": "Partner B"
+  },
+  "journey": {
+    "title": "Euer Weg",
+    "subtitle": "Ein Weg in Etappen: von heute zu einer Ehe, die diese App nicht mehr braucht.",
+    "stage": "Etappe",
+    "pulseCheck": "Puls-Check",
+    "nextStep": "Euer nächster Schritt",
+    "stageComplete": "Etappe abgeschlossen",
+    "advance": "Nächste Etappe beginnen",
+    "graduated": "Ihr habt es geschafft. Löscht uns.",
+    "designedToEnd": "Mend ist dafür gebaut, gelöscht zu werden: Das Ziel ist eine Ehe, die es nicht mehr braucht."
+  }
+}

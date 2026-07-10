@@ -1,0 +1,64 @@
+{
+  "tabs": {
+    "journey": "Jornada",
+    "talk": "Conversar",
+    "play": "Jogar",
+    "learn": "Aprender",
+    "plan": "Plano",
+    "space": "Espaço"
+  },
+  "common": {
+    "back": "Voltar",
+    "next": "Próximo",
+    "done": "Concluído",
+    "cancel": "Cancelar",
+    "continue": "Continuar",
+    "start": "Começar",
+    "save": "Salvar",
+    "of": "de",
+    "settings": "Ajustes",
+    "getHelp": "Ajuda urgente",
+    "markComplete": "Marcar como feito",
+    "completed": "Concluído",
+    "open": "Abrir"
+  },
+  "auth": {
+    "welcomeTitle": "Bem-vindos ao Mend",
+    "welcomeBody": "Um mediador gratuito e privado para vocês dois: tempo protegido para falar, ferramentas para as fases difíceis e um caminho de volta um para o outro.",
+    "email": "E-mail",
+    "password": "Senha",
+    "signIn": "Entrar",
+    "signUp": "Criar conta",
+    "signOut": "Sair",
+    "guest": "Continuar sem conta",
+    "haveAccount": "Já tenho uma conta",
+    "noAccount": "Sou novo aqui",
+    "checkEmail": "Confira seu e-mail para confirmar a conta e depois entre.",
+    "authError": "Não funcionou. Verifique seu e-mail e senha.",
+    "account": "Conta",
+    "signedInAs": "Conectado como",
+    "localOnly": "Usando o Mend sem conta. Tudo fica neste telefone."
+  },
+  "settings": {
+    "title": "Ajustes",
+    "language": "Idioma",
+    "languageNote": "Guias, baralhos de cartas e conteúdo das sessões estão apenas em inglês por enquanto. As traduções estão a caminho.",
+    "aboutTitle": "Sobre o Mend",
+    "aboutBody": "O Mend é uma ferramenta educativa, não terapia. Não substitui um terapeuta de casal e família licenciado e nunca faz diagnósticos. Se há violência, medo ou controle no seu relacionamento, conversas guiadas de casal não são a ferramenta segura. Gratuito, privado e feito para ser apagado.",
+    "safety": "Recursos de crise",
+    "names": "Seus nomes",
+    "partnerA": "Parceiro A",
+    "partnerB": "Parceiro B"
+  },
+  "journey": {
+    "title": "Sua jornada",
+    "subtitle": "Um caminho em etapas, de onde vocês estão hoje até um casamento que não precise deste app.",
+    "stage": "Etapa",
+    "pulseCheck": "Checagem de pulso",
+    "nextStep": "Seu próximo passo",
+    "stageComplete": "Etapa concluída",
+    "advance": "Começar a próxima etapa",
+    "graduated": "Vocês conseguiram. Podem nos apagar.",
+    "designedToEnd": "O Mend foi feito para ser apagado: a meta é um casamento que não precise mais dele."
+  }
+}

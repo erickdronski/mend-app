@@ -1,0 +1,29 @@
+{
+  "cli": {
+    "version": ">= 5.9.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "ascAppId": "6789373997",
+        "appleTeamId": "J9DMDH4S58",
+        "ascApiKeyPath": "./credentials/AuthKey_3Q7BV86NXY.p8",
+        "ascApiKeyId": "3Q7BV86NXY",
+        "ascApiKeyIssuerId": "c798b8c2-6181-42a4-ae66-34e30d3c1c5e"
+      }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+name: TestFlight
+
+# Builds the iOS app on GitHub's macOS runner via `eas build --local`
+# (consumes ZERO EAS build quota) and submits the .ipa to TestFlight with
+# the ASC API key. Manual dispatch only: macOS runner minutes are 10x, so
+# each run costs real free-tier budget (~4 builds/month on the free plan;
+# the default $0 spending limit hard-stops overage, no surprise charges).
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-submit:
+    runs-on: macos-26
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Select newest Xcode
+        run: |
+          LATEST=$(ls -d /Applications/Xcode_*.app 2>/dev/null | sort -V | tail -1)
+          if [ -n "$LATEST" ]; then sudo xcode-select -s "$LATEST/Contents/Developer"; fi
+          xcodebuild -version
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build iOS (EAS local, no quota)
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          npx eas-cli build --platform ios --profile production \
+            --local --non-interactive \
+            --output "$RUNNER_TEMP/mend.ipa"
+
+      - name: Write ASC API key
+        run: |
+          mkdir -p credentials
+          echo "${{ secrets.ASC_KEY_P8 }}" | base64 --decode > credentials/AuthKey_${{ secrets.ASC_KEY_ID }}.p8
+
+      - name: Submit to TestFlight
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          npx eas-cli submit --platform ios \
+            --path "$RUNNER_TEMP/mend.ipa" \
+            --non-interactive
+
+      - name: Upload ipa artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mend-ipa
+          path: ${{ runner.temp }}/mend.ipa
+          if-no-files-found: ignore
+          retention-days: 7

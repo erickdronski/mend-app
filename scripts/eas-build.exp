@@ -1,0 +1,25 @@
+#!/usr/bin/expect -f
+# Drives `eas build -p ios` interactively: EAS validates/reuses the team's
+# distribution certificate and creates the provisioning profile using the
+# ASC API key from the EXPO_ASC_* environment variables.
+set timeout 900
+log_file -noappend /tmp/eas-build-mend.log
+
+spawn npx eas-cli build --platform ios --profile production --no-wait
+
+expect {
+  -re {log in to your Apple account\?.*} { send "n\r"; exp_continue }
+  -re {Do you want to log in} { send "n\r"; exp_continue }
+  -re {Reuse this distribution certificate\?} { send "y\r"; exp_continue }
+  -re {[Gg]enerate a new Apple Distribution Certificate\?} { send "y\r"; exp_continue }
+  -re {[Gg]enerate a new Apple Provisioning Profile\?} { send "y\r"; exp_continue }
+  -re {Set up Push Notifications.*\?} { send "n\r"; exp_continue }
+  -re {Would you like to set up} { send "n\r"; exp_continue }
+  -re {Select certificate} { send "\r"; exp_continue }
+  -re {What would you like to do\?} { send "\r"; exp_continue }
+  -re {Build details: https://expo\.dev} { exp_continue }
+  timeout { puts "EXPECT TIMEOUT"; exit 2 }
+  eof
+}
+catch wait result
+exit [lindex $result 3]

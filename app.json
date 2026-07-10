@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "name": "Mend",
+    "slug": "mend",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "mend",
+    "userInterfaceStyle": "automatic",
+    "owner": "dr0nski",
+    "ios": {
+      "bundleIdentifier": "com.erickdronski.mend",
+      "supportsTablet": false,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.erickdronski.mend",
+      "adaptiveIcon": {
+        "backgroundColor": "#38553f",
+        "foregroundImage": "./assets/images/android-icon-foreground.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#38553f",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 120
+        }
+      ],
+      "expo-localization"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "df75fb63-b64a-41f0-8e1f-cb95d922de8f"
+      }
+    }
+  }
+}
