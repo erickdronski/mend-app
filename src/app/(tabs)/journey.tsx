@@ -26,6 +26,7 @@ import {
 } from "@/lib/journey";
 import { Btn, Card, H1, H2, Muted, P, Rise, Screen, usePalette } from "@/components/ui";
 import { ProgressRing } from "@/components/rings";
+import { Reveal } from "@/components/motion";
 
 /**
  * The Journey tab: the app's home. One current stage, its steps, the next
@@ -175,11 +176,12 @@ export default function JourneyScreen() {
 
       {/* all steps */}
       <View style={{ marginTop: 18, gap: 10 }}>
-        {stage.steps.map((step) => {
+        {stage.steps.map((step, si) => {
           const done = stepDone(step, ctx, journey);
           const manual = !step.auto;
           return (
-            <Card key={step.id} style={{ opacity: done ? 0.65 : 1 }}>
+            <Reveal key={step.id} index={si}>
+            <Card style={{ opacity: done ? 0.65 : 1 }}>
               <View style={{ flexDirection: "row", gap: 12 }}>
                 <Ionicons
                   name={done ? "checkmark-circle" : "ellipse-outline"}
@@ -214,6 +216,7 @@ export default function JourneyScreen() {
                 </View>
               </View>
             </Card>
+            </Reveal>
           );
         })}
       </View>

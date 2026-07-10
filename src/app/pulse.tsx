@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
+import { Press } from "@/components/motion";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import { addPulse, getJourney, getProfile, getPulses } from "@/lib/store";
@@ -101,22 +102,21 @@ export default function Pulse() {
         <Muted style={{ marginTop: 10 }}>1 = not at all · 5 = completely true</Muted>
         <View style={{ flexDirection: "row", gap: 8, marginTop: 24 }}>
           {[1, 2, 3, 4, 5].map((n) => (
-            <Pressable
-              key={n}
-              onPress={() => rate(n)}
-              style={({ pressed }) => ({
-                flex: 1,
-                aspectRatio: 0.9,
-                borderRadius: 14,
-                borderWidth: 1,
-                borderColor: p.line,
-                backgroundColor: pressed ? p.fern : p.raised,
-                alignItems: "center",
-                justifyContent: "center",
-              })}
-            >
-              <Text style={{ fontSize: 22, fontWeight: "700", color: p.ink }}>{n}</Text>
-            </Pressable>
+            <Press key={n} onPress={() => rate(n)} scaleTo={0.9} style={{ flex: 1 }}>
+              <View
+                style={{
+                  aspectRatio: 0.9,
+                  borderRadius: 14,
+                  borderWidth: 1,
+                  borderColor: p.line,
+                  backgroundColor: p.raised,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text style={{ fontSize: 22, fontWeight: "700", color: p.ink }}>{n}</Text>
+              </View>
+            </Press>
           ))}
         </View>
         <Muted style={{ marginTop: 20 }}>

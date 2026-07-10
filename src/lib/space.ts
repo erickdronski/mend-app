@@ -80,14 +80,18 @@ export async function leaveSpace(): Promise<void> {
 }
 
 export async function getTodayAnswers(space: Space): Promise<DailyAnswer[]> {
-  const { data } = await supabase
-    .from("mend_daily_answers")
-    .select("user_id, answer, created_at")
-    .eq("space_id", space.id)
-    .eq("prompt_date", todayKey());
+  // Read through the sealing RPC: the server withholds the partner's answer
+  // text until you have submitted your own (no anchoring, enforced in the DB).
+  const { data } = await supabase.rpc("mend_daily_reveal", {
+    sid: space.id,
+    pdate: todayKey(),
+  });
   const nameOf = (id: string) =>
     space.members.find((m) => m.user_id === id)?.display_name || "Partner";
-  return (data ?? []).map((a) => ({ ...a, display_name: nameOf(a.user_id) }));
+  return ((data ?? []) as { user_id: string; answer: string; created_at: string }[]).map((a) => ({
+    ...a,
+    display_name: nameOf(a.user_id),
+  }));
 }
 
 export async function submitAnswer(space: Space, question: string, answer: string): Promise<void> {

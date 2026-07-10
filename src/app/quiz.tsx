@@ -11,6 +11,7 @@ import {
 } from "@/lib/content/quiz";
 import { getProfile, saveProfile } from "@/lib/store";
 import { Btn, Card, H1, H2, Muted, P, Screen, usePalette, pressFx } from "@/components/ui";
+import { GlideBar } from "@/components/motion";
 
 type Stage = "intro" | "who" | "lens" | "conflict" | "result";
 
@@ -121,8 +122,8 @@ export default function Quiz() {
             {number} of {total}
           </Muted>
         </View>
-        <View style={{ height: 4, backgroundColor: p.panel, borderRadius: 2, marginTop: 8, overflow: "hidden" }}>
-          <View style={{ height: "100%", width: `${(number / total) * 100}%`, backgroundColor: p.moss, borderRadius: 2 }} />
+        <View style={{ marginTop: 8 }}>
+          <GlideBar progress={number / total} color={p.moss} track={p.panel} />
         </View>
         <H2 style={{ marginTop: 20, fontSize: 19, lineHeight: 26 }}>{prompt}</H2>
         <View style={{ marginTop: 16, gap: 10 }}>

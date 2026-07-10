@@ -16,6 +16,31 @@ import Animated, {
 import * as Haptics from "expo-haptics";
 import { springs, stagger, timings } from "@/lib/motion";
 
+/** A progress bar whose fill glides to `progress` (0..1) instead of jumping. */
+export function GlideBar({
+  progress,
+  color,
+  track,
+  height = 4,
+}: {
+  progress: number;
+  color: string;
+  track: string;
+  height?: number;
+}) {
+  const reduce = useReducedMotion();
+  const w = useSharedValue(progress);
+  useEffect(() => {
+    w.value = reduce ? progress : withTiming(progress, timings.base);
+  }, [progress, reduce, w]);
+  const style = useAnimatedStyle(() => ({ width: `${Math.max(0, Math.min(1, w.value)) * 100}%` }));
+  return (
+    <Animated.View style={{ height, backgroundColor: track, borderRadius: height / 2, overflow: "hidden" }}>
+      <Animated.View style={[{ height: "100%", backgroundColor: color, borderRadius: height / 2 }, style]} />
+    </Animated.View>
+  );
+}
+
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 /**

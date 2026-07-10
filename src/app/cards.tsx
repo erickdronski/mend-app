@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
+import Animated, { FadeInUp, useReducedMotion } from "react-native-reanimated";
 import { decks, type Deck } from "@/lib/content/cards";
 import { Btn, Card, H1, H2, Muted, P, Screen, usePalette, pressFx } from "@/components/ui";
 
@@ -14,6 +15,7 @@ function shuffle<T>(arr: T[]): T[] {
 
 export default function Cards() {
   const p = usePalette();
+  const reduce = useReducedMotion();
   const [deck, setDeck] = useState<Deck | null>(null);
   const [order, setOrder] = useState<number[]>([]);
   const [index, setIndex] = useState(0);
@@ -106,6 +108,7 @@ export default function Cards() {
       </View>
 
       <View style={{ flex: 1, justifyContent: "center" }}>
+        <Animated.View key={index} entering={reduce ? undefined : FadeInUp.springify().damping(16).stiffness(150)}>
         <Card style={{ padding: 26 }}>
           <Muted style={{ textTransform: "uppercase", letterSpacing: 1.5, fontWeight: "700", color: p.mossDeep }}>
             {deck.title}
@@ -127,6 +130,7 @@ export default function Cards() {
             )
           ) : null}
         </Card>
+        </Animated.View>
         <Muted style={{ textAlign: "center", marginTop: 12 }}>
           Answer out loud, then pass the phone. Listening counts as playing.
         </Muted>

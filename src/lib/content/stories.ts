@@ -6,6 +6,7 @@
  * None of these are real people, real cases, or testimonials, and the app
  * labels them that way. The situations are common; the couples are invented.
  */
+import { extraStories } from "./stories-extra";
 
 export type Story = {
   id: string;
@@ -322,6 +323,13 @@ export const stories: Story[] = [
       "The gap never closed all the way, but it stopped being a verdict on either of them; they talk about it now the way they talk about budgets, honestly, on schedule, and as teammates.",
   },
 ];
+
+// Representation stories (same-sex, interfaith, working-poor, high-conflict,
+// long caregiving) added after user testing found the first ten too narrow.
+// Idempotent so a hot-reload / double module eval cannot duplicate them.
+for (const s of extraStories) {
+  if (!stories.some((x) => x.id === s.id)) stories.push(s);
+}
 
 export const storiesNote: string =
   "Every couple in these stories is a fictional composite, written to teach what repair looks like in ordinary, repeatable terms; no story describes a real couple or a real person's situation. Nothing here is a testimonial or an endorsement, and Mend labels these as teaching stories wherever they appear.";

@@ -5,6 +5,7 @@
  * plainly. Every track signposts professional help and names the red flags
  * where an app is no longer the right tool.
  */
+import { extraTracks } from "./tracks-extra";
 
 export type TrackSession = {
   title: string;
@@ -515,6 +516,13 @@ export const tracks: Track[] = [
     ],
   },
 ];
+
+// Tracks added after user testing found couples with no track for their
+// situation (desire gap, blended family, interfaith, long caregiving, scarcity).
+// Idempotent so a hot-reload / double module eval cannot duplicate them.
+for (const t of extraTracks) {
+  if (!tracks.some((x) => x.slug === t.slug)) tracks.push(t);
+}
 
 export function getTrack(slug: string): Track | undefined {
   return tracks.find((t) => t.slug === slug);

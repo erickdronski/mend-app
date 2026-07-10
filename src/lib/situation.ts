@@ -16,6 +16,9 @@ export type Situation =
   | "baby"
   | "money"
   | "illness"
+  | "desire-gap"
+  | "blended"
+  | "faith"
   | "just-us";
 
 export type SituationDef = {
@@ -104,8 +107,44 @@ export const situations: SituationDef[] = [
       "You're partners through illness. This is a long haul, and you don't walk it alone.",
     track: "illness",
     trackTitle: "Illness and caregiving",
-    stories: ["chronic-illness"],
+    stories: ["chronic-illness", "long-caregiving"],
     decks: ["first-steps", "go-deeper"],
+    heavy: true,
+  },
+  {
+    id: "desire-gap",
+    chip: "Intimacy has gone quiet",
+    icon: "flame-outline",
+    hereForYou:
+      "You're finding your way back to closeness. This goes gently, and no one is broken here.",
+    track: "desire-gap",
+    trackTitle: "When desire has gone quiet",
+    stories: ["desire-gap"],
+    decks: ["desire", "go-deeper"],
+    heavy: true,
+  },
+  {
+    id: "blended",
+    chip: "Blended or second marriage",
+    icon: "people-outline",
+    hereForYou:
+      "You're building a second marriage through family shrapnel. There's a path for exactly this.",
+    track: "blended",
+    trackTitle: "Blended family and second marriage",
+    stories: ["almost-divorce"],
+    decks: ["go-deeper", "first-steps"],
+    heavy: true,
+  },
+  {
+    id: "faith",
+    chip: "Two faiths, one family",
+    icon: "compass-outline",
+    hereForYou:
+      "You love across a line of belief. This helps you hold both without either of you disappearing.",
+    track: "faith-gap",
+    trackTitle: "Two faiths, one family",
+    stories: ["interfaith-holidays"],
+    decks: ["go-deeper", "first-steps"],
     heavy: true,
   },
   {
