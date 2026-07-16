@@ -110,26 +110,22 @@ function Gate({ children }: { children: ReactNode }) {
     const inOnboarding = first === "onboarding";
     const inSafety = first === "safety";
 
-    // Signed in but no profile on this device (reinstall / new phone, and the
-    // backup restore found nothing): force profile creation. Overrides even
-    // the sign-in screen so a returning user is never stranded there.
-    if (session && !hasProfile) {
-      if (!inOnboarding && !inSafety) router.replace("/onboarding");
+    // Profile-first routing. Without a profile on this device, onboarding
+    // owns the app no matter who you are: signed-in (reinstall whose backup
+    // restore found nothing), signed-out first run, or a guest whose flag
+    // survived but whose profile was never written. That last state is the
+    // build-12 "crashes after onboarding" bug: the old gate let a fresh
+    // guest land on the tabs with no profile, natively fatal. /safety stays
+    // reachable always; a signed-out visitor may sit on /sign-in.
+    if (!hasProfile) {
+      const allowed = inOnboarding || inSafety || (inAuth && !session);
+      if (!allowed) router.replace("/onboarding");
       return;
     }
-    // Signed out and not a guest: onboarding owns first run, but /sign-in
-    // stays open (they may be signing in) and /safety stays reachable.
-    if (!session && !guest) {
-      if (!inOnboarding && !inAuth && !inSafety) router.replace("/onboarding");
-      return;
-    }
-    // Fully set up (real session + profile, or guest + profile): leave
-    // onboarding for the app, and leave the sign-in screen only once a real
-    // session exists, so a guest can sit on /sign-in to upgrade to an account.
-    // hasProfile is required here: a brand-new guest who just tapped "skip"
-    // inside onboarding still owes the names + situation steps, and ejecting
-    // them early ships an app that never learns who the partners are.
-    if (hasProfile && (inOnboarding || (inAuth && session))) router.replace("/");
+    // Fully set up: leave onboarding for the app, and leave the sign-in
+    // screen only once a real session exists, so a guest can sit on
+    // /sign-in to upgrade to an account.
+    if (inOnboarding || (inAuth && session)) router.replace("/");
   }, [ready, session, guest, hasProfile, segments, router]);
 
   return <>{children}</>;
