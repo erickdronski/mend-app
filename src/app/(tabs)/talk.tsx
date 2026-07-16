@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ComponentProps } from "react";
 import { Pressable, Text, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import { BreathingCircle, ProgressRing } from "@/components/rings";
+import { Bloom, Press, Reveal } from "@/components/motion";
 import { getTopic, topics } from "@/lib/content/topics";
 import { getTrack } from "@/lib/content/tracks";
 import {
@@ -12,7 +13,22 @@ import {
   saveProfile,
   type Profile,
 } from "@/lib/store";
-import { Btn, Card, H1, H2, Input, Label, Muted, P, Screen, usePalette } from "@/components/ui";
+import {
+  Btn,
+  Card,
+  CollapsibleP,
+  Eyebrow,
+  H1,
+  H2,
+  Hero,
+  IconChip,
+  Input,
+  Label,
+  Muted,
+  P,
+  Screen,
+  usePalette,
+} from "@/components/ui";
 
 type Phase =
   | "setup"
@@ -28,7 +44,66 @@ type Phase =
 
 type Source = { title: string; context: string; opener?: string; prompts: string[] };
 
+type IconName = ComponentProps<typeof IconChip>["name"];
+
 const BREAK_SECONDS = 20 * 60;
+
+/** The wizard's main path, in order. break/ended sit outside it on purpose. */
+const FLOW: Phase[] = ["setup", "rules", "checkin", "floor", "reflect", "appreciate", "commit", "done"];
+
+/** Step dots: small markers for each phase, the current one an elongated
+ *  moss pill, so partners always know where they are in the session. */
+function StepDots({ phase }: { phase: Phase }) {
+  const p = usePalette();
+  const idx = FLOW.indexOf(phase);
+  if (idx < 0) return null;
+  const accent = p.hues.moss.accent;
+  return (
+    <View
+      style={{
+        flexDirection: "row",
+        gap: 6,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 6,
+        marginBottom: 4,
+      }}
+    >
+      {FLOW.map((f, i) => (
+        <View
+          key={f}
+          style={{
+            width: i === idx ? 24 : 7,
+            height: 7,
+            borderRadius: 4,
+            backgroundColor: i <= idx ? accent : p.line,
+            opacity: i === idx ? 1 : i < idx ? 0.45 : 1,
+          }}
+        />
+      ))}
+    </View>
+  );
+}
+
+const topicIcon: Record<string, IconName> = {
+  Reconnection: "leaf-outline",
+  "Daily Life": "home-outline",
+  Money: "cash-outline",
+  Intimacy: "heart-outline",
+  Family: "people-outline",
+  "The Future": "compass-outline",
+  Repair: "bandage-outline",
+};
+
+const ruleIcons: IconName[] = [
+  "mic-outline",
+  "person-outline",
+  "ear-outline",
+  "pause-circle-outline",
+  "lock-closed-outline",
+];
+
+const reflectIcons: IconName[] = ["repeat-outline", "checkmark-circle-outline", "heart-outline"];
 
 const groundRules = [
   {
@@ -229,20 +304,20 @@ export default function Talk() {
     setPhase("setup");
   }
 
-  // ————— setup —————
+  // ----- setup -----
   if (phase === "setup") {
     return (
       <Screen safeTop>
-        <Muted style={{ marginTop: 8, textTransform: "uppercase", letterSpacing: 2, fontWeight: "700", color: p.mossDeep }}>
-          New session
-        </Muted>
-        <H1 style={{ marginTop: 6 }}>Set the table</H1>
-        <P style={{ marginTop: 10 }}>
-          Sit somewhere you can face each other. One phone between you is enough; Mend holds the
-          structure so neither of you has to referee.
-        </P>
+        <StepDots phase={phase} />
+        <Hero
+          hue="moss"
+          eyebrow="New session"
+          title="Set the table"
+          sub="Sit somewhere you can face each other. Mend holds the structure so neither of you has to referee."
+          style={{ marginTop: 8 }}
+        />
 
-        <View style={{ marginTop: 20, gap: 14 }}>
+        <View style={{ marginTop: 18, gap: 14 }}>
           <View style={{ flexDirection: "row", gap: 10 }}>
             {([0, 1] as const).map((i) => (
               <View key={i} style={{ flex: 1 }}>
@@ -262,40 +337,58 @@ export default function Talk() {
 
           {source ? (
             <Card>
-              <Muted>Tonight&apos;s conversation</Muted>
-              <H2 style={{ marginTop: 4 }}>{source.title}</H2>
-              <Muted style={{ marginTop: 8 }}>{source.context}</Muted>
-              <Pressable onPress={() => setSource(null)}>
-                <Text style={{ color: p.ember, fontWeight: "600", marginTop: 10, fontSize: 14 }}>
-                  Choose a different topic
-                </Text>
-              </Pressable>
+              <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 12 }}>
+                <IconChip name="chatbubbles-outline" hue="moss" size={40} />
+                <View style={{ flex: 1 }}>
+                  <Eyebrow hue="moss">Tonight&apos;s conversation</Eyebrow>
+                  <Text style={{ fontSize: 17, fontWeight: "700", color: p.ink, marginTop: 4 }} numberOfLines={2}>
+                    {source.title}
+                  </Text>
+                  <CollapsibleP lines={2} style={{ marginTop: 6, fontSize: 13.5 }}>
+                    {source.context}
+                  </CollapsibleP>
+                  <Pressable onPress={() => setSource(null)}>
+                    <Text style={{ color: p.ember, fontWeight: "600", marginTop: 8, fontSize: 14 }}>
+                      Choose a different topic
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
             </Card>
           ) : (
             <View>
               <Label>What are we talking about?</Label>
-              <Pressable
+              <Press
                 onPress={() => setPickerOpen(!pickerOpen)}
                 style={{ borderWidth: 1, borderColor: p.line, backgroundColor: p.raised, borderRadius: 12, padding: 14 }}
               >
                 <Text style={{ color: p.ink, fontSize: 15 }}>
                   {pickerOpen ? "Hide topics" : "Browse the topic library"}
                 </Text>
-              </Pressable>
+              </Press>
               {pickerOpen && (
-                <View style={{ marginTop: 8, gap: 6 }}>
-                  {topics.map((t) => (
-                    <Pressable
-                      key={t.id}
-                      onPress={() => {
-                        setSource({ title: t.title, context: t.why, opener: t.opener, prompts: t.prompts });
-                        setPickerOpen(false);
-                      }}
-                      style={{ backgroundColor: p.raised, borderWidth: 1, borderColor: p.line, borderRadius: 10, padding: 12 }}
-                    >
-                      <Text style={{ color: p.ink, fontWeight: "600", fontSize: 14 }}>{t.title}</Text>
-                      <Muted style={{ marginTop: 2, fontSize: 12 }}>{t.category}</Muted>
-                    </Pressable>
+                <View style={{ marginTop: 10, gap: 8 }}>
+                  {topics.map((t, i) => (
+                    <Reveal key={t.id} index={i}>
+                      <Press
+                        onPress={() => {
+                          setSource({ title: t.title, context: t.why, opener: t.opener, prompts: t.prompts });
+                          setPickerOpen(false);
+                        }}
+                      >
+                        <Card style={{ paddingVertical: 12 }}>
+                          <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+                            <IconChip name={topicIcon[t.category] ?? "chatbubbles-outline"} hue="moss" />
+                            <View style={{ flex: 1 }}>
+                              <Text style={{ color: p.ink, fontWeight: "700", fontSize: 15 }} numberOfLines={2}>
+                                {t.title}
+                              </Text>
+                              <Muted style={{ marginTop: 2, fontSize: 12 }}>{t.category}</Muted>
+                            </View>
+                          </View>
+                        </Card>
+                      </Press>
+                    </Reveal>
                   ))}
                 </View>
               )}
@@ -363,22 +456,30 @@ export default function Talk() {
     );
   }
 
-  // ————— rules —————
+  // ----- rules -----
   if (phase === "rules") {
     return (
       <Screen safeTop>
+        <StepDots phase={phase} />
         <H1 style={{ marginTop: 8 }}>Five ground rules</H1>
         <Muted style={{ marginTop: 8 }}>
           Read them out loud: one of you reads the odd ones, the other the even. Yes, really.
         </Muted>
         <View style={{ marginTop: 16, gap: 10 }}>
           {groundRules.map((r, i) => (
-            <Card key={r.title}>
-              <Text style={{ fontWeight: "700", color: p.ink, fontSize: 15.5 }}>
-                {i + 1}. {r.title}
-              </Text>
-              <Muted style={{ marginTop: 6 }}>{r.body}</Muted>
-            </Card>
+            <Reveal key={r.title} index={i}>
+              <Card>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+                  <IconChip name={ruleIcons[i]} hue="moss" size={34} />
+                  <Text style={{ fontWeight: "700", color: p.ink, fontSize: 15.5, flex: 1 }}>
+                    {i + 1}. {r.title}
+                  </Text>
+                </View>
+                <CollapsibleP lines={2} style={{ marginTop: 8, fontSize: 14 }}>
+                  {r.body}
+                </CollapsibleP>
+              </Card>
+            </Reveal>
           ))}
         </View>
         <Btn label="We agree" onPress={() => setPhase("checkin")} style={{ marginTop: 18 }} />
@@ -386,15 +487,16 @@ export default function Talk() {
     );
   }
 
-  // ————— checkin —————
+  // ----- checkin -----
   if (phase === "checkin") {
     return (
       <Screen safeTop>
+        <StepDots phase={phase} />
         <H1 style={{ marginTop: 8 }}>One word each</H1>
-        <P style={{ marginTop: 10 }}>
+        <CollapsibleP lines={1} style={{ marginTop: 10 }}>
           How are you arriving at this conversation? Tired, hopeful, nervous, guarded, ready. One
           honest word; it tells your partner what to be gentle with.
-        </P>
+        </CollapsibleP>
         <View style={{ marginTop: 20, gap: 14 }}>
           {([0, 1] as const).map((i) => (
             <View key={i}>
@@ -416,29 +518,32 @@ export default function Talk() {
     );
   }
 
-  // ————— floor —————
+  // ----- floor -----
   if (phase === "floor") {
     const total = turnMinutes * 60;
     return (
       <Screen safeTop>
-        <Muted style={{ marginTop: 8, textAlign: "center" }}>
+        <StepDots phase={phase} />
+        <Muted style={{ marginTop: 6, textAlign: "center" }} numberOfLines={1}>
           Round {round} of {rounds} · {source?.title}
         </Muted>
-        <H1 style={{ marginTop: 6, textAlign: "center" }}>{nameOf(speaker)} has the floor</H1>
-        <Muted style={{ marginTop: 6, textAlign: "center" }}>
-          {nameOf(listener)}, your only job is to listen. Your turn is coming.
+        <H1 style={{ marginTop: 6, textAlign: "center", fontSize: 34, lineHeight: 40 }}>
+          {nameOf(speaker)}
+        </H1>
+        <Muted style={{ marginTop: 2, textAlign: "center" }}>
+          has the floor. {nameOf(listener)}, your only job is to listen.
         </Muted>
 
-        <View style={{ alignItems: "center", marginTop: 20 }}>
+        <View style={{ alignItems: "center", marginTop: 22 }}>
           <ProgressRing
             progress={secondsLeft / total}
-            size={200}
+            size={230}
             trackColor={p.line}
             color={running ? p.moss : p.ember}
             durationMs={running ? 1000 : 260}
             breathing={running}
           >
-            <Text style={{ fontSize: 44, fontWeight: "800", color: p.ink, fontVariant: ["tabular-nums"] }}>
+            <Text style={{ fontSize: 48, fontWeight: "800", color: p.ink, fontVariant: ["tabular-nums"] }}>
               {fmt(secondsLeft)}
             </Text>
             <Muted>{running ? "speaking" : "paused"}</Muted>
@@ -468,14 +573,14 @@ export default function Talk() {
           </Card>
         )}
 
-        <Muted style={{ marginTop: 18, textTransform: "uppercase", letterSpacing: 1.5, fontWeight: "700" }}>
-          If you lose the thread, lean on these
-        </Muted>
+        <Eyebrow style={{ marginTop: 18 }}>If you lose the thread, lean on these</Eyebrow>
         <View style={{ marginTop: 8, gap: 8 }}>
-          {source?.prompts.map((prompt) => (
-            <Card key={prompt} style={{ paddingVertical: 12 }}>
-              <P style={{ fontSize: 14 }}>{prompt}</P>
-            </Card>
+          {source?.prompts.map((prompt, i) => (
+            <Reveal key={prompt} index={i}>
+              <Card style={{ paddingVertical: 12 }}>
+                <P style={{ fontSize: 14 }}>{prompt}</P>
+              </Card>
+            </Reveal>
           ))}
         </View>
 
@@ -488,27 +593,35 @@ export default function Talk() {
     );
   }
 
-  // ————— reflect —————
+  // ----- reflect -----
   if (phase === "reflect") {
     return (
       <Screen safeTop>
-        <Muted style={{ marginTop: 8, textTransform: "uppercase", letterSpacing: 2, fontWeight: "700", color: p.mossDeep }}>
+        <StepDots phase={phase} />
+        <Eyebrow hue="moss" style={{ marginTop: 8 }}>
           The floor passes back
-        </Muted>
+        </Eyebrow>
         <H1 style={{ marginTop: 6 }}>{nameOf(listener)}, show them they were heard</H1>
-        <P style={{ marginTop: 8 }}>
+        <CollapsibleP lines={1} style={{ marginTop: 8 }}>
           Before any reply, three small steps. Take them slowly. This is the part that changes
           things.
-        </P>
+        </CollapsibleP>
         <View style={{ marginTop: 16, gap: 10 }}>
           {reflectSteps.map((s, i) => (
-            <Card key={s.name}>
-              <Text style={{ fontWeight: "700", color: p.ink }}>
-                {i + 1}. {s.name}
-              </Text>
-              <P style={{ marginTop: 6, fontStyle: "italic" }}>{s.script}</P>
-              <Muted style={{ marginTop: 4 }}>{s.note}</Muted>
-            </Card>
+            <Reveal key={s.name} index={i}>
+              <Card>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+                  <IconChip name={reflectIcons[i]} hue="moss" size={34} />
+                  <Text style={{ fontWeight: "700", color: p.ink, flex: 1 }}>
+                    {i + 1}. {s.name}
+                  </Text>
+                </View>
+                <P style={{ marginTop: 8, fontStyle: "italic" }}>{s.script}</P>
+                <CollapsibleP lines={1} style={{ marginTop: 4, fontSize: 13.5 }}>
+                  {s.note}
+                </CollapsibleP>
+              </Card>
+            </Reveal>
           ))}
         </View>
         <Btn
@@ -531,7 +644,7 @@ export default function Talk() {
     );
   }
 
-  // ————— break —————
+  // ----- break -----
   if (phase === "break") {
     return (
       <Screen safeTop>
@@ -545,7 +658,9 @@ export default function Talk() {
           water, music.
         </P>
         <View style={{ alignItems: "center", marginTop: 24 }}>
-          <BreathingCircle size={150} color={p.fern} labelColor={p.mossDeep} />
+          <Bloom trigger={breakLeft === 0} color={p.moss} size={190}>
+            <BreathingCircle size={150} color={p.fern} labelColor={p.mossDeep} />
+          </Bloom>
           <Text style={{ fontSize: 28, fontWeight: "800", color: p.mossDeep, fontVariant: ["tabular-nums"], marginTop: 10 }}>
             {fmt(breakLeft)}
           </Text>
@@ -559,7 +674,7 @@ export default function Talk() {
     );
   }
 
-  // ————— ended kindly —————
+  // ----- ended kindly -----
   if (phase === "ended") {
     return (
       <Screen safeTop>
@@ -574,15 +689,16 @@ export default function Talk() {
     );
   }
 
-  // ————— appreciate —————
+  // ----- appreciate -----
   if (phase === "appreciate") {
     return (
       <Screen safeTop>
+        <StepDots phase={phase} />
         <H1 style={{ marginTop: 8 }}>One appreciation each</H1>
-        <P style={{ marginTop: 10 }}>
+        <CollapsibleP lines={1} style={{ marginTop: 10 }}>
           Something your partner did in this conversation (or this week) that you&apos;re grateful
           for. Say it out loud to each other, then write it down so it&apos;s kept.
-        </P>
+        </CollapsibleP>
         <View style={{ marginTop: 20, gap: 14 }}>
           {([0, 1] as const).map((i) => (
             <View key={i}>
@@ -604,16 +720,17 @@ export default function Talk() {
     );
   }
 
-  // ————— commit —————
+  // ----- commit -----
   if (phase === "commit") {
     return (
       <Screen safeTop>
+        <StepDots phase={phase} />
         <H1 style={{ marginTop: 8 }}>One small commitment each</H1>
-        <P style={{ marginTop: 10 }}>
+        <CollapsibleP lines={1} style={{ marginTop: 10 }}>
           Small and concrete beats grand and vague: &ldquo;I&apos;ll handle bedtime Tuesday&rdquo;
           keeps a marriage better than &ldquo;I&apos;ll be more present.&rdquo; These go on your
           shared plan.
-        </P>
+        </CollapsibleP>
         <View style={{ marginTop: 20, gap: 14 }}>
           {([0, 1] as const).map((i) => (
             <View key={i}>
@@ -635,16 +752,22 @@ export default function Talk() {
     );
   }
 
-  // ————— done —————
+  // ----- done -----
   return (
     <Screen safeTop>
-      <Muted style={{ marginTop: 20, textAlign: "center", textTransform: "uppercase", letterSpacing: 2, fontWeight: "700", color: p.mossDeep }}>
+      <StepDots phase="done" />
+      <View style={{ alignItems: "center", marginTop: 20 }}>
+        <Bloom trigger={phase === "done"} color={p.moss} size={120}>
+          <IconChip name="checkmark" hue="moss" size={76} />
+        </Bloom>
+      </View>
+      <Eyebrow hue="moss" style={{ marginTop: 16, textAlign: "center" }}>
         Session complete
-      </Muted>
+      </Eyebrow>
       <H1 style={{ marginTop: 6, textAlign: "center" }}>You both showed up</H1>
       <P style={{ marginTop: 10, textAlign: "center" }}>
         That&apos;s the whole secret, repeated. Your appreciations and commitments are saved to
-        your plan. The journey counts this session automatically.
+        your plan.
       </P>
       <Card style={{ marginTop: 20 }}>
         <H2>{source?.title}</H2>

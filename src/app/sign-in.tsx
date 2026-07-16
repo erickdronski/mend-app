@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { KeyboardAvoidingView, Platform, Pressable, Text, View, useColorScheme } from "react-native";
 import { useTranslation } from "react-i18next";
+import * as AppleAuthentication from "expo-apple-authentication";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { Btn, H1, Input, Label, Muted, P, Screen, usePalette } from "@/components/ui";
@@ -8,6 +9,7 @@ import { Btn, H1, Input, Label, Muted, P, Screen, usePalette } from "@/component
 export default function SignIn() {
   const { t } = useTranslation();
   const p = usePalette();
+  const scheme = useColorScheme();
   const { continueAsGuest } = useAuth();
   const [mode, setMode] = useState<"in" | "up">("in");
   const [email, setEmail] = useState("");
@@ -15,6 +17,37 @@ export default function SignIn() {
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [appleReady, setAppleReady] = useState(false);
+
+  // Native Sign in with Apple: only offered where the OS supports it.
+  useEffect(() => {
+    if (Platform.OS !== "ios") return;
+    AppleAuthentication.isAvailableAsync().then(setAppleReady).catch(() => {});
+  }, []);
+
+  async function signInWithApple() {
+    setError(null);
+    setNotice(null);
+    try {
+      const cred = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+      if (!cred.identityToken) throw new Error("Apple didn't hand back a token. Try again.");
+      const { error } = await supabase.auth.signInWithIdToken({
+        provider: "apple",
+        token: cred.identityToken,
+      });
+      if (error) throw error;
+    } catch (e) {
+      // User closed the Apple sheet: not an error worth showing.
+      if ((e as { code?: string })?.code === "ERR_REQUEST_CANCELED") return;
+      const msg = e instanceof Error && e.message ? e.message : "";
+      setError(msg || t("auth.authError"));
+    }
+  }
 
   async function submit() {
     setBusy(true);
@@ -51,7 +84,28 @@ export default function SignIn() {
         <H1 style={{ marginTop: 18 }}>{t("auth.welcomeTitle")}</H1>
         <P style={{ marginTop: 10 }}>{t("auth.welcomeBody")}</P>
 
-        <View style={{ marginTop: 28, gap: 14 }}>
+        {appleReady && (
+          <View style={{ marginTop: 24 }}>
+            <AppleAuthentication.AppleAuthenticationButton
+              buttonType={AppleAuthentication.AppleAuthenticationButtonType.CONTINUE}
+              buttonStyle={
+                scheme === "dark"
+                  ? AppleAuthentication.AppleAuthenticationButtonStyle.WHITE
+                  : AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
+              }
+              cornerRadius={14}
+              style={{ height: 50 }}
+              onPress={signInWithApple}
+            />
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 10, marginTop: 18 }}>
+              <View style={{ flex: 1, height: 1, backgroundColor: p.line }} />
+              <Muted style={{ fontSize: 12 }}>or with email</Muted>
+              <View style={{ flex: 1, height: 1, backgroundColor: p.line }} />
+            </View>
+          </View>
+        )}
+
+        <View style={{ marginTop: appleReady ? 16 : 28, gap: 14 }}>
           <View>
             <Label>{t("auth.email")}</Label>
             <Input

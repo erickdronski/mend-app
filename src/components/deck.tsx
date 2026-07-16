@@ -4,9 +4,14 @@
  * beneath peek out and rise into place as the stack advances, so the deck
  * feels like a real object instead of a paged list.
  *
- * Reduced motion: cards fade instead of flying; drag is disabled.
+ * State progression NEVER depends on an animation frame: the fly-off timing
+ * animates the exit, but a JS timeout settles the swipe even if rAF is
+ * throttled (backgrounded web tab, low-power mode). Whichever fires first
+ * wins; the second is a no-op.
+ *
+ * Reduced motion: cards settle instantly; drag is disabled.
  */
-import { forwardRef, useImperativeHandle, type ReactNode } from "react";
+import { forwardRef, useImperativeHandle, useRef, type ReactNode } from "react";
 import { View, useWindowDimensions } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -49,12 +54,17 @@ export const DeckSwiper = forwardRef<
   const tx = useSharedValue(0);
   const ty = useSharedValue(0);
   const flying = useSharedValue(0);
+  // The swipe currently in flight; null once settled. Guards double-settle
+  // between the animation callback and the JS fallback timer.
+  const pending = useRef<SwipeDir | null>(null);
 
   function haptic() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
   }
 
   function settle(dir: SwipeDir) {
+    if (pending.current !== dir) return;
+    pending.current = null;
     onSwiped(dir);
     // next card is already beneath; snap shared values back for the new top
     tx.value = 0;
@@ -62,27 +72,26 @@ export const DeckSwiper = forwardRef<
     flying.value = 0;
   }
 
+  /** JS-side fly: starts the exit animation AND a frame-independent fallback. */
   function fly(dir: SwipeDir) {
-    "worklet";
+    if (pending.current) return;
+    pending.current = dir;
+    if (reduce) {
+      settle(dir);
+      return;
+    }
     flying.value = 1;
     const out = (dir === "left" ? -1 : 1) * (width + 120);
     tx.value = withTiming(out, { duration: FLY_MS, easing: Easing.out(Easing.quad) }, () => {
       runOnJS(settle)(dir);
     });
+    setTimeout(() => settle(dir), FLY_MS + 140);
   }
 
   useImperativeHandle(ref, () => ({
     swipe: (dir: SwipeDir) => {
-      if (reduce) {
-        settle(dir);
-        return;
-      }
       haptic();
-      flying.value = 1;
-      const out = (dir === "left" ? -1 : 1) * (width + 120);
-      tx.value = withTiming(out, { duration: FLY_MS, easing: Easing.out(Easing.quad) }, () => {
-        runOnJS(settle)(dir);
-      });
+      fly(dir);
     },
   }));
 
@@ -97,8 +106,9 @@ export const DeckSwiper = forwardRef<
       if (flying.value) return;
       const past = Math.abs(tx.value) > THRESHOLD || Math.abs(e.velocityX) > 900;
       if (past) {
+        const dir: SwipeDir = tx.value + e.velocityX * 0.05 < 0 ? "left" : "right";
         runOnJS(haptic)();
-        fly(tx.value + e.velocityX * 0.05 < 0 ? "left" : "right");
+        runOnJS(fly)(dir);
       } else {
         tx.value = withSpring(0, springs.bouncy);
         ty.value = withSpring(0, springs.bouncy);

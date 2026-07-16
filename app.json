@@ -11,6 +11,7 @@
     "ios": {
       "bundleIdentifier": "com.erickdronski.mend",
       "supportsTablet": false,
+      "usesAppleSignIn": true,
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "NSFaceIDUsageDescription": "Mend uses Face ID to keep your private answers and notes locked to you."
@@ -39,7 +40,8 @@
         }
       ],
       "expo-localization",
-      "expo-local-authentication"
+      "expo-local-authentication",
+      "expo-apple-authentication"
     ],
     "experiments": {
       "typedRoutes": true,

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Linking, Pressable, Text, View } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, type Href } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 import i18n, { LANGUAGES, type LanguageCode } from "@/lib/i18n";
@@ -9,7 +9,8 @@ import { supabase } from "@/lib/supabase";
 import { getProfile, saveLanguage, saveProfile, type Profile } from "@/lib/store";
 import { isLockEnabled, lockAvailable, setLockEnabled } from "@/lib/lock";
 import { situations } from "@/lib/situation";
-import { Btn, Card, Divider, H1, H2, Input, Label, Muted, P, Screen, usePalette } from "@/components/ui";
+import { usePremium } from "@/lib/premium";
+import { Btn, Card, Chip, Divider, H1, H2, IconChip, Input, Label, Muted, P, Screen, usePalette } from "@/components/ui";
 
 const SITE = "https://mend-drab-pi.vercel.app";
 
@@ -24,6 +25,7 @@ export default function Settings() {
   const router = useRouter();
   const { t } = useTranslation();
   const { session, guest, signOut } = useAuth();
+  const { tier, previewOnly } = usePremium();
   const [lang, setLang] = useState<LanguageCode>((i18n.language as LanguageCode) ?? "en");
   const [profile, setProfile] = useState<Profile | null>(null);
   const [names, setNames] = useState<[string, string]>(["", ""]);
@@ -90,7 +92,27 @@ export default function Settings() {
 
   return (
     <Screen>
-      <H1 style={{ marginTop: 8 }}>{t("settings.title")}</H1>
+      {/* No H1 here: the native header already says Settings. */}
+      {/* Mend Plus */}
+      <Pressable onPress={() => router.push("/plus" as Href)} style={{ marginTop: 12 }}>
+        <Card style={{ flexDirection: "row", alignItems: "center", gap: 12, borderColor: p.hues.ember.accent }}>
+          <IconChip name="sparkles" hue="ember" size={38} />
+          <View style={{ flex: 1 }}>
+            <Text style={{ color: p.ink, fontSize: 15.5, fontWeight: "700" }}>Mend Plus</Text>
+            <Muted style={{ marginTop: 2, fontSize: 12.5 }}>
+              {tier === "plus"
+                ? "Founding member. Everything is unlocked for you."
+                : previewOnly
+                  ? "Unlocked free during the beta."
+                  : "See what Plus includes."}
+            </Muted>
+          </View>
+          {tier === "plus" ? <Chip label="Plus" hue="honey" icon="ribbon-outline" /> : null}
+          <Ionicons name="chevron-forward" size={16} color={p.muted} />
+        </Card>
+      </Pressable>
+
+      <Divider />
 
       {/* Language */}
       <H2 style={{ marginTop: 20 }}>{t("settings.language")}</H2>

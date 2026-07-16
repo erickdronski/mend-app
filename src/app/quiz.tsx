@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { View } from "react-native";
 import {
   conflictQuestions,
   getConflictResult,
@@ -10,13 +10,58 @@ import {
   type LensId,
 } from "@/lib/content/quiz";
 import { getProfile, saveProfile } from "@/lib/store";
-import { Btn, Card, H1, H2, Muted, P, Screen, usePalette, pressFx } from "@/components/ui";
-import { GlideBar } from "@/components/motion";
+import {
+  Btn,
+  Card,
+  Chip,
+  CollapsibleP,
+  H1,
+  H2,
+  Hero,
+  IconChip,
+  Muted,
+  P,
+  Screen,
+  usePalette,
+} from "@/components/ui";
+import { GlideBar, Press, Reveal } from "@/components/motion";
 
 type Stage = "intro" | "who" | "lens" | "conflict" | "result";
 
+/** A springy answer target that tints sky while held. */
+function OptionCard({ text, index, onPress }: { text: string; index: number; onPress: () => void }) {
+  const p = usePalette();
+  const sky = p.hues.sky;
+  const [held, setHeld] = useState(false);
+  return (
+    <Reveal index={index}>
+      <Press
+        onPress={onPress}
+        haptic
+        onTouchStart={() => setHeld(true)}
+        onTouchEnd={() => setHeld(false)}
+        onTouchCancel={() => setHeld(false)}
+      >
+        <View
+          style={{
+            borderRadius: 18,
+            borderWidth: 1,
+            paddingHorizontal: 18,
+            paddingVertical: 14,
+            backgroundColor: held ? sky.bg : p.raised,
+            borderColor: held ? sky.accent : p.line,
+          }}
+        >
+          <P style={{ fontSize: 14.5 }}>{text}</P>
+        </View>
+      </Press>
+    </Reveal>
+  );
+}
+
 export default function Quiz() {
   const p = usePalette();
+  const sky = p.hues.sky;
   const [stage, setStage] = useState<Stage>("intro");
   const [who, setWho] = useState<0 | 1 | null>(null);
   const [names, setNames] = useState<[string, string]>(["Partner A", "Partner B"]);
@@ -62,13 +107,19 @@ export default function Quiz() {
   if (stage === "intro") {
     return (
       <Screen>
-        <H1 style={{ marginTop: 8 }}>How you love & fight</H1>
-        <P style={{ marginTop: 10 }}>
+        <Hero
+          hue="sky"
+          eyebrow="Quiz"
+          title="How you love & fight"
+          sub="Find your attachment lens and your role in the fight cycle."
+          style={{ marginTop: 8 }}
+        />
+        <CollapsibleP style={{ marginTop: 14 }}>
           Eighteen quick scenario questions. The first twelve find your attachment lens: the
           reflex your nervous system reaches for when closeness feels uncertain. The last six
           find your role in the fight cycle. Take it separately, then trade phones and read each
           other&apos;s results. That trade is the whole point.
-        </P>
+        </CollapsibleP>
         <Card tone="panel" style={{ marginTop: 14 }}>
           <Muted>{quizDisclaimer}</Muted>
         </Card>
@@ -116,31 +167,33 @@ export default function Quiz() {
     const prompt = isLens ? lensQuestions[qIndex].prompt : conflictQuestions[qIndex].prompt;
     return (
       <Screen>
-        <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 8 }}>
-          <Muted>{isLens ? "Part one: how you love" : "Part two: how you fight"}</Muted>
-          <Muted>
-            {number} of {total}
-          </Muted>
+        <View
+          style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 8 }}
+        >
+          <Chip label={isLens ? "Part one: how you love" : "Part two: how you fight"} hue="sky" />
+          <Chip label={`${number} of ${total}`} hue="sky" />
         </View>
-        <View style={{ marginTop: 8 }}>
-          <GlideBar progress={number / total} color={p.moss} track={p.panel} />
+        <View style={{ marginTop: 12 }}>
+          <GlideBar progress={number / total} color={sky.accent} track={p.panel} height={5} />
         </View>
         <H2 style={{ marginTop: 20, fontSize: 19, lineHeight: 26 }}>{prompt}</H2>
         <View style={{ marginTop: 16, gap: 10 }}>
           {isLens
             ? lensQuestions[qIndex].options.map((o, i) => (
-                <Pressable key={i} onPress={() => pickLens(o.lens)} style={pressFx}>
-                  <Card style={{ paddingVertical: 14 }}>
-                    <P style={{ fontSize: 14.5 }}>{o.text}</P>
-                  </Card>
-                </Pressable>
+                <OptionCard
+                  key={`lens-${qIndex}-${i}`}
+                  index={i}
+                  text={o.text}
+                  onPress={() => pickLens(o.lens)}
+                />
               ))
             : conflictQuestions[qIndex].options.map((o, i) => (
-                <Pressable key={i} onPress={() => pickRole(o.role)} style={pressFx}>
-                  <Card style={{ paddingVertical: 14 }}>
-                    <P style={{ fontSize: 14.5 }}>{o.text}</P>
-                  </Card>
-                </Pressable>
+                <OptionCard
+                  key={`conflict-${qIndex}-${i}`}
+                  index={i}
+                  text={o.text}
+                  onPress={() => pickRole(o.role)}
+                />
               ))}
         </View>
         <Muted style={{ marginTop: 12 }}>
@@ -162,7 +215,7 @@ export default function Quiz() {
       <Muted style={{ marginTop: 8 }}>
         {who !== null ? `${names[who]}'s attachment lens` : "Your attachment lens"}
       </Muted>
-      <H1 style={{ marginTop: 4 }}>{lens.title}</H1>
+      <H1 style={{ marginTop: 4, fontSize: 32, lineHeight: 38 }}>{lens.title}</H1>
       {second && (
         <Muted style={{ marginTop: 6 }}>
           With a strong second read: {second.title.toLowerCase()}. Most people are a blend; read
@@ -172,7 +225,10 @@ export default function Quiz() {
       <P style={{ marginTop: 12 }}>{lens.summary}</P>
 
       <Card tone="fern" style={{ marginTop: 16 }}>
-        <H2>What this gives your marriage</H2>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          <IconChip name="heart" hue="sky" />
+          <H2 style={{ flex: 1 }}>What this gives your marriage</H2>
+        </View>
         {lens.strengths.map((s) => (
           <P key={s} style={{ marginTop: 8, fontSize: 14 }}>
             · {s}
@@ -180,15 +236,19 @@ export default function Quiz() {
         ))}
       </Card>
       <Card style={{ marginTop: 10 }}>
-        <H2>Worth watching for</H2>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          <IconChip name="eye" hue="rose" />
+          <H2 style={{ flex: 1 }}>Worth watching for</H2>
+        </View>
         {lens.watchFor.map((s) => (
           <P key={s} style={{ marginTop: 8, fontSize: 14 }}>
             · {s}
           </P>
         ))}
       </Card>
-      <Card style={{ marginTop: 10, borderColor: p.moss }}>
-        <H2>Hand the phone over</H2>
+      <Card style={{ marginTop: 10, borderColor: p.hues.rose.accent, borderWidth: 1.5 }}>
+        <Chip label="For your partner" hue="rose" icon="heart" />
+        <H2 style={{ marginTop: 8 }}>Hand the phone over</H2>
         <Muted style={{ marginTop: 2 }}>This part is written to your partner, not to you.</Muted>
         <P style={{ marginTop: 10 }}>{lens.forYourPartner}</P>
       </Card>
@@ -206,7 +266,10 @@ export default function Quiz() {
       </Card>
 
       <Card style={{ marginTop: 12 }}>
-        <H2>Use it inside Mend</H2>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          <IconChip name="compass" hue="ember" />
+          <H2 style={{ flex: 1 }}>Use it inside Mend</H2>
+        </View>
         {lens.inMend.map((s) => (
           <P key={s} style={{ marginTop: 8, fontSize: 14 }}>
             · {s}

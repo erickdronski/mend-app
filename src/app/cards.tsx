@@ -1,8 +1,38 @@
-import { useState } from "react";
-import { Pressable, Text, View } from "react-native";
-import Animated, { FadeInUp, useReducedMotion } from "react-native-reanimated";
+import { useRef, useState } from "react";
+import { Text, View } from "react-native";
+import { useRouter, type Href } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 import { decks, type Deck } from "@/lib/content/cards";
-import { Btn, Card, H1, H2, Muted, P, Screen, usePalette, pressFx } from "@/components/ui";
+import { usePremium } from "@/lib/premium";
+import type { Hue } from "@/lib/theme";
+import {
+  Btn,
+  Card,
+  Chip,
+  Eyebrow,
+  H1,
+  H2,
+  IconChip,
+  Muted,
+  P,
+  Screen,
+  usePalette,
+} from "@/components/ui";
+import { Bloom, Press, Reveal } from "@/components/motion";
+import { DeckSwiper, type DeckSwiperHandle } from "@/components/deck";
+
+/** Each deck gets its own personality: a hue from the cycle plus an icon
+ *  matched to its vibe. Order follows the decks array, nothing invented. */
+const deckHues: Hue[] = ["honey", "rose", "sky", "moss", "plum", "ember"];
+
+const vibeIcons: Record<Deck["vibe"], keyof typeof Ionicons.glyphMap> = {
+  gentle: "leaf",
+  deep: "water",
+  playful: "balloon",
+  repair: "bandage",
+  desire: "flame",
+  dreams: "moon",
+};
 
 function shuffle<T>(arr: T[]): T[] {
   const out = [...arr];
@@ -13,13 +43,19 @@ function shuffle<T>(arr: T[]): T[] {
   return out;
 }
 
+/** The free tier keeps the on-ramp and the crisis deck; Plus opens the rest.
+ *  Money never gates the heavy seasons (see docs/MONETIZATION.md). */
+const FREE_DECKS = new Set(["first-steps", "repair"]);
+
 export default function Cards() {
   const p = usePalette();
-  const reduce = useReducedMotion();
+  const router = useRouter();
+  const { plus } = usePremium();
   const [deck, setDeck] = useState<Deck | null>(null);
   const [order, setOrder] = useState<number[]>([]);
   const [index, setIndex] = useState(0);
   const [showFollowUp, setShowFollowUp] = useState(false);
+  const swiper = useRef<DeckSwiperHandle>(null);
 
   function openDeck(d: Deck) {
     setDeck(d);
@@ -42,47 +78,56 @@ export default function Cards() {
           explanation is owed.
         </P>
         <View style={{ marginTop: 18, gap: 12 }}>
-          {decks.map((d) => (
-            <Pressable key={d.id} onPress={() => openDeck(d)} style={pressFx}>
-              <Card>
-                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                  <H2 style={{ flex: 1 }}>{d.title}</H2>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      fontWeight: "700",
-                      textTransform: "uppercase",
-                      letterSpacing: 1,
-                      color: p.mossDeep,
-                      backgroundColor: p.fern,
-                      paddingHorizontal: 8,
-                      paddingVertical: 3,
-                      borderRadius: 99,
-                      overflow: "hidden",
-                    }}
-                  >
-                    {d.vibe}
-                  </Text>
-                </View>
-                <Muted style={{ marginTop: 4, fontStyle: "italic" }}>{d.tagline}</Muted>
-                <Muted style={{ marginTop: 8 }} numberOfLines={3}>
-                  {d.description}
-                </Muted>
-                <Text style={{ color: p.ember, fontWeight: "600", marginTop: 10, fontSize: 14 }}>
-                  {d.cards.length} cards →
-                </Text>
-              </Card>
-            </Pressable>
-          ))}
+          {decks.map((d, i) => {
+            const hue = deckHues[i % deckHues.length];
+            const locked = !plus && !FREE_DECKS.has(d.id);
+            return (
+              <Reveal key={d.id} index={i}>
+                <Press onPress={() => (locked ? router.push("/plus" as Href) : openDeck(d))} haptic>
+                  <Card style={locked ? { opacity: 0.82 } : undefined}>
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+                      <IconChip name={vibeIcons[d.vibe]} hue={hue} size={40} />
+                      <View style={{ flex: 1 }}>
+                        <H2>{d.title}</H2>
+                        <Muted style={{ fontStyle: "italic" }} numberOfLines={1}>
+                          {d.tagline}
+                        </Muted>
+                      </View>
+                    </View>
+                    <Muted style={{ marginTop: 10 }} numberOfLines={2}>
+                      {d.description}
+                    </Muted>
+                    <View style={{ flexDirection: "row", gap: 8, marginTop: 12 }}>
+                      <Chip label={d.vibe} hue={hue} />
+                      <Chip label={`${d.cards.length} cards`} hue={hue} icon="albums" />
+                      {locked ? <Chip label="Plus" hue="ember" icon="lock-closed" /> : null}
+                    </View>
+                  </Card>
+                </Press>
+              </Reveal>
+            );
+          })}
         </View>
       </Screen>
     );
   }
 
+  const deckIndex = Math.max(
+    0,
+    decks.findIndex((d) => d.id === deck.id)
+  );
+  const hue = deckHues[deckIndex % deckHues.length];
+  const h = p.hues[hue];
+
   if (index >= order.length) {
     return (
       <Screen>
-        <H1 style={{ marginTop: 24, textAlign: "center" }}>That was the whole deck</H1>
+        <View style={{ alignItems: "center", marginTop: 36 }}>
+          <Bloom trigger color={h.accent} size={116}>
+            <IconChip name="checkmark" hue={hue} size={76} />
+          </Bloom>
+        </View>
+        <H1 style={{ marginTop: 22, textAlign: "center" }}>That was the whole deck</H1>
         <P style={{ marginTop: 10, textAlign: "center" }}>
           However many you answered and however many you passed, you just spent real time turned
           toward each other. That counts.
@@ -95,50 +140,66 @@ export default function Cards() {
     );
   }
 
-  const card = deck.cards[order[index]];
+  function renderCard(at: number, top: boolean) {
+    if (!deck) return null;
+    const q = deck.cards[order[at]];
+    return (
+      <Card style={{ padding: 26, borderRadius: 24, minHeight: 300 }}>
+        <Eyebrow hue={hue}>{deck.title}</Eyebrow>
+        <Text style={{ marginTop: 14, fontSize: 24, lineHeight: 32, fontWeight: "700", color: p.ink }}>
+          {q.text}
+        </Text>
+        {top && q.followUp ? (
+          showFollowUp ? (
+            <View style={{ marginTop: 14, borderLeftWidth: 2, borderLeftColor: p.moss, paddingLeft: 12 }}>
+              <P>{q.followUp}</P>
+            </View>
+          ) : (
+            <Press onPress={() => setShowFollowUp(true)}>
+              <Text style={{ color: p.ember, fontWeight: "600", marginTop: 14, textDecorationLine: "underline" }}>
+                There&apos;s a follow-up, when you&apos;re ready
+              </Text>
+            </Press>
+          )
+        ) : null}
+      </Card>
+    );
+  }
+
   return (
     <Screen scroll={false}>
-      <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 8 }}>
-        <Pressable onPress={() => setDeck(null)} style={pressFx}>
+      <View
+        style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 8 }}
+      >
+        <Press onPress={() => setDeck(null)}>
           <Muted>← All decks</Muted>
-        </Pressable>
-        <Muted>
-          {index + 1} of {order.length}
-        </Muted>
+        </Press>
+        <Chip label={`${index + 1} of ${order.length}`} hue={hue} />
       </View>
 
       <View style={{ flex: 1, justifyContent: "center" }}>
-        <Animated.View key={index} entering={reduce ? undefined : FadeInUp.springify().damping(16).stiffness(150)}>
-        <Card style={{ padding: 26 }}>
-          <Muted style={{ textTransform: "uppercase", letterSpacing: 1.5, fontWeight: "700", color: p.mossDeep }}>
-            {deck.title}
-          </Muted>
-          <Text style={{ marginTop: 14, fontSize: 22, lineHeight: 30, fontWeight: "700", color: p.ink }}>
-            {card.text}
-          </Text>
-          {card.followUp ? (
-            showFollowUp ? (
-              <View style={{ marginTop: 14, borderLeftWidth: 2, borderLeftColor: p.moss, paddingLeft: 12 }}>
-                <P>{card.followUp}</P>
-              </View>
-            ) : (
-              <Pressable onPress={() => setShowFollowUp(true)} style={pressFx}>
-                <Text style={{ color: p.ember, fontWeight: "600", marginTop: 14, textDecorationLine: "underline" }}>
-                  There&apos;s a follow-up, when you&apos;re ready
-                </Text>
-              </Pressable>
-            )
-          ) : null}
-        </Card>
-        </Animated.View>
-        <Muted style={{ textAlign: "center", marginTop: 12 }}>
+        <DeckSwiper
+          ref={swiper}
+          topKey={index}
+          renderTop={() => renderCard(index, true)}
+          renderUnder={() =>
+            [index + 1, index + 2]
+              .filter((i) => i < order.length)
+              .map((i) => renderCard(i, false))
+          }
+          onSwiped={() => next()}
+        />
+        <Muted style={{ textAlign: "center", marginTop: 16 }}>
           Answer out loud, then pass the phone. Listening counts as playing.
+        </Muted>
+        <Muted style={{ textAlign: "center", marginTop: 4, fontSize: 12 }}>
+          Swipe either way, or use the buttons. Passing is always fine.
         </Muted>
       </View>
 
       <View style={{ flexDirection: "row", gap: 10, paddingBottom: 20 }}>
-        <Btn label="Pass" kind="ghost" onPress={next} style={{ flex: 1 }} />
-        <Btn label="We answered it" onPress={next} style={{ flex: 2 }} />
+        <Btn label="Pass" kind="ghost" onPress={() => swiper.current?.swipe("left")} style={{ flex: 1 }} />
+        <Btn label="We answered it" onPress={() => swiper.current?.swipe("right")} style={{ flex: 2 }} />
       </View>
     </Screen>
   );

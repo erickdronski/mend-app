@@ -122,8 +122,8 @@ export default function Onboarding() {
           </Rise>
           <Rise delay={300}>
             <Text style={{ fontSize: 16, color: "#f4f4ee", opacity: 0.75, marginTop: 18, lineHeight: 24 }}>
-              A free, private mediator for the two of you. No ads, no fees, nothing sold. Just the
-              way back.
+              A private mediator for the two of you. The heart of it free forever, no ads, your
+              data never sold. Just the way back.
             </Text>
           </Rise>
           <View style={{ flex: 1 }} />
@@ -165,15 +165,16 @@ export default function Onboarding() {
           onMomentumScrollEnd={(e) => setPage(Math.round(e.nativeEvent.contentOffset.x / width))}
           style={{ flex: 1 }}
         >
+          {/* Plain Views on purpose: the pager provides the motion. An entering
+              animation on the first panel can strand it invisible on web if
+              the animation never fires (throttled rAF), leaving page one blank. */}
           {tour.map((t2, i) => (
             <View key={t2.title} style={{ width, paddingHorizontal: 32, justifyContent: "center" }}>
-              <Rise delay={i === 0 ? 100 : 0}>
-                <IconChip name={t2.icon} tone={i % 2 === 0 ? "moss" : "ember"} size={72} />
-                <Text style={{ fontSize: 30, fontWeight: "800", color: p.ink, marginTop: 24, letterSpacing: -0.5, lineHeight: 36 }}>
-                  {t2.title}
-                </Text>
-                <P style={{ marginTop: 12, fontSize: 16.5, lineHeight: 25 }}>{t2.body}</P>
-              </Rise>
+              <IconChip name={t2.icon} tone={i % 2 === 0 ? "moss" : "ember"} size={72} />
+              <Text style={{ fontSize: 30, fontWeight: "800", color: p.ink, marginTop: 24, letterSpacing: -0.5, lineHeight: 36 }}>
+                {t2.title}
+              </Text>
+              <P style={{ marginTop: 12, fontSize: 16.5, lineHeight: 25 }}>{t2.body}</P>
             </View>
           ))}
         </ScrollView>

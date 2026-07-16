@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Pressable, Text, View } from "react-native";
-import { Press } from "@/components/motion";
+import { Text, View } from "react-native";
+import { Bloom, Bounce, GlideBar, Press } from "@/components/motion";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import { addPulse, getJourney, getProfile, getPulses } from "@/lib/store";
 import { PULSE_QUESTIONS, pulseAvg } from "@/lib/journey";
-import { Btn, Card, H1, H2, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Btn, Card, Eyebrow, H1, H2, Hero, IconChip, Muted, P, Screen, usePalette } from "@/components/ui";
 
 type Step = "who" | "rate" | "handoff" | "done" | "support";
 
@@ -22,6 +22,7 @@ export default function Pulse() {
   const [step, setStep] = useState<Step>("who");
   const [qIndex, setQIndex] = useState(0);
   const [scores, setScores] = useState<number[]>([]);
+  const [selected, setSelected] = useState<number | null>(null);
   const [tookBoth, setTookBoth] = useState(false);
   const [afterSupport, setAfterSupport] = useState<Step>("handoff");
   const [prevAvg, setPrevAvg] = useState<number | null>(null);
@@ -63,15 +64,25 @@ export default function Pulse() {
     }
   }
 
+  /** Let the chosen circle fill and pop before the question advances. */
+  function choose(n: number) {
+    if (selected !== null) return;
+    setSelected(n);
+    setTimeout(() => {
+      setSelected(null);
+      rate(n);
+    }, 320);
+  }
+
   if (step === "who") {
     return (
       <Screen>
-        <H1>Who's answering first?</H1>
-        <P style={{ marginTop: 10 }}>
-          Five statements about the last stretch, rated honestly and separately. Don&apos;t
-          negotiate your answers; the gap between your two truths is useful information, not a
-          problem.
-        </P>
+        <Hero
+          hue="ember"
+          eyebrow="Pulse check"
+          title="Who's answering first?"
+          sub="Five statements about the last stretch, rated honestly and separately."
+        />
         <View style={{ marginTop: 22, gap: 10 }}>
           {([0, 1] as const).map((i) => (
             <Btn
@@ -85,6 +96,10 @@ export default function Pulse() {
           ))}
         </View>
         <Muted style={{ marginTop: 16 }}>
+          Don&apos;t negotiate your answers; the gap between your two truths is useful
+          information, not a problem.
+        </Muted>
+        <Muted style={{ marginTop: 8 }}>
           Partner not on board yet? Answer for yourself and leave theirs for later; the journey
           will wait.
         </Muted>
@@ -93,31 +108,48 @@ export default function Pulse() {
   }
 
   if (step === "rate") {
+    const hue = p.hues.ember;
     return (
       <Screen>
         <Muted>
           {names[who]} · {qIndex + 1} of {PULSE_QUESTIONS.length}
         </Muted>
-        <H1 style={{ marginTop: 10 }}>{PULSE_QUESTIONS[qIndex]}</H1>
+        <View style={{ marginTop: 10 }}>
+          <GlideBar
+            progress={(qIndex + (selected !== null ? 1 : 0)) / PULSE_QUESTIONS.length}
+            color={hue.accent}
+            track={hue.bg}
+            height={6}
+          />
+        </View>
+        <H1 style={{ marginTop: 18 }}>{PULSE_QUESTIONS[qIndex]}</H1>
         <Muted style={{ marginTop: 10 }}>1 = not at all · 5 = completely true</Muted>
-        <View style={{ flexDirection: "row", gap: 8, marginTop: 24 }}>
-          {[1, 2, 3, 4, 5].map((n) => (
-            <Press key={n} onPress={() => rate(n)} scaleTo={0.9} style={{ flex: 1 }}>
-              <View
-                style={{
-                  aspectRatio: 0.9,
-                  borderRadius: 14,
-                  borderWidth: 1,
-                  borderColor: p.line,
-                  backgroundColor: p.raised,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Text style={{ fontSize: 22, fontWeight: "700", color: p.ink }}>{n}</Text>
-              </View>
-            </Press>
-          ))}
+        <View style={{ flexDirection: "row", gap: 10, marginTop: 26 }}>
+          {[1, 2, 3, 4, 5].map((n) => {
+            const chosen = selected === n;
+            return (
+              <Press key={n} onPress={() => choose(n)} scaleTo={0.88} style={{ flex: 1 }}>
+                <Bounce trigger={chosen}>
+                  <View
+                    style={{
+                      aspectRatio: 1,
+                      minHeight: 48,
+                      borderRadius: 999,
+                      borderWidth: 1,
+                      borderColor: chosen ? hue.accent : p.line,
+                      backgroundColor: chosen ? hue.accent : p.raised,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text style={{ fontSize: 22, fontWeight: "700", color: chosen ? p.surface : p.ink }}>
+                      {n}
+                    </Text>
+                  </View>
+                </Bounce>
+              </Press>
+            );
+          })}
         </View>
         <Muted style={{ marginTop: 20 }}>
           Answer for the season, not for today's mood. And answer for yourself; your partner
@@ -130,9 +162,7 @@ export default function Pulse() {
   if (step === "support") {
     return (
       <Screen>
-        <Muted style={{ textTransform: "uppercase", letterSpacing: 2, fontWeight: "700", color: p.ember }}>
-          Just for you, {names[who]}
-        </Muted>
+        <Eyebrow hue="ember">Just for you, {names[who]}</Eyebrow>
         <H1 style={{ marginTop: 8 }}>This season is landing hard</H1>
         <P style={{ marginTop: 10 }}>
           Your answers were honest, and they were low. That is worth more than an app can hold.
@@ -158,9 +188,12 @@ export default function Pulse() {
         {prevAvg !== null && (
           <Muted style={{ marginTop: 8 }}>Saved. Your last stage's average was {prevAvg.toFixed(1)}.</Muted>
         )}
-        <Card tone="fern" style={{ marginTop: 20 }}>
-          <H2>Pass the phone</H2>
-          <P style={{ marginTop: 8 }}>
+        <Card style={{ marginTop: 20, backgroundColor: p.hues.ember.bg, borderColor: "transparent" }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+            <IconChip name="swap-horizontal" hue="ember" size={38} />
+            <H2 style={{ color: p.hues.ember.fg }}>Pass the phone</H2>
+          </View>
+          <P style={{ marginTop: 10, color: p.hues.ember.fg }}>
             {names[other]}, same five statements, your own honest numbers. {names[who]}, no
             peeking and no lobbying.
           </P>
@@ -186,8 +219,13 @@ export default function Pulse() {
 
   return (
     <Screen>
-      <H1>Pulse recorded</H1>
-      <P style={{ marginTop: 10 }}>
+      <View style={{ alignItems: "center", marginTop: 16 }}>
+        <Bloom trigger={step === "done"} color={p.hues.ember.accent} size={112}>
+          <IconChip name="pulse" hue="ember" size={72} />
+        </Bloom>
+      </View>
+      <H1 style={{ marginTop: 18, textAlign: "center" }}>Pulse recorded</H1>
+      <P style={{ marginTop: 10, textAlign: "center" }}>
         {tookBoth
           ? "Both of you are on the record for this stage. The journey uses these numbers to keep the pace honest, and to celebrate real distance when you look back."
           : "Saved."}

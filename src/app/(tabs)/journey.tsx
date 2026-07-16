@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import { LinearGradient } from "expo-linear-gradient";
 import { Pressable, Text, View } from "react-native";
 import { Link, useFocusEffect, useRouter, type Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -24,9 +23,10 @@ import {
   stepDone,
   type StepContext,
 } from "@/lib/journey";
-import { Btn, Card, H1, H2, Muted, P, Rise, Screen, usePalette } from "@/components/ui";
+import { onHero } from "@/lib/theme";
+import { Btn, Card, Chip, CollapsibleP, Eyebrow, H1, H2, Hero, Muted, P, Rise, Screen, usePalette } from "@/components/ui";
 import { ProgressRing } from "@/components/rings";
-import { Reveal } from "@/components/motion";
+import { Bloom, Bounce, Reveal } from "@/components/motion";
 
 /**
  * The Journey tab: the app's home. One current stage, its steps, the next
@@ -60,7 +60,7 @@ export default function JourneyScreen() {
 
   if (!ctx || !journey) return <Screen scroll={false} safeTop>{null}</Screen>;
 
-  // ——— graduated ———
+  // graduated
   if (journey.graduatedAt) {
     const base = pulseAvg(ctx.pulses, 1, 0);
     const final = pulseAvg(ctx.pulses, 5, 0);
@@ -105,29 +105,14 @@ export default function JourneyScreen() {
         </Pressable>
       </View>
 
-      {/* stage hero: deep forest with a progress ring */}
+      {/* stage hero: the shared gradient band with the progress ring */}
       <Rise>
-        <LinearGradient
-          colors={["#2e4a38", "#233c2c"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ marginTop: 16, borderRadius: 20, padding: 20 }}
-        >
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 16 }}>
-            <View style={{ flex: 1 }}>
-              {names ? (
-                <Text style={{ color: "#f4f4ee", opacity: 0.6, fontSize: 12.5 }}>{names}</Text>
-              ) : null}
-              <Text style={{ color: "#d9a057", fontWeight: "700", fontSize: 12, textTransform: "uppercase", letterSpacing: 1.5, marginTop: 4 }}>
-                {t("journey.stage")} {stage.n} {t("common.of")} {stages.length}
-              </Text>
-              <Text style={{ color: "#f4f4ee", fontSize: 25, fontWeight: "800", letterSpacing: -0.4, marginTop: 4, lineHeight: 30 }}>
-                {stage.title}
-              </Text>
-              <Text style={{ color: "#f4f4ee", opacity: 0.75, fontSize: 13.5, marginTop: 6, lineHeight: 19 }}>
-                {stage.arc}
-              </Text>
-            </View>
+        <Hero
+          hue="moss"
+          eyebrow={`${t("journey.stage")} ${stage.n} ${t("common.of")} ${stages.length}`}
+          title={stage.title}
+          sub={stage.arc}
+          right={
             <ProgressRing
               progress={doneCount / stage.steps.length}
               size={84}
@@ -139,15 +124,22 @@ export default function JourneyScreen() {
                 {doneCount}/{stage.steps.length}
               </Text>
             </ProgressRing>
-          </View>
-          <Text style={{ color: "#f4f4ee", opacity: 0.55, fontSize: 12, marginTop: 12 }}>{stage.weeksHint}</Text>
-        </LinearGradient>
+          }
+          style={{ marginTop: 16 }}
+        >
+          {names ? (
+            <Text style={{ color: onHero.dim, fontSize: 12.5, marginTop: 12 }}>{names}</Text>
+          ) : null}
+          <Text style={{ color: onHero.text, opacity: 0.55, fontSize: 12, marginTop: names ? 3 : 12 }}>
+            {stage.weeksHint}
+          </Text>
+        </Hero>
       </Rise>
 
-      {/* the why */}
+      {/* the why, folded to two lines so the screen stays light */}
       <Rise delay={120}>
         <Card tone="panel" style={{ marginTop: 12 }}>
-          <P style={{ fontSize: 14 }}>{stage.why}</P>
+          <CollapsibleP style={{ fontSize: 14 }}>{stage.why}</CollapsibleP>
         </Card>
       </Rise>
 
@@ -160,9 +152,7 @@ export default function JourneyScreen() {
       {/* next step, big */}
       {nextStep && !complete && (
         <Card tone="fern" style={{ marginTop: 16 }}>
-          <Muted style={{ textTransform: "uppercase", letterSpacing: 1.5, fontWeight: "700", color: p.mossDeep }}>
-            {t("journey.nextStep")}
-          </Muted>
+          <Eyebrow>{t("journey.nextStep")}</Eyebrow>
           <H2 style={{ marginTop: 6 }}>{nextStep.title}</H2>
           <P style={{ marginTop: 8 }}>{nextStep.body}</P>
           <Btn
@@ -183,17 +173,20 @@ export default function JourneyScreen() {
             <Reveal key={step.id} index={si}>
             <Card style={{ opacity: done ? 0.65 : 1 }}>
               <View style={{ flexDirection: "row", gap: 12 }}>
-                <Ionicons
-                  name={done ? "checkmark-circle" : "ellipse-outline"}
-                  size={22}
-                  color={done ? p.moss : p.muted}
-                  style={{ marginTop: 1 }}
-                />
+                <View style={{ marginTop: 1 }}>
+                  <Bloom trigger={journey.doneSteps.includes(step.id)} color={p.hues.ember.accent} size={40}>
+                    <Ionicons
+                      name={done ? "checkmark-circle" : "ellipse-outline"}
+                      size={22}
+                      color={done ? p.moss : p.muted}
+                    />
+                  </Bloom>
+                </View>
                 <View style={{ flex: 1 }}>
                   <Text style={{ fontSize: 15.5, fontWeight: "600", color: p.ink, textDecorationLine: done ? "line-through" : "none" }}>
                     {step.title}
                   </Text>
-                  {!done && <Muted style={{ marginTop: 5 }}>{step.body}</Muted>}
+                  {!done && <Muted style={{ marginTop: 5 }} numberOfLines={2}>{step.body}</Muted>}
                   {!done && (
                     <View style={{ flexDirection: "row", gap: 14, marginTop: 10 }}>
                       <Link href={step.href as Href} style={{ color: p.ember, fontWeight: "600", fontSize: 14 }}>
@@ -223,25 +216,32 @@ export default function JourneyScreen() {
 
       {/* stage gate */}
       {complete && !graduating && (
-        <Card tone="moss" style={{ marginTop: 18 }}>
-          <H2 style={{ color: p.surface }}>{t("journey.stageComplete")}</H2>
-          <P style={{ marginTop: 8, color: p.surface, opacity: 0.9 }}>
-            Every step of stage {stage.n} is done. Move when you're both ready; the stages ahead
-            assume the ground this one built.
-          </P>
-          <Btn
-            label={t("journey.advance")}
-            onPress={async () => setJourney(await advanceStage())}
-            style={{ marginTop: 14, backgroundColor: p.surface, borderColor: p.surface }}
-          />
-        </Card>
+        <Bounce trigger={complete}>
+          <Card tone="moss" style={{ marginTop: 18 }}>
+            <Chip label={`Stage ${stage.n} complete`} hue="ember" />
+            <H2 style={{ color: p.surface, marginTop: 10 }}>{t("journey.stageComplete")}</H2>
+            <P style={{ marginTop: 8, color: p.surface, opacity: 0.9 }}>
+              Every step of stage {stage.n} is done. Move when you're both ready; the stages ahead
+              assume the ground this one built.
+            </P>
+            <Btn
+              label={t("journey.advance")}
+              onPress={async () => setJourney(await advanceStage())}
+              style={{ marginTop: 14, backgroundColor: p.surface, borderColor: p.surface }}
+            />
+          </Card>
+        </Bounce>
       )}
 
       {graduating && (
         <Card tone="moss" style={{ marginTop: 18 }}>
-          <H2 style={{ color: p.surface }}>
-            {canGraduate ? "You're ready to graduate" : "The work is done. The numbers aren't, yet"}
-          </H2>
+          <Chip label="Stage 5 complete" hue="ember" />
+          <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 10, marginTop: 10 }}>
+            <Ionicons name="ribbon-outline" size={22} color={p.surface} style={{ marginTop: 2 }} />
+            <H2 style={{ color: p.surface, flex: 1 }}>
+              {canGraduate ? "You're ready to graduate" : "The work is done. The numbers aren't, yet"}
+            </H2>
+          </View>
           <P style={{ marginTop: 8, color: p.surface, opacity: 0.9 }}>
             {canGraduate
               ? "Stage five is complete and both of your pulses are strong. There's one feature left: leaving."

@@ -1,8 +1,9 @@
 import { useCallback, useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
-import { useFocusEffect } from "expo-router";
+import { ScrollView, Text, View } from "react-native";
+import { useFocusEffect, useRouter, type Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { challenges, getChallenge, microMoves } from "@/lib/content/challenges";
+import { usePremium } from "@/lib/premium";
 import {
   clearChallenge,
   completeChallengeDay,
@@ -10,13 +11,42 @@ import {
   startChallenge,
   type ChallengeState,
 } from "@/lib/store";
-import { Btn, Card, H1, H2, Muted, P, Screen, usePalette } from "@/components/ui";
+import {
+  Btn,
+  Card,
+  Chip,
+  CollapsibleP,
+  Eyebrow,
+  H1,
+  H2,
+  IconChip,
+  Muted,
+  P,
+  Screen,
+  usePalette,
+} from "@/components/ui";
+import { Bloom, Bounce, Press, Reveal } from "@/components/motion";
+
+const challengeIcons: Record<string, keyof typeof Ionicons.glyphMap> = {
+  "turning-toward": "people",
+  appreciation: "heart",
+  "soft-repair": "bandage",
+  "last-line": "flag",
+};
+
+/** Free tier keeps the starter week and, deliberately, the crisis week:
+ *  money never gates the heavy seasons (see docs/MONETIZATION.md). */
+const FREE_CHALLENGES = new Set(["turning-toward", "last-line"]);
 
 export default function Challenges() {
   const p = usePalette();
+  const honey = p.hues.honey;
+  const router = useRouter();
+  const { plus } = usePremium();
   const [state, setState] = useState<ChallengeState | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [confirmSwitch, setConfirmSwitch] = useState(false);
+  const [justDone, setJustDone] = useState<number | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -37,50 +67,96 @@ export default function Challenges() {
   if (active && state) {
     return (
       <Screen>
-        <Muted style={{ marginTop: 8 }}>Your week</Muted>
-        <H1 style={{ marginTop: 2 }}>{active.title}</H1>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 6, marginTop: 12 }}>
-          {active.days.map((_, i) => (
-            <Ionicons
-              key={i}
-              name={done.includes(i) ? "checkmark-circle" : "ellipse-outline"}
-              size={22}
-              color={done.includes(i) ? p.moss : i === currentDay ? p.ember : p.line}
-            />
-          ))}
-          <Muted style={{ marginLeft: 6 }}>{done.length} of 7</Muted>
+        <View
+          style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 8 }}
+        >
+          <Eyebrow hue="honey">Your week</Eyebrow>
+          <Chip label={`${done.length} of ${active.days.length} done`} hue="honey" />
+        </View>
+        <H1 style={{ marginTop: 6 }}>{active.title}</H1>
+
+        {/* Seven day dots: done = filled, today = ringed, future = muted. */}
+        <View style={{ flexDirection: "row", gap: 8, marginTop: 16 }}>
+          {active.days.map((_, i) => {
+            const isDone = done.includes(i);
+            const isToday = i === currentDay;
+            return (
+              <Bloom key={i} trigger={justDone === i} color={honey.accent} size={52}>
+                <Bounce trigger={justDone === i}>
+                  <View
+                    style={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 18,
+                      backgroundColor: isDone ? honey.accent : "transparent",
+                      borderWidth: 2,
+                      borderColor: isDone || isToday ? honey.accent : p.line,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {isDone ? (
+                      <Ionicons name="checkmark" size={17} color={p.surface} />
+                    ) : (
+                      <Text
+                        style={{ fontWeight: "700", fontSize: 12.5, color: isToday ? honey.fg : p.muted }}
+                      >
+                        {i + 1}
+                      </Text>
+                    )}
+                  </View>
+                </Bounce>
+              </Bloom>
+            );
+          })}
         </View>
 
         {finished ? (
-          <Card tone="fern" style={{ marginTop: 18 }}>
-            <H2>Seven for seven</H2>
-            <P style={{ marginTop: 8 }}>
-              A week of showing up on purpose. Whatever it shifted, you built it one small day at
-              a time, which is the only way anything in a marriage gets built. The journey has
-              counted it.
-            </P>
-            <Btn
-              label="Choose the next week"
-              kind="moss"
-              onPress={async () => {
-                await clearChallenge();
-                setState(null);
-              }}
-              style={{ marginTop: 14 }}
-            />
-          </Card>
+          <>
+            <View style={{ alignItems: "center", marginTop: 26 }}>
+              <Bloom trigger color={honey.accent} size={112}>
+                <IconChip name="checkmark" hue="honey" size={72} />
+              </Bloom>
+            </View>
+            <Card tone="fern" style={{ marginTop: 20 }}>
+              <H2>Seven for seven</H2>
+              <P style={{ marginTop: 8 }}>
+                A week of showing up on purpose. Whatever it shifted, you built it one small day at
+                a time, which is the only way anything in a marriage gets built. The journey has
+                counted it.
+              </P>
+              <Btn
+                label="Choose the next week"
+                kind="moss"
+                onPress={async () => {
+                  await clearChallenge();
+                  setState(null);
+                  setJustDone(null);
+                }}
+                style={{ marginTop: 14 }}
+              />
+            </Card>
+          </>
         ) : (
           <Card style={{ marginTop: 18 }}>
-            <Text style={{ color: p.ember, fontWeight: "700", fontSize: 14 }}>
-              Day {currentDay + 1}: {active.days[currentDay].title}
-            </Text>
-            <P style={{ marginTop: 10, fontSize: 16.5, lineHeight: 25 }}>{active.days[currentDay].task}</P>
-            <View style={{ borderLeftWidth: 2, borderLeftColor: p.line, paddingLeft: 12, marginTop: 12 }}>
-              <Muted>{active.days[currentDay].why}</Muted>
+            <Chip label={`Day ${currentDay + 1} of ${active.days.length}`} hue="honey" icon="calendar" />
+            <H2 style={{ marginTop: 10 }}>{active.days[currentDay].title}</H2>
+            <P style={{ marginTop: 8, fontSize: 16.5, lineHeight: 25 }}>
+              {active.days[currentDay].task}
+            </P>
+            <View style={{ borderLeftWidth: 2, borderLeftColor: honey.accent, paddingLeft: 12, marginTop: 12 }}>
+              <CollapsibleP lines={2} style={{ fontSize: 13.5, lineHeight: 20 }}>
+                {active.days[currentDay].why}
+              </CollapsibleP>
             </View>
             <Btn
               label="Done for today"
-              onPress={async () => setState(await completeChallengeDay(currentDay))}
+              onPress={async () => {
+                const day = currentDay;
+                const s = await completeChallengeDay(day);
+                setState(s);
+                setJustDone(day);
+              }}
               style={{ marginTop: 16 }}
             />
             <Muted style={{ marginTop: 8 }}>
@@ -90,61 +166,28 @@ export default function Challenges() {
           </Card>
         )}
 
-        {!finished && (
-          <View style={{ marginTop: 18 }}>
-            <H2>The week at a glance</H2>
-            <View style={{ marginTop: 8, gap: 4 }}>
-              {active.days.map((d, i) => (
-                <View
-                  key={i}
-                  style={{
-                    flexDirection: "row",
-                    gap: 10,
-                    paddingVertical: 8,
-                    paddingHorizontal: 10,
-                    borderRadius: 8,
-                    backgroundColor: i === currentDay ? p.panel : "transparent",
-                  }}
-                >
-                  <Muted style={{ width: 44 }}>Day {i + 1}</Muted>
-                  <Text
-                    style={{
-                      flex: 1,
-                      fontSize: 13.5,
-                      color: done.includes(i) ? p.muted : p.ink,
-                      textDecorationLine: done.includes(i) ? "line-through" : "none",
-                      fontWeight: i === currentDay ? "600" : "400",
-                    }}
-                  >
-                    {d.title}
-                  </Text>
-                </View>
-              ))}
-            </View>
-          </View>
-        )}
-
         <View style={{ marginTop: 24 }}>
           {confirmSwitch ? (
             <View style={{ flexDirection: "row", gap: 16, alignItems: "center", flexWrap: "wrap" }}>
               <Muted>Drop this week and choose another?</Muted>
-              <Pressable
+              <Press
                 onPress={async () => {
                   await clearChallenge();
                   setState(null);
                   setConfirmSwitch(false);
+                  setJustDone(null);
                 }}
               >
                 <Text style={{ color: p.ember, fontWeight: "600" }}>Yes, switch</Text>
-              </Pressable>
-              <Pressable onPress={() => setConfirmSwitch(false)}>
+              </Press>
+              <Press onPress={() => setConfirmSwitch(false)}>
                 <Muted style={{ textDecorationLine: "underline" }}>Keep going</Muted>
-              </Pressable>
+              </Press>
             </View>
           ) : (
-            <Pressable onPress={() => setConfirmSwitch(true)}>
+            <Press onPress={() => setConfirmSwitch(true)}>
               <Muted style={{ textDecorationLine: "underline" }}>Switch to a different challenge</Muted>
-            </Pressable>
+            </Press>
           )}
         </View>
       </Screen>
@@ -161,37 +204,67 @@ export default function Challenges() {
       </P>
 
       <View style={{ marginTop: 18, gap: 12 }}>
-        {challenges.map((c) => {
+        {challenges.map((c, idx) => {
           const heavy = c.id === "last-line";
+          const locked = !plus && !FREE_CHALLENGES.has(c.id);
           return (
-            <Card key={c.id} tone={heavy ? "moss" : "raised"}>
-              <H2 style={heavy ? { color: p.surface } : undefined}>{c.title}</H2>
-              <Muted style={[{ marginTop: 4, fontStyle: "italic" }, heavy && { color: p.surface, opacity: 0.75 }]}>
-                {c.tagline}
-              </Muted>
-              <Muted style={[{ marginTop: 8 }, heavy && { color: p.surface, opacity: 0.85 }]}>{c.forWhom}</Muted>
-              <Btn
-                label="Start this week"
-                onPress={async () => setState(await startChallenge(c.id))}
-                style={
-                  heavy
-                    ? { marginTop: 14, backgroundColor: p.surface, borderColor: p.surface }
-                    : { marginTop: 14 }
-                }
-              />
-            </Card>
+            <Reveal key={c.id} index={idx}>
+              <Card tone={heavy ? "moss" : "raised"} style={locked ? { opacity: 0.82 } : undefined}>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+                  <IconChip name={challengeIcons[c.id] ?? "calendar"} hue="honey" size={40} />
+                  <View style={{ flex: 1 }}>
+                    <H2 style={heavy ? { color: p.surface } : undefined}>{c.title}</H2>
+                    <Muted
+                      style={[{ fontStyle: "italic" }, heavy && { color: p.surface, opacity: 0.75 }]}
+                      numberOfLines={1}
+                    >
+                      {c.tagline}
+                    </Muted>
+                  </View>
+                </View>
+                <Muted
+                  style={[{ marginTop: 10 }, heavy && { color: p.surface, opacity: 0.85 }]}
+                  numberOfLines={2}
+                >
+                  {c.forWhom}
+                </Muted>
+                <View style={{ flexDirection: "row", gap: 8, marginTop: 12 }}>
+                  <Chip label={`${c.days.length} days`} hue="honey" icon="calendar" />
+                  {locked ? <Chip label="Plus" hue="ember" icon="lock-closed" /> : null}
+                </View>
+                <Btn
+                  label={locked ? "See Mend Plus" : "Start this week"}
+                  kind={heavy ? "ghost" : locked ? "ghost" : "primary"}
+                  onPress={
+                    locked
+                      ? () => router.push("/plus" as Href)
+                      : async () => setState(await startChallenge(c.id))
+                  }
+                  style={
+                    heavy
+                      ? { marginTop: 14, backgroundColor: p.surface, borderColor: p.surface }
+                      : { marginTop: 14 }
+                  }
+                />
+              </Card>
+            </Reveal>
           );
         })}
       </View>
 
       <H2 style={{ marginTop: 26 }}>Too tired for a challenge? Try a micro-move.</H2>
-      <Muted style={{ marginTop: 6 }}>Single moves for specific moments. No streaks, no tracking. Just one.</Muted>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 12 }} contentContainerStyle={{ gap: 10 }}>
+      <Muted style={{ marginTop: 6 }}>
+        Single moves for specific moments. No streaks, no tracking. Just one.
+      </Muted>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={{ marginTop: 12 }}
+        contentContainerStyle={{ gap: 10 }}
+      >
         {microMoves.map((m, i) => (
           <Card key={i} style={{ width: 260 }}>
-            <Muted style={{ textTransform: "uppercase", letterSpacing: 1, fontWeight: "700", color: p.ember, fontSize: 10.5 }}>
-              {m.when}
-            </Muted>
+            <Chip label={m.when} hue="honey" />
             <P style={{ marginTop: 8, fontSize: 14 }}>{m.tip}</P>
           </Card>
         ))}

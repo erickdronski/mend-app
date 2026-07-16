@@ -1,42 +1,71 @@
-import { Pressable, View } from "react-native";
+import { Text, View } from "react-native";
 import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 import { topicCategories, topics } from "@/lib/content/topics";
-import { Card, H1, H2, Muted, P, Screen, usePalette, pressFx } from "@/components/ui";
-import { Text } from "react-native";
+import { Card, Chip, Eyebrow, Hero, IconChip, Muted, Screen, usePalette } from "@/components/ui";
+import { Press, Reveal } from "@/components/motion";
+
+/** One icon per category so a scan of the list reads as places, not text. */
+const categoryIcon: Record<string, keyof typeof Ionicons.glyphMap> = {
+  Reconnection: "heart-outline",
+  "Daily Life": "home-outline",
+  Intimacy: "flame-outline",
+  Money: "wallet-outline",
+  Family: "people-outline",
+  Repair: "bandage-outline",
+  "The Future": "compass-outline",
+};
 
 export default function Topics() {
   const p = usePalette();
   const router = useRouter();
+
+  // Precompute per-category groups plus a running index for staggered reveals.
+  let running = 1;
+  const groups = topicCategories.map((cat) => {
+    const items = topics.filter((t) => t.category === cat);
+    const start = running;
+    running += items.length;
+    return { cat, items, start };
+  });
+
   return (
     <Screen>
-      <H1 style={{ marginTop: 8 }}>The talks you keep not having</H1>
-      <P style={{ marginTop: 10 }}>
-        Every topic comes with a soft way to begin (how a conversation starts is usually how it
-        ends) and questions the speaker can lean on. Pick one and it becomes tonight&apos;s
-        guided session.
-      </P>
-      {topicCategories.map((cat) => (
-        <View key={cat} style={{ marginTop: 22 }}>
-          <Muted style={{ textTransform: "uppercase", letterSpacing: 1.5, fontWeight: "700", color: p.mossDeep }}>
-            {cat}
-          </Muted>
+      <Hero
+        hue="moss"
+        eyebrow="Talk it out"
+        title="The talks you keep not having"
+        sub="Pick one and it becomes tonight's guided session."
+        style={{ marginTop: 4 }}
+      />
+      {groups.map((g) => (
+        <View key={g.cat} style={{ marginTop: 22 }}>
+          <Eyebrow hue="moss">{g.cat}</Eyebrow>
           <View style={{ marginTop: 8, gap: 10 }}>
-            {topics
-              .filter((t) => t.category === cat)
-              .map((t) => (
-                <Pressable key={t.id} onPress={() => router.push(`/talk?topic=${t.id}`)} style={pressFx}>
+            {g.items.map((t, i) => (
+              <Reveal key={t.id} index={g.start + i}>
+                <Press onPress={() => router.push(`/talk?topic=${t.id}`)}>
                   <Card>
-                    <H2>{t.title}</H2>
-                    <Muted style={{ marginTop: 6 }}>{t.why}</Muted>
-                    <View style={{ backgroundColor: p.panel, borderRadius: 10, padding: 10, marginTop: 10 }}>
-                      <Muted style={{ fontStyle: "italic" }}>{t.opener}</Muted>
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+                      <IconChip name={categoryIcon[g.cat] ?? "chatbubbles-outline"} hue="moss" size={34} />
+                      <View style={{ flex: 1 }}>
+                        <Text style={{ fontSize: 15.5, fontWeight: "700", color: p.ink }}>{t.title}</Text>
+                        <Muted numberOfLines={1} style={{ marginTop: 2, fontStyle: "italic", fontSize: 12.5 }}>
+                          {t.opener}
+                        </Muted>
+                      </View>
+                      <Ionicons name="chevron-forward" size={16} color={p.muted} />
                     </View>
-                    <Text style={{ color: p.ember, fontWeight: "600", marginTop: 10, fontSize: 14 }}>
-                      Have this conversation →
-                    </Text>
+                    <Chip
+                      label={`${t.prompts.length} prompts`}
+                      hue="moss"
+                      icon="chatbox-ellipses-outline"
+                      style={{ marginTop: 10 }}
+                    />
                   </Card>
-                </Pressable>
-              ))}
+                </Press>
+              </Reveal>
+            ))}
           </View>
         </View>
       ))}

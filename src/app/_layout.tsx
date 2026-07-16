@@ -6,6 +6,7 @@ import { AppState, Pressable, Text, View, useColorScheme, type AppStateStatus } 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import { AuthProvider, useAuth } from "@/lib/auth";
+import { PremiumProvider } from "@/lib/premium";
 import { getLanguage, getProfile } from "@/lib/store";
 import { authenticate, isLockEnabled } from "@/lib/lock";
 import { usePalette } from "@/components/ui";
@@ -125,7 +126,10 @@ function Gate({ children }: { children: ReactNode }) {
     // Fully set up (real session + profile, or guest + profile): leave
     // onboarding for the app, and leave the sign-in screen only once a real
     // session exists, so a guest can sit on /sign-in to upgrade to an account.
-    if (inOnboarding || (inAuth && session)) router.replace("/");
+    // hasProfile is required here: a brand-new guest who just tapped "skip"
+    // inside onboarding still owes the names + situation steps, and ejecting
+    // them early ships an app that never learns who the partners are.
+    if (hasProfile && (inOnboarding || (inAuth && session))) router.replace("/");
   }, [ready, session, guest, hasProfile, segments, router]);
 
   return <>{children}</>;
@@ -165,6 +169,7 @@ function Shell() {
           <Stack.Screen name="toolkit" options={{ title: "Toolkit" }} />
           <Stack.Screen name="safety" options={{ title: "Get help now" }} />
           <Stack.Screen name="settings" options={{ title: "Settings" }} />
+          <Stack.Screen name="plus" options={{ title: "Mend Plus" }} />
           <Stack.Screen name="space" options={{ title: "Our space" }} />
           <Stack.Screen name="notes" options={{ title: "Little notes" }} />
           <Stack.Screen name="plan" options={{ title: "Our plan" }} />
@@ -181,7 +186,9 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <AuthProvider>
-        <Shell />
+        <PremiumProvider>
+          <Shell />
+        </PremiumProvider>
       </AuthProvider>
     </GestureHandlerRootView>
   );
