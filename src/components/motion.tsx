@@ -123,6 +123,59 @@ export function Reveal({
 }
 
 /**
+ * Bloom: a celebratory ring that expands and fades behind its child when
+ * `trigger` turns truthy. The app's one "confetti", kept quiet on purpose:
+ * finishing a step in a hard season deserves warmth, not fireworks.
+ */
+export function Bloom({
+  children,
+  trigger,
+  color,
+  size = 96,
+}: {
+  children: ReactNode;
+  trigger: unknown;
+  color: string;
+  size?: number;
+}) {
+  const reduce = useReducedMotion();
+  const scale = useSharedValue(0);
+  const fade = useSharedValue(0);
+  const ringStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+    opacity: fade.value,
+  }));
+
+  useEffect(() => {
+    if (reduce || !trigger) return;
+    scale.value = 0.5;
+    fade.value = 0.85;
+    scale.value = withSpring(1.5, springs.gentle);
+    fade.value = withTiming(0, { duration: 700 });
+  }, [trigger, reduce, scale, fade]);
+
+  return (
+    <Animated.View style={{ alignItems: "center", justifyContent: "center" }}>
+      <Animated.View
+        pointerEvents="none"
+        style={[
+          {
+            position: "absolute",
+            width: size,
+            height: size,
+            borderRadius: size / 2,
+            borderWidth: 3,
+            borderColor: color,
+          },
+          ringStyle,
+        ]}
+      />
+      {children}
+    </Animated.View>
+  );
+}
+
+/**
  * Bounce: a subtle scale pop when `trigger` changes to a truthy value. For
  * confirmations (answer sent, day done, stage complete). Never loud.
  */

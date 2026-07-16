@@ -2,7 +2,7 @@
  * Mend UI kit: small, consistent primitives themed by color scheme.
  * Forest palette, generous radii, calm motion. No per-screen styling drift.
  */
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -25,7 +25,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
-import { palettes, type Palette } from "@/lib/theme";
+import { LinearGradient } from "expo-linear-gradient";
+import { heroGradients, onHero, palettes, type Hue, type Palette } from "@/lib/theme";
 import { springs, timings } from "@/lib/motion";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -96,19 +97,23 @@ export function Rise({
   );
 }
 
-/** Tinted rounded-square icon, iOS-Settings style. Kills the text-wall feel. */
+/** Tinted rounded-square icon, iOS-Settings style. Kills the text-wall feel.
+ *  Pass `hue` for the v2 feature colors; the legacy `tone` prop still works. */
 export function IconChip({
   name,
   tone = "moss",
+  hue,
   size = 36,
 }: {
   name: keyof typeof Ionicons.glyphMap;
   tone?: "moss" | "ember" | "fern";
+  hue?: Hue;
   size?: number;
 }) {
   const p = usePalette();
-  const bg = tone === "ember" ? p.ember : tone === "fern" ? p.fern : p.moss;
-  const fg = tone === "fern" ? p.mossDeep : p.surface;
+  const h = hue ? p.hues[hue] : null;
+  const bg = h ? h.bg : tone === "ember" ? p.ember : tone === "fern" ? p.fern : p.moss;
+  const fg = h ? h.fg : tone === "fern" ? p.mossDeep : p.surface;
   return (
     <View
       style={{
@@ -121,6 +126,184 @@ export function IconChip({
       }}
     >
       <Ionicons name={name} size={size * 0.55} color={fg} />
+    </View>
+  );
+}
+
+/** Small tinted pill for counts, vibes, and category labels. */
+export function Chip({
+  label,
+  hue = "moss",
+  icon,
+  style,
+}: {
+  label: string;
+  hue?: Hue;
+  icon?: keyof typeof Ionicons.glyphMap;
+  style?: StyleProp<ViewStyle>;
+}) {
+  const p = usePalette();
+  const h = p.hues[hue];
+  return (
+    <View
+      style={[
+        {
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 4,
+          backgroundColor: h.bg,
+          paddingHorizontal: 9,
+          paddingVertical: 4,
+          borderRadius: 99,
+          alignSelf: "flex-start",
+        },
+        style,
+      ]}
+    >
+      {icon ? <Ionicons name={icon} size={12} color={h.fg} /> : null}
+      <Text style={{ fontSize: 11.5, fontWeight: "700", color: h.fg }}>{label}</Text>
+    </View>
+  );
+}
+
+/** Uppercase section eyebrow, the one way sections are titled. */
+export function Eyebrow({
+  children,
+  hue,
+  style,
+}: {
+  children: ReactNode;
+  hue?: Hue;
+  style?: StyleProp<TextStyle>;
+}) {
+  const p = usePalette();
+  const color = hue ? p.hues[hue].fg : p.mossDeep;
+  return (
+    <Text
+      style={[
+        { textTransform: "uppercase", letterSpacing: 1.4, fontWeight: "700", fontSize: 11.5, color },
+        style,
+      ]}
+    >
+      {children}
+    </Text>
+  );
+}
+
+/**
+ * Hero: the deep-gradient header band every major screen opens with. Soft
+ * decorative circles give it depth without imagery. Text is always bone.
+ */
+export function Hero({
+  hue = "moss",
+  eyebrow,
+  title,
+  sub,
+  right,
+  children,
+  style,
+}: {
+  hue?: Hue;
+  eyebrow?: string;
+  title?: string;
+  sub?: string;
+  /** rendered to the right of the text block (a ring, a big icon) */
+  right?: ReactNode;
+  children?: ReactNode;
+  style?: StyleProp<ViewStyle>;
+}) {
+  return (
+    <LinearGradient
+      colors={heroGradients[hue]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={[{ borderRadius: 22, padding: 20, overflow: "hidden" }, style]}
+    >
+      {/* decorative depth: two translucent circles bleeding off the corners */}
+      <View
+        pointerEvents="none"
+        style={{ position: "absolute", top: -46, right: -34, width: 130, height: 130, borderRadius: 65, backgroundColor: "rgba(244,244,238,0.07)" }}
+      />
+      <View
+        pointerEvents="none"
+        style={{ position: "absolute", bottom: -58, left: -28, width: 150, height: 150, borderRadius: 75, backgroundColor: "rgba(0,0,0,0.10)" }}
+      />
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 16 }}>
+        <View style={{ flex: 1 }}>
+          {eyebrow ? (
+            <Text style={{ color: onHero.accent, fontWeight: "700", fontSize: 12, textTransform: "uppercase", letterSpacing: 1.5 }}>
+              {eyebrow}
+            </Text>
+          ) : null}
+          {title ? (
+            <Text style={{ color: onHero.text, fontSize: 24, fontWeight: "800", letterSpacing: -0.4, marginTop: eyebrow ? 6 : 0, lineHeight: 29 }}>
+              {title}
+            </Text>
+          ) : null}
+          {sub ? (
+            <Text style={{ color: onHero.dim, fontSize: 13.5, marginTop: 6, lineHeight: 19 }}>{sub}</Text>
+          ) : null}
+        </View>
+        {right ?? null}
+      </View>
+      {children}
+    </LinearGradient>
+  );
+}
+
+/**
+ * CollapsibleP: long explanations fold to two lines behind a "More" tap.
+ * The screen stays calm; the depth stays one tap away.
+ */
+export function CollapsibleP({
+  children,
+  lines = 2,
+  style,
+}: {
+  children: ReactNode;
+  lines?: number;
+  style?: StyleProp<TextStyle>;
+}) {
+  const p = usePalette();
+  const [open, setOpen] = useState(false);
+  return (
+    <Pressable onPress={() => setOpen((o) => !o)}>
+      <P numberOfLines={open ? undefined : lines} style={style}>
+        {children}
+      </P>
+      <Text style={{ color: p.ember, fontWeight: "600", fontSize: 13, marginTop: 4 }}>
+        {open ? "Less" : "More"}
+      </Text>
+    </Pressable>
+  );
+}
+
+/** Friendly zero-state: a tinted icon disc, one line, one action. */
+export function EmptyState({
+  icon,
+  hue = "moss",
+  title,
+  body,
+  cta,
+  onPress,
+}: {
+  icon: keyof typeof Ionicons.glyphMap;
+  hue?: Hue;
+  title: string;
+  body?: string;
+  cta?: string;
+  onPress?: () => void;
+}) {
+  const p = usePalette();
+  const h = p.hues[hue];
+  return (
+    <View style={{ alignItems: "center", paddingVertical: 28, gap: 10 }}>
+      <View style={{ width: 72, height: 72, borderRadius: 36, backgroundColor: h.bg, alignItems: "center", justifyContent: "center" }}>
+        <Ionicons name={icon} size={32} color={h.fg} />
+      </View>
+      <Text style={{ fontSize: 16.5, fontWeight: "700", color: p.ink, textAlign: "center" }}>{title}</Text>
+      {body ? <Muted style={{ textAlign: "center", maxWidth: 280 }}>{body}</Muted> : null}
+      {cta && onPress ? <Btn label={cta} onPress={onPress} style={{ marginTop: 6, alignSelf: "stretch" }} /> : null}
     </View>
   );
 }

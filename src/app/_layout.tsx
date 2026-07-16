@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { AppState, Pressable, Text, View, useColorScheme, type AppStateStatus } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import { AuthProvider, useAuth } from "@/lib/auth";
 import { getLanguage, getProfile } from "@/lib/store";
@@ -178,8 +179,10 @@ function Shell() {
 
 export default function RootLayout() {
   return (
-    <AuthProvider>
-      <Shell />
-    </AuthProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AuthProvider>
+        <Shell />
+      </AuthProvider>
+    </GestureHandlerRootView>
   );
 }
