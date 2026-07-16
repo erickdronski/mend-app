@@ -57,11 +57,17 @@ crisis lines; per-track red flags; "not therapy" everywhere. Non-negotiable.
 - ASC API key **Mend CI / 3Q7BV86NXY** in `credentials/` (gitignored),
   issuer c798b8c2-6181-42a4-ae66-34e30d3c1c5e, team J9DMDH4S58
 - ASC app record: **"Mend: Marriage Repair"**, appId **6789373997**, SKU mend-ios
-- Build: `expect scripts/eas-build.exp` with EXPO_ASC_* env vars set
-  (see script; interactive validation driven automatically)
-- Submit: `npx eas-cli submit -p ios --latest` (eas.json has everything)
-- **Blocked 2026-07-09:** EAS free-plan iOS builds exhausted; resets Aug 1,
-  or upgrade the Expo plan (owner billing decision). No local Xcode.
+- **Local pipeline (2026-07-16, the ship path):** Xcode 26.6 + Homebrew
+  CocoaPods/fastlane are installed, so `eas build --local` runs on this Mac
+  at $0. Recipe: rsync the repo (exclude node_modules/ios/android) to a
+  path WITHOUT spaces (RN breaks on "Personal Projects"), `npm ci`, then
+  `CI=1 npx eas-cli build -p ios --profile production --local
+  --non-interactive --output mend.ipa` and `npx eas-cli submit -p ios
+  --profile production --path mend.ipa --non-interactive` (~15 min total).
+  GitHub Actions workflow remains as backup (billing-gated).
+- Version note: `appVersionSource: remote` + autoIncrement means EAS owns
+  the build number; the 2026-07-16 upload landed as TestFlight build 12
+  (11 was skipped). Trust TestFlight numbering, not commit messages.
 
 ## Couple Spaces (shipped 2026-07-09)
 
