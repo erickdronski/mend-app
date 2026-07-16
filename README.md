@@ -1,56 +1,25 @@
-# Welcome to your Expo app 👋
+# Mend 💛
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**A free app for couples repairing a marriage.**
 
-## Get started
+Mend walks two partners through a staged Journey: an easy start, deeper work over months, real change, and then graduation off the app. The knowledge inside is counseling-grade and always attributed (Gottman, EFT, PREP, NVC). It never invents advice, and it is free.
 
-1. Install dependencies
+## How it works
 
-   ```bash
-   npm install
-   ```
+- **The Journey** · a staged path of exercises, tests, games, and experiences designed for two people, not one. Couples move from easy openers to advanced work as they actually do it.
+- **Spaces** · a private shared place for each couple, where answers, notes, and progress live together.
+- **Graduation** · the goal is to stop needing the app. Mend measures forward motion, not engagement.
 
-2. Start the app
+## Stack
 
-   ```bash
-   npx expo start
-   ```
+- Expo / React Native with expo-router and TypeScript
+- Supabase for auth and data
+- Shipped to TestFlight with EAS local builds running inside GitHub Actions
 
-In the output, you'll find options to open the app in a
+## Status
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+On TestFlight. The full product spec is in [SPEC.md](SPEC.md).
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## License
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-### Other setup steps
-
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+See [LICENSE](LICENSE).
