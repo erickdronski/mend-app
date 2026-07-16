@@ -28,7 +28,7 @@ import {
 } from "@/lib/space";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { onHero } from "@/lib/theme";
-import { Card, Eyebrow, Hero, IconChip, Input, Muted, Rise, Screen, usePalette } from "@/components/ui";
+import { Card, Eyebrow, Hero, IconChip, Input, Muted, Rise, Screen, usePalette, Wordmark } from "@/components/ui";
 import { Bounce, Press } from "@/components/motion";
 
 /** Warm, time-aware hello. No stats, no streaks, just a greeting. */
@@ -155,9 +155,7 @@ export default function Today() {
   return (
     <Screen safeTop>
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: 8 }}>
-        <Text style={{ fontSize: 24, fontWeight: "800", color: p.ink }}>
-          Mend<Text style={{ color: p.ember }}>.</Text>
-        </Text>
+        <Wordmark />
         <Pressable onPress={() => router.push("/settings")} hitSlop={10}>
           <Ionicons name="settings-outline" size={22} color={p.muted} />
         </Pressable>

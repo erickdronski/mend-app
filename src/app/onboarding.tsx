@@ -18,7 +18,7 @@ import { useAuth } from "@/lib/auth";
 import { saveProfile } from "@/lib/store";
 import { situations, type Situation } from "@/lib/situation";
 import { whyGateMatters } from "@/lib/content/safety";
-import { Btn, Card, H1, H2, IconChip, Input, Label, Muted, P, pressFx, Rise, Screen, usePalette } from "@/components/ui";
+import { Btn, Card, H1, H2, IconChip, Input, Label, Muted, P, pressFx, Rise, Screen, usePalette, Wordmark } from "@/components/ui";
 
 type Step = "welcome" | "tour" | "deal" | "gate" | "account" | "names" | "situation";
 
@@ -108,9 +108,7 @@ export default function Onboarding() {
         <StatusBar style="light" />
         <View style={{ flex: 1, paddingHorizontal: 28, paddingTop: insets.top + 80, paddingBottom: insets.bottom + 28 }}>
           <Rise>
-            <Text style={{ fontSize: 56, fontWeight: "800", color: "#f4f4ee", letterSpacing: -1 }}>
-              Mend<Text style={{ color: "#d9a057" }}>.</Text>
-            </Text>
+            <Wordmark size={56} color="#f4f4ee" accent="#d9a057" />
           </Rise>
           <Rise delay={150}>
             <Text style={{ fontSize: 26, fontWeight: "700", color: "#f4f4ee", marginTop: 18, lineHeight: 34 }}>

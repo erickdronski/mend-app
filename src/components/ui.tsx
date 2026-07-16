@@ -130,6 +130,36 @@ export function IconChip({
   );
 }
 
+/**
+ * The Mend wordmark. The brand idea is kintsugi: the mended place is the one
+ * that glows, so the "e" carries the ember gold while the rest stays ink.
+ * (Replaces the old trailing-period mark, which the suite's other apps use.)
+ * Pass color/accent only on gradient surfaces where palette ink won't read.
+ */
+export function Wordmark({
+  size = 24,
+  color,
+  accent,
+  style,
+}: {
+  size?: number;
+  color?: string;
+  accent?: string;
+  style?: StyleProp<TextStyle>;
+}) {
+  const p = usePalette();
+  return (
+    <Text
+      style={[
+        { fontSize: size, fontWeight: "800", letterSpacing: size * -0.02, color: color ?? p.ink },
+        style,
+      ]}
+    >
+      M<Text style={{ color: accent ?? p.ember }}>e</Text>nd
+    </Text>
+  );
+}
+
 /** Small tinted pill for counts, vibes, and category labels. */
 export function Chip({
   label,

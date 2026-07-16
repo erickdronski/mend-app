@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
-import { Btn, H1, Input, Label, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Btn, H1, Input, Label, Muted, P, Screen, usePalette, Wordmark } from "@/components/ui";
 
 export default function SignIn() {
   const { t } = useTranslation();
@@ -78,9 +78,7 @@ export default function SignIn() {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1, justifyContent: "center", paddingHorizontal: 24 }}
       >
-        <Text style={{ fontSize: 34, fontWeight: "800", color: p.ink }}>
-          Mend<Text style={{ color: p.ember }}>.</Text>
-        </Text>
+        <Wordmark size={34} />
         <H1 style={{ marginTop: 18 }}>{t("auth.welcomeTitle")}</H1>
         <P style={{ marginTop: 10 }}>{t("auth.welcomeBody")}</P>
 

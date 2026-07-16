@@ -1,6 +1,9 @@
 /**
- * Generates Mend's app icons from an SVG wordmark: moss field, bone "M",
- * ember dot. Outputs the icon set app.json references.
+ * Generates Mend's app icons from an SVG mark: moss field, bone "M", and an
+ * ember STITCH running beneath the letter. The stitch is the brand: kintsugi,
+ * the repaired seam is the part that glows. (The old mark ended in a period,
+ * which the suite's other apps use; Mend now carries its own signature.)
+ * Outputs the icon set app.json references.
  */
 import sharp from "sharp";
 import { mkdirSync } from "node:fs";
@@ -9,12 +12,16 @@ const MOSS = "#38553f";
 const BONE = "#f4f4ee";
 const EMBER = "#d9a057";
 
-const mark = (bg, pad = 0) => `
+// A hand-stitch zigzag centered under the letter: seven stitches, rounded.
+const STITCH_POINTS = "262,772 332,728 402,772 472,728 542,772 612,728 682,772 752,728";
+
+const mark = (bg) => `
 <svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
   ${bg ? `<rect width="1024" height="1024" fill="${MOSS}"/>` : ""}
-  <text x="472" y="${640 + pad}" font-family="Georgia, 'Times New Roman', serif" font-weight="700"
-        font-size="560" fill="${BONE}" text-anchor="middle">M</text>
-  <circle cx="768" cy="608" r="56" fill="${EMBER}"/>
+  <text x="507" y="616" font-family="Georgia, 'Times New Roman', serif" font-weight="700"
+        font-size="520" fill="${BONE}" text-anchor="middle">M</text>
+  <polyline points="${STITCH_POINTS}" fill="none" stroke="${EMBER}"
+            stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>`;
 
 mkdirSync("assets/images", { recursive: true });

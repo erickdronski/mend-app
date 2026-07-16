@@ -24,7 +24,7 @@ import {
   type StepContext,
 } from "@/lib/journey";
 import { onHero } from "@/lib/theme";
-import { Btn, Card, Chip, CollapsibleP, Eyebrow, H1, H2, Hero, Muted, P, Rise, Screen, usePalette } from "@/components/ui";
+import { Btn, Card, Chip, CollapsibleP, Eyebrow, H1, H2, Hero, Muted, P, Rise, Screen, usePalette, Wordmark } from "@/components/ui";
 import { ProgressRing } from "@/components/rings";
 import { Bloom, Bounce, Reveal } from "@/components/motion";
 
@@ -97,9 +97,7 @@ export default function JourneyScreen() {
   return (
     <Screen safeTop>
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: 8 }}>
-        <Text style={{ fontSize: 24, fontWeight: "800", color: p.ink }}>
-          Mend<Text style={{ color: p.ember }}>.</Text>
-        </Text>
+        <Wordmark />
         <Pressable onPress={() => router.push("/settings")} hitSlop={10}>
           <Ionicons name="settings-outline" size={22} color={p.muted} />
         </Pressable>

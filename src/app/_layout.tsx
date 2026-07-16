@@ -9,7 +9,7 @@ import { AuthProvider, useAuth } from "@/lib/auth";
 import { PremiumProvider } from "@/lib/premium";
 import { getLanguage, getProfile } from "@/lib/store";
 import { authenticate, isLockEnabled } from "@/lib/lock";
-import { usePalette } from "@/components/ui";
+import { usePalette, Wordmark } from "@/components/ui";
 import i18n from "@/lib/i18n";
 
 /**
@@ -57,9 +57,7 @@ function LockGate({ children }: { children: ReactNode }) {
       {children}
       {enabled && locked && (
         <View style={{ position: "absolute", inset: 0, backgroundColor: p.surface, alignItems: "center", justifyContent: "center", gap: 20 }}>
-          <Text style={{ fontSize: 34, fontWeight: "800", color: p.ink }}>
-            Mend<Text style={{ color: p.ember }}>.</Text>
-          </Text>
+          <Wordmark size={34} />
           <Ionicons name="lock-closed" size={40} color={p.muted} />
           <Text style={{ color: p.muted }}>Locked for your privacy</Text>
           <Pressable
