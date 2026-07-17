@@ -24,6 +24,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
+import Svg, { Polyline } from "react-native-svg";
 import { LinearGradient } from "expo-linear-gradient";
 import { heroGradients, onHero, palettes, type Hue, type Palette } from "@/lib/theme";
 import { springs, timings } from "@/lib/motion";
@@ -153,9 +154,10 @@ export function IconChip({
 }
 
 /**
- * The Mend wordmark. The brand idea is kintsugi: the mended place is the one
- * that glows, so the "e" carries the ember gold while the rest stays ink.
- * (Replaces the old trailing-period mark, which the suite's other apps use.)
+ * The Mend wordmark, matching the app icon: the name in one clean color
+ * with the ember hand-stitch running beneath it. The stitch is the whole
+ * brand (kintsugi, the mended seam), so the letters stay quiet: no gold
+ * letter, no trailing period (the suite's other apps own that mark).
  * Pass color/accent only on gradient surfaces where palette ink won't read.
  */
 export function Wordmark({
@@ -167,18 +169,37 @@ export function Wordmark({
   size?: number;
   color?: string;
   accent?: string;
-  style?: StyleProp<TextStyle>;
+  style?: StyleProp<ViewStyle>;
 }) {
   const p = usePalette();
+  const [w, setW] = useState(size * 2.55);
+  const h = Math.max(5, size * 0.22);
+  const sw = Math.max(2, size * 0.09);
+  // seven stitches across the word, like the icon
+  const pts = Array.from({ length: 8 }, (_, i) => {
+    const x = sw / 2 + (i * (w - sw)) / 7;
+    const y = i % 2 === 0 ? h - sw / 2 : sw / 2;
+    return `${x},${y}`;
+  }).join(" ");
   return (
-    <Text
-      style={[
-        { fontSize: size, fontWeight: "800", letterSpacing: size * -0.02, color: color ?? p.ink },
-        style,
-      ]}
-    >
-      M<Text style={{ color: accent ?? p.ember }}>e</Text>nd
-    </Text>
+    <View style={[{ alignSelf: "flex-start" }, style]}>
+      <Text
+        onLayout={(e) => setW(Math.max(1, e.nativeEvent.layout.width))}
+        style={{ fontSize: size, fontWeight: "800", letterSpacing: size * -0.02, color: color ?? p.ink }}
+      >
+        Mend
+      </Text>
+      <Svg width={w} height={h} style={{ marginTop: size * 0.12 }}>
+        <Polyline
+          points={pts}
+          fill="none"
+          stroke={accent ?? p.ember}
+          strokeWidth={sw}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </Svg>
+    </View>
   );
 }
 
