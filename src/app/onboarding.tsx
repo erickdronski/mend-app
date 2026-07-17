@@ -1,26 +1,17 @@
 import { useRef, useState } from "react";
-import {
-  Dimensions,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
+import { Dimensions, Pressable, ScrollView, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { saveProfile } from "@/lib/store";
 import { situations, type Situation } from "@/lib/situation";
 import { whyGateMatters } from "@/lib/content/safety";
 import { Btn, Card, H1, H2, IconChip, Input, Label, Muted, P, pressFx, Rise, Screen, usePalette, Wordmark } from "@/components/ui";
 
-type Step = "welcome" | "tour" | "deal" | "gate" | "account" | "names" | "situation";
+type Step = "welcome" | "tour" | "deal" | "gate" | "names" | "situation";
 
 const tour: { icon: keyof typeof Ionicons.glyphMap; title: string; body: string }[] = [
   {
@@ -55,14 +46,6 @@ export default function Onboarding() {
   const scrollRef = useRef<ScrollView>(null);
   const width = Dimensions.get("window").width;
 
-  // account step
-  const [mode, setMode] = useState<"up" | "in">("up");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [notice, setNotice] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
   // names step
   const [a, setA] = useState("");
   const [b, setB] = useState("");
@@ -78,28 +61,11 @@ export default function Onboarding() {
     router.replace("/");
   }
 
-  async function submitAccount() {
-    setBusy(true);
-    setError(null);
-    setNotice(null);
-    try {
-      if (mode === "up") {
-        const { data, error } = await supabase.auth.signUp({ email, password });
-        if (error) throw error;
-        if (data.session) setStep("names");
-        else setNotice("Check your email to confirm your account, then come back and sign in.");
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        setStep("names");
-      }
-    } catch (e) {
-      const msg = e instanceof Error && e.message ? e.message : "";
-      setError(msg || "That didn't work. Check your email and password.");
-    } finally {
-      setBusy(false);
-    }
-  }
+  // The account step is gone on purpose (2026-07-16): beta feedback showed
+  // email confirmation dead-ends (no SMTP on the shared project) and the
+  // guest path stranded. Identity is now an invisible anonymous account
+  // minted at the safety gate; real logins live on /sign-in for returning
+  // users only.
 
   // ————— welcome: the brand moment —————
   if (step === "welcome") {
@@ -286,7 +252,13 @@ export default function Onboarding() {
         <View style={{ marginTop: 24, gap: 10 }}>
           <Btn
             label="We're safe with each other. Continue"
-            onPress={() => setStep(session || guest ? "names" : "account")}
+            onPress={() => {
+              // No login in the way: mint an invisible account underneath so
+              // the shared space and backup work with nothing to fill in.
+              // Fire and forget; offline stays local and retries next launch.
+              if (!session) continueAsGuest();
+              setStep("names");
+            }}
           />
           <Btn
             label="I'm not sure, or I don't feel safe. Show me help"
@@ -294,64 +266,6 @@ export default function Onboarding() {
             onPress={() => router.push("/safety")}
           />
         </View>
-      </Screen>
-    );
-  }
-
-  // ————— account —————
-  if (step === "account") {
-    return (
-      <Screen scroll={false} padded={false} safeTop>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
-          style={{ flex: 1, paddingHorizontal: 24, justifyContent: "center" }}
-        >
-          <Rise>
-            <H1>Make it yours</H1>
-            <P style={{ marginTop: 10 }}>
-              A free account backs up your progress and unlocks the shared space with your
-              partner. Or skip it: everything else works right on this phone.
-            </P>
-          </Rise>
-          <View style={{ marginTop: 22, gap: 12 }}>
-            <View>
-              <Label>Email</Label>
-              <Input value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" autoComplete="email" />
-            </View>
-            <View>
-              <Label>Password</Label>
-              <Input value={password} onChangeText={setPassword} secureTextEntry autoComplete={mode === "up" ? "new-password" : "current-password"} />
-              {mode === "up" && (
-                <Muted style={{ marginTop: 4, fontSize: 12 }}>
-                  One lowercase, one uppercase, one number.
-                </Muted>
-              )}
-            </View>
-            {error && <Muted style={{ color: p.ember }}>{error}</Muted>}
-            {notice && <Muted style={{ color: p.moss }}>{notice}</Muted>}
-            <Btn
-              label={mode === "up" ? "Create account" : "Sign in"}
-              onPress={submitAccount}
-              disabled={busy || !email || password.length < 6}
-            />
-            <Btn
-              label={mode === "up" ? "I already have an account" : "I'm new here"}
-              kind="ghost"
-              onPress={() => setMode(mode === "up" ? "in" : "up")}
-            />
-            <Pressable
-              onPress={async () => {
-                await continueAsGuest();
-                setStep("names");
-              }}
-              style={{ alignItems: "center", marginTop: 6 }}
-            >
-              <Muted style={{ textDecorationLine: "underline" }}>
-                Skip for now, keep everything on this phone
-              </Muted>
-            </Pressable>
-          </View>
-        </KeyboardAvoidingView>
       </Screen>
     );
   }

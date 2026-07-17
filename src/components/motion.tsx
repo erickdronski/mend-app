@@ -6,7 +6,6 @@
 import { ReactNode, useEffect } from "react";
 import { Pressable, type PressableProps, type StyleProp, type ViewStyle } from "react-native";
 import Animated, {
-  FadeInDown,
   useAnimatedStyle,
   useReducedMotion,
   useSharedValue,
@@ -100,6 +99,10 @@ export function Press({
  * Reveal: entrance animation with a staggered delay by index. A soft rise +
  * fade, springy. Use on list items and stacked cards so a screen assembles
  * itself instead of snapping in.
+ *
+ * Like Rise, visibility never depends on an animation frame: a plain JS
+ * timeout snaps the item visible shortly after its slot, so a stalled rAF
+ * (hidden web tab, low-power mode) can never strand content at opacity 0.
  */
 export function Reveal({
   children,
@@ -111,15 +114,26 @@ export function Reveal({
   style?: StyleProp<ViewStyle>;
 }) {
   const reduce = useReducedMotion();
-  if (reduce) return <Animated.View style={style}>{children}</Animated.View>;
-  return (
-    <Animated.View
-      entering={FadeInDown.springify().damping(18).stiffness(140).delay(stagger(index))}
-      style={style}
-    >
-      {children}
-    </Animated.View>
-  );
+  const t = useSharedValue(reduce ? 1 : 0);
+  useEffect(() => {
+    if (reduce) return;
+    const delay = stagger(index);
+    const timer = setTimeout(() => {
+      t.value = withSpring(1, springs.gentle);
+    }, delay);
+    const snap = setTimeout(() => {
+      t.value = 1;
+    }, delay + 800);
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(snap);
+    };
+  }, [index, reduce, t]);
+  const anim = useAnimatedStyle(() => ({
+    opacity: t.value,
+    transform: [{ translateY: (1 - t.value) * 16 }],
+  }));
+  return <Animated.View style={[anim, style]}>{children}</Animated.View>;
 }
 
 /**

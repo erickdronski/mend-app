@@ -142,7 +142,20 @@ export default function Settings() {
 
       {/* Account */}
       <H2>{t("auth.account")}</H2>
-      {session ? (
+      {session?.user.is_anonymous ? (
+        <View style={{ marginTop: 10 }}>
+          <Muted>
+            You&apos;re using Mend without a login. Your progress and shared space still sync;
+            add an email or Apple account anytime to keep them if you switch phones.
+          </Muted>
+          <Btn
+            label="Add an account"
+            kind="ghost"
+            onPress={() => router.push("/sign-in")}
+            style={{ marginTop: 12 }}
+          />
+        </View>
+      ) : session ? (
         <View style={{ marginTop: 10 }}>
           <Muted>
             {t("auth.signedInAs")} {session.user.email}

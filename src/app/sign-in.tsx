@@ -15,6 +15,7 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [guestBusy, setGuestBusy] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [appleReady, setAppleReady] = useState(false);
@@ -57,7 +58,14 @@ export default function SignIn() {
       if (mode === "up") {
         const { data, error } = await supabase.auth.signUp({ email, password });
         if (error) throw error;
-        if (!data.session) setNotice(t("auth.checkEmail"));
+        // No session back means either a confirmation email is pending OR
+        // this email already has an account (the response is identical by
+        // design). Say both honestly instead of promising an email that may
+        // never come; and the no-account path is always one tap away.
+        if (!data.session)
+          setNotice(
+            "If that email is new here, a confirmation is on its way (check spam). Already used it before? Tap 'I already have an account' and sign in instead, or just start without an account."
+          );
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
@@ -82,6 +90,26 @@ export default function SignIn() {
         <H1 style={{ marginTop: 18 }}>{t("auth.welcomeTitle")}</H1>
         <P style={{ marginTop: 10 }}>{t("auth.welcomeBody")}</P>
 
+        {/* The no-login path leads. It quietly creates an invisible account
+            underneath (continueAsGuest), so the shared space still works. */}
+        <Btn
+          label="Start without an account"
+          onPress={async () => {
+            if (guestBusy) return;
+            setGuestBusy(true);
+            try {
+              await continueAsGuest();
+            } finally {
+              setGuestBusy(false);
+            }
+          }}
+          disabled={guestBusy}
+          style={{ marginTop: 24 }}
+        />
+        <Muted style={{ marginTop: 8, textAlign: "center", fontSize: 12.5 }}>
+          Nothing to fill in. You can add an account later in Settings.
+        </Muted>
+
         {appleReady && (
           <View style={{ marginTop: 24 }}>
             <AppleAuthentication.AppleAuthenticationButton
@@ -95,15 +123,16 @@ export default function SignIn() {
               style={{ height: 50 }}
               onPress={signInWithApple}
             />
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 10, marginTop: 18 }}>
-              <View style={{ flex: 1, height: 1, backgroundColor: p.line }} />
-              <Muted style={{ fontSize: 12 }}>or with email</Muted>
-              <View style={{ flex: 1, height: 1, backgroundColor: p.line }} />
-            </View>
           </View>
         )}
 
-        <View style={{ marginTop: appleReady ? 16 : 28, gap: 14 }}>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10, marginTop: 20 }}>
+          <View style={{ flex: 1, height: 1, backgroundColor: p.line }} />
+          <Muted style={{ fontSize: 12 }}>or with an account</Muted>
+          <View style={{ flex: 1, height: 1, backgroundColor: p.line }} />
+        </View>
+
+        <View style={{ marginTop: 16, gap: 14 }}>
           <View>
             <Label>{t("auth.email")}</Label>
             <Input
@@ -155,10 +184,6 @@ export default function SignIn() {
           />
         </View>
 
-        <View style={{ marginTop: 24, alignItems: "center" }}>
-          <Btn label={t("auth.guest")} kind="ghost" onPress={continueAsGuest} style={{ alignSelf: "stretch" }} />
-          <Muted style={{ marginTop: 10, textAlign: "center" }}>{t("auth.localOnly")}</Muted>
-        </View>
       </KeyboardAvoidingView>
     </Screen>
   );

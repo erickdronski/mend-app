@@ -43,6 +43,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(data.session);
       setGuest(guestFlag === "1");
       setReady(true);
+      // A guest from an earlier launch (or an offline first run) quietly gets
+      // an invisible account when the network allows, so the shared space and
+      // backup work without any login screen. Best effort, never blocks.
+      if (guestFlag === "1" && !data.session) {
+        supabase.auth.signInAnonymously().catch(() => {});
+      }
     })();
     const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
       setSession(s);
@@ -53,9 +59,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  /**
+   * "No account" mode. Marks the device as guest, then tries to mint an
+   * invisible anonymous account underneath (nothing asked of the user, no
+   * email, no password) so two-phone features still work. If the network
+   * says no, the app stays fully usable locally and we retry next launch.
+   */
   async function continueAsGuest() {
     await AsyncStorage.setItem(GUEST_KEY, "1");
     setGuest(true);
+    try {
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) await supabase.auth.signInAnonymously();
+    } catch {
+      // offline or transient: local-only until the next launch retries
+    }
   }
 
   async function signOut() {

@@ -1,8 +1,18 @@
 import { useEffect, useState } from "react";
 import { Share, Text, View } from "react-native";
 import { useRouter } from "expo-router";
-import { getProfile } from "@/lib/store";
-import { createSpace, getMySpace, joinSpace, leaveSpace, type Space } from "@/lib/space";
+import { Ionicons } from "@expo/vector-icons";
+import { getChallengesDone, getJourney, getProfile, getSessions } from "@/lib/store";
+import { getStage, stepDone, stages, type StepContext } from "@/lib/journey";
+import {
+  createSpace,
+  getMySpace,
+  getSpaceProgress,
+  joinSpace,
+  leaveSpace,
+  type Space,
+  type SpaceProgress,
+} from "@/lib/space";
 import {
   Btn,
   Card,
@@ -31,6 +41,8 @@ export default function SpaceScreen() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [confirmLeave, setConfirmLeave] = useState(false);
+  const [progress, setProgress] = useState<SpaceProgress | null>(null);
+  const [local, setLocal] = useState<{ sessions: number; challengeDays: number; stageN: number; stageDone: number; stageTotal: number } | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -38,6 +50,28 @@ export default function SpaceScreen() {
       setSpace(s);
       if (prof?.a) setName(prof.a);
       setLoaded(true);
+      // Real numbers only: shared counts from the server, the rest from this
+      // phone's own log. Failures just hide the card, never block the screen.
+      if (s) getSpaceProgress(s).then(setProgress).catch(() => {});
+      const store = await import("@/lib/store");
+      const [sessions, challengesDone, journey, plan, pulses, challenge] = await Promise.all([
+        getSessions(),
+        getChallengesDone(),
+        getJourney(),
+        store.getPlan(),
+        store.getPulses(),
+        store.getChallengeState(),
+      ]);
+      const stage = getStage(Math.min(journey.stage, 5));
+      const ctx: StepContext = { profile: prof, sessions, plan, challengesDone, pulses };
+      setLocal({
+        sessions: sessions.length,
+        // finished weeks count 7 days each, plus the in-flight week's days
+        challengeDays: challengesDone.length * 7 + (challenge?.doneDays.length ?? 0),
+        stageN: Math.min(journey.stage, stages.length),
+        stageDone: stage ? stage.steps.filter((st) => stepDone(st, ctx, journey)).length : 0,
+        stageTotal: stage ? stage.steps.length : 0,
+      });
     })();
   }, []);
 
@@ -155,6 +189,43 @@ export default function SpaceScreen() {
             body="They join with the code above, and from then on you're answering into the same place."
           />
         )}
+
+        {/* Real movement, gently celebrated: every number here is a logged
+            action, never an estimate. Shows only once something exists. */}
+        {(() => {
+          const stats: { icon: keyof typeof Ionicons.glyphMap; n: number; label: string }[] = [
+            { icon: "sunny", n: progress?.days_both ?? 0, label: "days you both answered" },
+            { icon: "chatbubbles", n: local?.sessions ?? 0, label: "guided talks" },
+            { icon: "calendar", n: local?.challengeDays ?? 0, label: "challenge days" },
+          ];
+          const shown = stats.filter((s) => s.n > 0);
+          if (!shown.length && !local) return null;
+          return (
+            <View style={{ marginTop: 20 }}>
+              <Eyebrow hue="rose">Your progress together</Eyebrow>
+              {shown.length ? (
+                <View style={{ flexDirection: "row", gap: 10, marginTop: 10 }}>
+                  {shown.map((s2) => (
+                    <Card key={s2.label} style={{ flex: 1, alignItems: "center", paddingVertical: 14, paddingHorizontal: 8 }}>
+                      <Ionicons name={s2.icon} size={18} color={rose.accent} />
+                      <Text style={{ fontSize: 26, fontWeight: "800", color: p.ink, marginTop: 4 }}>{s2.n}</Text>
+                      <Muted style={{ fontSize: 11.5, textAlign: "center", marginTop: 2 }}>{s2.label}</Muted>
+                    </Card>
+                  ))}
+                </View>
+              ) : (
+                <Muted style={{ marginTop: 8 }}>
+                  Answer today&apos;s question or take a guided talk, and your first numbers appear here.
+                </Muted>
+              )}
+              {local && local.stageTotal > 0 ? (
+                <Muted style={{ marginTop: 10 }}>
+                  Journey: stage {local.stageN} of {stages.length}, {local.stageDone} of {local.stageTotal} steps done.
+                </Muted>
+              ) : null}
+            </View>
+          );
+        })()}
 
         <Btn label="Little notes between us" kind="ghost" onPress={() => router.push("/notes")} style={{ marginTop: 14 }} />
 

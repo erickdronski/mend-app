@@ -2,7 +2,8 @@
  * Couple Spaces: a shared two-person collaboration space joined by invite
  * code. Both partners answer the same daily question from their own phones;
  * a partner's answer stays hidden until you write your own (no anchoring).
- * Requires an account (guest mode stays fully local, without a space).
+ * Requires a session; the invisible anonymous account counts, so no one
+ * ever fills in a login to get here.
  */
 import { supabase } from "./supabase";
 
@@ -77,6 +78,21 @@ export async function joinSpace(code: string, myName: string): Promise<Space | n
 
 export async function leaveSpace(): Promise<void> {
   await supabase.rpc("mend_leave_space");
+}
+
+export type SpaceProgress = {
+  days_both: number;
+  days_mine: number;
+  days_partner: number;
+  notes_count: number;
+};
+
+/** Shared-progress counts (never answer text), for the space's progress card. */
+export async function getSpaceProgress(space: Space): Promise<SpaceProgress | null> {
+  const { data, error } = await supabase.rpc("mend_space_progress", { sid: space.id });
+  if (error) return null;
+  const row = Array.isArray(data) ? data[0] : data;
+  return (row as SpaceProgress) ?? null;
 }
 
 export async function getTodayAnswers(space: Space): Promise<DailyAnswer[]> {

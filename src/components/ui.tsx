@@ -2,7 +2,7 @@
  * Mend UI kit: small, consistent primitives themed by color scheme.
  * Forest palette, generous radii, calm motion. No per-screen styling drift.
  */
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -17,7 +17,6 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Animated, {
-  FadeInDown,
   useAnimatedStyle,
   useReducedMotion,
   useSharedValue,
@@ -80,7 +79,14 @@ export const pressFx = ({ pressed }: { pressed: boolean }) => ({
   transform: [{ scale: pressed ? 0.995 : 1 }],
 });
 
-/** Soft entrance for cards and lists. Subtle, never bouncy. */
+/**
+ * Soft entrance for cards and lists. Subtle, never bouncy.
+ *
+ * Content visibility NEVER depends on an animation frame: rAF can stall
+ * (hidden web tab, low-power mode) and `entering` animations then strand
+ * content at opacity 0 forever. A plain JS timeout snaps everything visible
+ * shortly after the animation should have finished, whatever happened.
+ */
 export function Rise({
   children,
   delay = 0,
@@ -90,11 +96,27 @@ export function Rise({
   delay?: number;
   style?: StyleProp<ViewStyle>;
 }) {
-  return (
-    <Animated.View entering={FadeInDown.duration(420).delay(delay)} style={style}>
-      {children}
-    </Animated.View>
-  );
+  const reduce = useReducedMotion();
+  const t = useSharedValue(reduce ? 1 : 0);
+  useEffect(() => {
+    if (reduce) return;
+    const timer = setTimeout(() => {
+      t.value = withTiming(1, { duration: 420 });
+    }, delay);
+    // frame-independent fallback: whatever rAF did, end visible
+    const snap = setTimeout(() => {
+      t.value = 1;
+    }, delay + 700);
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(snap);
+    };
+  }, [delay, reduce, t]);
+  const anim = useAnimatedStyle(() => ({
+    opacity: t.value,
+    transform: [{ translateY: (1 - t.value) * 14 }],
+  }));
+  return <Animated.View style={[anim, style]}>{children}</Animated.View>;
 }
 
 /** Tinted rounded-square icon, iOS-Settings style. Kills the text-wall feel.

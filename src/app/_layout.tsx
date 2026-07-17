@@ -116,14 +116,18 @@ function Gate({ children }: { children: ReactNode }) {
     // guest land on the tabs with no profile, natively fatal. /safety stays
     // reachable always; a signed-out visitor may sit on /sign-in.
     if (!hasProfile) {
-      const allowed = inOnboarding || inSafety || (inAuth && !session);
+      // /sign-in may only hold a signed-out NON-guest (someone restoring an
+      // account). A guest who tapped "continue without an account" there must
+      // move on to onboarding even before the invisible session lands,
+      // otherwise the button reads as dead (the build-16 feedback).
+      const allowed = inOnboarding || inSafety || (inAuth && !session && !guest);
       if (!allowed) router.replace("/onboarding");
       return;
     }
     // Fully set up: leave onboarding for the app, and leave the sign-in
-    // screen only once a real session exists, so a guest can sit on
-    // /sign-in to upgrade to an account.
-    if (inOnboarding || (inAuth && session)) router.replace("/");
+    // screen only once a REAL (non-anonymous) session exists, so guests and
+    // invisible-account users can sit there to upgrade to email or Apple.
+    if (inOnboarding || (inAuth && session && !session.user.is_anonymous)) router.replace("/");
   }, [ready, session, guest, hasProfile, segments, router]);
 
   return <>{children}</>;
