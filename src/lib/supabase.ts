@@ -10,9 +10,9 @@ import { createClient } from "@supabase/supabase-js";
  * to ship in clients; RLS protects the data.
  */
 const SUPABASE_URL =
-  process.env.EXPO_PUBLIC_SUPABASE_URL ?? "https://nrxhewcnlqeosshwxbhj.supabase.co";
+  process.env.EXPO_PUBLIC_SUPABASE_URL ?? "https://cmqrhoelexmtgudcupvx.supabase.co";
 const SUPABASE_KEY =
-  process.env.EXPO_PUBLIC_SUPABASE_KEY ?? "sb_publishable_WsyNyZnOF4m-nW1Pl7tlsw_82WDW8tq";
+  process.env.EXPO_PUBLIC_SUPABASE_KEY ?? "sb_publishable_KYXltDt9nC-wPbzbL-bd2Q_d1peCmw7";
 
 // During the web static-export prerender there is no `window`, so session
 // storage would crash the router server. Minimal config there; full
