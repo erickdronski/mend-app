@@ -121,9 +121,9 @@ export const earlyTracks: Track[] = [
       "One weekly conversation about the life you each want that is not about the step",
     ],
     seekHelp: [
-      "The pressure has an ultimatum attached to it: your money, your housing, your immigration status, your family, or something private about you being told to someone. That is not negotiation. See the safety page.",
-      "One of you is being tracked, asked to prove where you are or who you're with, or punished for not answering. Control can arrive dressed as commitment. See the safety page.",
-      "Either of you is threatening to leave, or threatening self-harm, as a way to end the argument. That needs a professional now, not a session.",
+      "The pressure has an ultimatum attached to it: your money, your housing, your immigration status, your family, or something private about you being told to someone. That is not negotiation. See the safety page. In the US, the National Domestic Violence Hotline is 800-799-7233 or text START to 88788.",
+      "One of you is being tracked, asked to prove where you are or who you're with, asked to hand over passwords, or punished for not answering. Control can arrive dressed as commitment. See the safety page.",
+      "Either of you is threatening to leave, or threatening self-harm, as a way to end the argument. That needs a professional now, not a session. If anyone is actually thinking about suicide, call or text 988 now, and treat a threat as real rather than as a tactic.",
       "One of you is holding something the other would need in order to decide honestly: debt, another relationship, a health issue, a plan already made. A disclosure that size usually goes better with a therapist in the room.",
       "This decision is sitting on top of weeks of low mood, sleeplessness, or anxiety in either of you. Individual therapy first. A choice this size is unfair to make while someone is running on empty.",
       "You have had this identical conversation for months with no movement at all. A couples therapist can hold a stalemate far better than an app can, and plenty of them work with unmarried couples on exactly this.",
@@ -134,7 +134,7 @@ export const earlyTracks: Track[] = [
     title: "Across the miles and the clocks",
     subtitle: "Keeping this real when you're mostly apart",
     overview:
-      "Long distance is not a thinner version of a relationship. It is a different job. You lose everything that holds ordinary couples together without either person trying: the shared silence, the accidental touch, the small repair that happens because you both ended up in the kitchen. What's left has to be deliberate, which is why it can feel like work, and why one quiet week can read as a crisis. Distance also puts a specific strain on trust, because you cannot see the room your partner is standing in, so imagination fills it. This track is for the loneliness, the trust questions, and the plan, including the honest version where the gap doesn't close on the timeline either of you hoped for.",
+      "Long distance is not a thinner version of a relationship. It is a different job. What you lose is everything that holds a couple together for free when they share a kitchen: the shared silence, the accidental touch, the small repair that happens because you both ended up at the sink at the same time. What's left has to be deliberate, which is why it can feel like work, and why one quiet week can read as a crisis. Distance also puts a specific strain on trust, because you cannot see the room your partner is standing in, so imagination fills it. This track is for the loneliness, the trust questions, and the plan, including the honest version where the gap doesn't close on the timeline either of you hoped for.",
     feelings: [
       {
         label: "If you're the one who moved",
@@ -228,15 +228,15 @@ export const earlyTracks: Track[] = [
     planSeeds: [
       "A protected overlap window on both calendars, defended like an appointment",
       "A goodnight voice memo for the partner who is already asleep",
-      "Thirty minutes on a call with cameras on, doing separate things, with nothing to say",
+      "Thirty minutes on a call doing separate things with nothing to say, cameras on only if both of you want them on and either of you can say no without a reason",
       "One question banked during the day and saved for the call instead of spent on text",
       "A visit debrief within a week of every goodbye: what was good, what was hard, what we want next time",
     ],
     seekHelp: [
-      "Location tracking, demands that you prove where you are or who you're with, required video as proof, punishment for an unanswered call, or pressure to hand over your passwords. Distance gets used as the reason for all of this, and it is control rather than care. See the safety page.",
+      "Location tracking, demands that you prove where you are or who you're with, required video as proof, punishment for an unanswered call, or pressure to hand over your passwords. Distance gets used as the reason for all of this, and it is control rather than care. See the safety page. In the US, the National Domestic Violence Hotline is 800-799-7233 or text START to 88788.",
       "Threats to tell your family, your employer, your landlord, or anyone else something about you that you have not chosen to share. See the safety page.",
       "One of you depends on the other financially across the distance and is being reminded of it. That is a leash, and there are people whose whole job is helping with exactly this. See the safety page.",
-      "Either of you has no life where you are: no friends, no interest in building any, everything routed through the phone. Distance plus isolation is a fast road into depression, which is common and treatable.",
+      "Either of you has no life where you are: no friends, no interest in building any, everything routed through the phone. Distance plus isolation is a fast road into depression, which is common and treatable. If either of you is having thoughts of self-harm, call or text 988 now.",
       "A trust question that turns out to be about something that actually happened. Stop here and use the affair track, which is built for that order of operations.",
       "The same fight is happening on every call, or visits are ending in contempt. Many couples therapists now work by video with each of you in a different place, which makes this one of the easier kinds of help to get.",
     ],
@@ -250,7 +250,7 @@ export const earlyTracks: Track[] = [
     feelings: [
       {
         label: "If you moved into their place",
-        body: "You can be a guest in your own home for months. Everything already has a location that somebody else decided, the mugs live somewhere, the routine was set before you arrived, and you find yourself asking permission to hang a picture in the place you pay for. Most people in this seat over-adapt quietly and then resent all of it at once, in one bad Thursday that seems to come from nowhere. Say the boring version early. It is much easier to hear than the speech.",
+        body: "You can be a guest in your own home for months. Everything already has a location that somebody else decided, the mugs live somewhere, the routine was set before you arrived, and you find yourself asking permission to hang a picture in the place you now live. Most people in this seat over-adapt quietly and then resent all of it at once, in one bad Thursday that seems to come from nowhere. Say the boring version early. It is much easier to hear than the speech.",
       },
       {
         label: "If they moved into your place",
@@ -265,7 +265,7 @@ export const earlyTracks: Track[] = [
       "Most of these fights are not about the task. They are about fairness, and about whether the work you do is seen. Some of them genuinely are about the task, and a schedule solves those in one evening. Sort them, because treating a scheduling problem as a character problem is how an ordinary week turns poisonous.",
       "Standards are inherited, not moral. Neither of the houses you two grew up in was the correct one. Clean is a family dialect, and so is on time, and so is enough.",
       "There is work you cannot see: remembering, tracking, noticing, planning, keeping the running list in someone's head. It is real labor, and it is close to invisible to whichever of you is not carrying it.",
-      "Money under one roof needs a stated principle, not a nightly argument. Unequal incomes are ordinary and workable. What does not work is one of you quietly deciding what's fair while the other quietly disagrees.",
+      "Money under one roof needs a stated principle, not a nightly argument. Unequal incomes are ordinary and workable, and so is one of you having no wage at all: benefits, a student year, a health problem, and unpaid care are all real contributions to a household and none of them make someone a guest in it. What does not work is one of you quietly deciding what's fair while the other quietly disagrees.",
       "Wanting time alone is not a withdrawal from your partner. Full-time exposure is new for both of you, and doors exist for a reason.",
       "Say out loud what living together means to each of you. Two people can share a lease for two years while one of them believes it is a step toward a whole life and the other believes it is a good arrangement, and neither finds out until something forces the question.",
     ],
@@ -308,7 +308,7 @@ export const earlyTracks: Track[] = [
         focus:
           "Getting the numbers and the principle into the same conversation, once, on a calm day. Facts first, meaning second, no verdicts on anyone's history.",
         prompts: [
-          "What do each of us actually earn, owe, and spend? Real numbers, said out loud, once.",
+          "What money actually comes in for each of us, from wherever it comes in from, and what do we each owe and spend? Real numbers, said out loud, once.",
           "What is our principle: even split, proportional to income, separate with a shared pot, something else? Put it in one sentence.",
           "What size of purchase needs a conversation first, and what is genuinely nobody else's business?",
           "What did money mean in the house I grew up in, and what does spending make me feel here?",
@@ -356,10 +356,11 @@ export const earlyTracks: Track[] = [
       "A guest rule: nobody arrives or stays over as a surprise",
     ],
     seekHelp: [
-      "You are being pressured or given an ultimatum about a lease, a mortgage, or whose name goes on what, or you are being told you would have nowhere to live. Housing is a common lever for control, and unmarried partners often have fewer legal footholds than people assume. See the safety page.",
+      "You are being pressured or given an ultimatum about a lease, a mortgage, or whose name goes on what, or you are being told you would have nowhere to live. Housing is a common lever for control, and unmarried partners often have fewer legal footholds than people assume. See the safety page. In the US, the National Domestic Violence Hotline is 800-799-7233 or text START to 88788, and advocates there can point you to local housing and legal help.",
       "One of you controls the money the other needs to live: an allowance, hidden accounts, debt taken out in your name, receipts demanded. See the safety page.",
       "You are being monitored at home, checked on, or punished for seeing friends, or your world has quietly shrunk to this apartment and the person in it. See the safety page.",
-      "Alcohol or drug use is making the home unpredictable or frightening. That is a treatment question before it is a chores question, and it does not wait for a better week.",
+      "Any fear of your partner, any threats, or anything physical. Leaving is not a failure of this track and staying is not the goal of it. Go to the safety page now, and in an emergency in the US call 911.",
+      "Alcohol or drug use is making the home unpredictable or frightening. That is a treatment question before it is a chores question, and it does not wait for a better week. If either of you is having thoughts of self-harm, call or text 988 now.",
       "Contempt has become the everyday tone inside the first year: eye-rolling, mockery, name-calling, the little disgusted noise. That is worth a professional now rather than later.",
       "You have been having the same fight since the boxes were unpacked. A couples therapist can often break a loop like this in a handful of sessions, and they see unmarried couples routinely.",
     ],

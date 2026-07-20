@@ -53,7 +53,7 @@ export default function Plus() {
       <Hero
         hue="ember"
         eyebrow="Mend Plus"
-        title="A year for less than one session"
+        title="A year of Plus costs less than one counseling session"
         sub="The heart of Mend is free forever. Plus opens the full breadth."
         style={{ marginTop: 12 }}
       >
@@ -99,17 +99,22 @@ export default function Plus() {
       <Reveal index={2} style={{ marginTop: 22 }}>
         <Eyebrow hue="sky">What counseling costs</Eyebrow>
         <Card tone="panel" style={{ marginTop: 8 }}>
+          {/* Copy is fixed by docs/PRICING.md section 3 (P3 and P4) and is
+              sourced line by line. Do not edit a number here without updating
+              that document: the previous "$100 to $250" matched no source. */}
           <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
             <IconChip name="cash-outline" hue="sky" size={32} />
             <P style={{ flex: 1, fontSize: 14 }}>
-              Couples counseling typically runs $100 to $250 for a single session, and insurance
-              usually will not cover it, because insurers require a mental health diagnosis rather
-              than relationship help.
+              A national therapy provider puts couples counseling at $150 to $250 a session out of
+              pocket, and a typical course at eight to twenty sessions. Insurance often will not
+              cover it on its own, because plans pay to treat a diagnosed condition in one person,
+              and relationship trouble is not a diagnosis.
             </P>
           </View>
+          {/* P4. Ships exactly as written, never shortened. It is the reason
+              we are allowed to discuss price at all. */}
           <Muted style={{ marginTop: 10, fontSize: 12.5 }}>
-            Mend is not therapy and does not replace it. If you can see a counselor, see one. This
-            is about what is available at 11pm on a Tuesday, for the price of a couple of coffees.
+            Mend is not therapy and does not replace it. If you can see a counselor, see one.
           </Muted>
         </Card>
       </Reveal>

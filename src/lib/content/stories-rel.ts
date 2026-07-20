@@ -13,6 +13,20 @@
  * app labels them that way. The situations are common; the couples are
  * invented. Nothing here is therapy, a diagnosis, or treatment advice, and a
  * few of these couples needed outside help that no app can replace.
+ *
+ * Representation rule, from the inclusivity review (2026-07-20). A queer couple
+ * must appear in stories that are not about being queer. If the only same-gender
+ * couple in the set is the one filed under the closet, the app has said that
+ * queer people show up when there is a problem with being queer and otherwise
+ * do not exist. That is why the long-distance couple here are two men and the
+ * story never mentions it: their problem is a nightly call, same as anyone's.
+ * Apply the same rule to anything added later.
+ *
+ * KNOWN GAPS in this set, to be filled rather than argued with: no couple where
+ * a partner is disabled or chronically ill and that is not the plot, no
+ * consensually non-monogamous couple anywhere (the jealousy track speaks to
+ * them and no story does), and no trans partner. Write those as ordinary
+ * stories about ordinary problems, not as case studies.
  */
 
 import type { Story } from "./stories";
@@ -58,7 +72,7 @@ export const relStories: Story[] = [
     oneView:
       "I have a whole life here that he only ever hears about in summary. By nine at night I have already had the day, and the call is where I report it, and reporting is not the same as being known. Meanwhile I am the one who books the flights, counts the weeks, and asks the hard question about what happens next. It is exhausting being the only person in the relationship who seems to be keeping time.",
     otherView:
-      "Nine o'clock arrives when I am at my absolute worst, and I show up flat and half there, and I can hear her hearing it. The truth is that a scheduled call every single night started to feel like a shift I clock into, and I felt like a monster for thinking that. And every time she asks about the plan, I do not have one, because the honest answer is that leaving my job might sink me and I have not been able to say that without it sounding like I am choosing work over her.",
+      "Nine o'clock arrives when I am at my absolute worst, and I show up flat and half there, and I can hear him hearing it. The truth is that a scheduled call every single night started to feel like a shift I clock into, and I felt like a monster for thinking that. And every time he asks about the plan, I do not have one, because the honest answer is that leaving my job might sink me and I have not been able to say that without it sounding like I am choosing work over him.",
     turning:
       "They stopped defending the nightly call and redesigned the whole thing: two short calls a week, one long unhurried one on Sunday, and a lot more small contact in between. The change that mattered more was agreeing to put a real decision date on the calendar rather than letting the distance renew itself by default.",
     whatHelped: [
@@ -76,7 +90,7 @@ export const relStories: Story[] = [
       },
     ],
     where:
-      "Still apart. Marcus is interviewing in her city and has been told nothing is likely before spring, and they have agreed on what they will decide in June if nothing has changed. Both of them say the distance is easier and the uncertainty is not.",
+      "Still apart. Marcus is interviewing for jobs in the city Ife moved to and has been told nothing is likely before spring, and they have agreed on what they will decide in June if nothing has changed. Both of them say the distance is easier and the uncertainty is not.",
   },
   {
     id: "outness-gap",
@@ -256,7 +270,7 @@ export const relStories: Story[] = [
       },
       {
         practice: "transparency agreements",
-        how: "Location, schedule, money, all open, and offered by him rather than demanded by her. The information mattered less than the fact that he kept volunteering it without being asked, week after week, on days when nothing was wrong.",
+        how: "Schedule and money, open, and offered by him rather than asked for by her. Nobody tracks anybody: they were explicit that this was Ben volunteering information, not Aliyah being given access, and that she could stop wanting it without owing an explanation. The information mattered less than the fact that he kept offering it without being asked, week after week, on days when nothing was wrong.",
       },
       {
         practice: "timed uninterrupted turns",

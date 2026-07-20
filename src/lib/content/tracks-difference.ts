@@ -17,7 +17,7 @@ export const differenceTracks: Track[] = [
     title: "Wired differently",
     subtitle: "When one or both of you is ADHD, autistic, or otherwise neurodivergent",
     overview:
-      "Most relationship advice was written for two brains that process at the same speed, in the same channel, with the same tolerance for noise and surprise. When one or both of you is ADHD or autistic, that advice does not just fail quietly, it often makes things worse: it tells you to communicate more when more talking is exactly what floods one of you, and it reads a missed task as a statement about love. The real problem in most of these relationships is not the wiring but the translation, plus a manager-and-managed dynamic that grows in the gap and leaves one of you resentful and the other ashamed. This track is for building an honest translation layer between two valid ways of being a person, and for moving the work off willpower and into systems. It applies whether one of you is diagnosed, both are, or you have only recently started to suspect.",
+      "Most relationship advice was written for two brains that process at the same speed, in the same channel, with the same tolerance for noise and surprise. When one or both of you is ADHD or autistic, that advice does not just fail quietly, it often makes things worse: it tells you to communicate more when more talking is exactly what floods one of you, and it reads a missed task as a statement about love. What tends to break first here is not the wiring, it is the translation between two ways of processing, plus a manager-and-managed dynamic that grows in the gap and leaves one of you resentful and the other ashamed. This track is for building an honest translation layer between two valid ways of being a person, and for moving the work off willpower and into systems. It applies whether one of you is diagnosed, both are, or you have only recently started to suspect.",
     feelings: [
       {
         label: "If you're the neurodivergent partner",
@@ -55,13 +55,13 @@ export const differenceTracks: Track[] = [
       {
         title: "The user manual",
         focus:
-          "Each of you writes your own manual, separately and in writing, then trades. Written and asynchronous on purpose: this is the accommodation, not a workaround. Read the other person's without commenting for at least a day.",
+          "Each of you makes your own manual, separately and on your own, then trades. Asynchronous is the point: this is the accommodation, not a workaround. Writing suits some people and is a barrier for others, so a voice memo, a list of bullet points, or a recording made while walking all count the same. Take in the other person's without commenting for at least a day.",
         prompts: [
           "How I show love, including the ways you might not recognize as love.",
           "How I show overwhelm, and what the earliest sign is before it gets loud.",
           "What I need after conflict, in what order, and roughly how long.",
           "What sensory input I genuinely cannot tolerate, and what environment makes me most myself.",
-          "Which questions I answer badly out loud and much better in writing.",
+          "Which questions I answer badly out loud and much better with time and a keyboard or a recorder.",
         ],
       },
       {
@@ -129,10 +129,11 @@ export const differenceTracks: Track[] = [
       "A sensory-honest ritual that fits both bodies: a quiet walk, a drive, cooking together with the music off",
     ],
     seekHelp: [
-      "You suspect ADHD or autism in yourself or your partner and have never been assessed. A real evaluation changes the conversation more than any exercise here, and it is worth the wait for an appointment.",
-      "The manager-and-managed dynamic has hardened into contempt: eye-rolling, mocking, talking about your partner to others the way you would talk about a difficult child. Contempt is the pattern most predictive of things ending, and it needs more than a worksheet.",
-      "Rejection-sensitive reactions are escalating into rages, self-harm, or days-long shutdowns. That is a treatment question, not a communication question.",
-      "Meltdowns or shutdowns are being used, by either of you, to end conversations or to control what the other person is allowed to bring up.",
+      "Any fear of your partner, any intimidation, any threat, or any physical or sexual violence. Being neurodivergent never explains this away, and a meltdown is not a defense for frightening someone. Stop using this track and go to the safety page. In the US, the National Domestic Violence Hotline is 800-799-7233 or text START to 88788, and in an emergency call 911.",
+      "You suspect ADHD or autism in yourself or your partner and want a formal assessment. An evaluation can change the conversation more than any exercise here, and it is worth asking a doctor what the route is where you live. Be warned that in many places the wait runs to years and the private route costs more than most people have, so if that door is shut for now, nothing in this track depends on a diagnosis. Recognising yourself is enough to start, and a partner who dismisses that because there is no paperwork is the actual problem in the room.",
+      "The manager-and-managed dynamic has hardened into contempt: eye-rolling, mocking, talking about your partner to others the way you would talk about a difficult child. Contempt is corrosive in a way no worksheet can reach, and it needs a professional.",
+      "Rejection-sensitive reactions are escalating into rages, self-harm, or days-long shutdowns. That is a treatment question, not a communication question. If either of you is thinking about self-harm or suicide, call or text 988 now.",
+      "Meltdowns or shutdowns are being used, by either of you, to end conversations or to control what the other person is allowed to bring up. Control is still control whatever its cause, and being told you are not allowed to raise a subject is a red flag rather than an accommodation.",
       "One of you is medicating the load with alcohol, weed, stimulants, or anything else, or a prescribed medication has stopped working or started causing problems.",
       "You want a couples therapist. Ask directly whether they have worked with neurodivergent couples. A therapist who treats your wiring as an attitude problem will make this worse, and it is completely reasonable to leave and find another one.",
     ],
@@ -233,7 +234,7 @@ export const differenceTracks: Track[] = [
           "What do we drop, and can we each say plainly what dropping it costs?",
           "What do we invent that neither family has, that will be ours?",
           "What languages, foods, names, and holidays do we want in this home in ten years?",
-          "If we have or already have children, what do we want them to be fluent in, and what would it take to make that real?",
+          "If children are part of this, now or one day, what would we want them fluent in, and what would it take to make that real? If children are not part of this, what do we want to pass on anyway, and to whom?",
         ],
       },
     ],
@@ -246,9 +247,9 @@ export const differenceTracks: Track[] = [
     ],
     seekHelp: [
       "A family member's hostility has escalated to threats, stalking, showing up uninvited, or attempts to break up your relationship through money, immigration status, or your children.",
-      "One partner is repeatedly required to hide, minimize, or cut off their culture, language, faith, or family as a condition of the relationship. That is control, not compromise, and the safety page applies.",
-      "Immigration or visa status is being used as leverage in your arguments, by a partner or by a relative. Threatening someone's status is a recognized form of coercive control, and there is legal help for it.",
-      "The outside stress has moved inward: panic, sleeplessness, hypervigilance in public, or one of you dreading every family event for weeks in advance.",
+      "One partner is repeatedly required to hide, minimize, or cut off their culture, language, faith, or family as a condition of the relationship. That is control, not compromise. Go to the safety page. In the US, the National Domestic Violence Hotline is 800-799-7233 or text START to 88788, and advocates there work with callers in many languages.",
+      "Immigration or visa status is being used as leverage in your arguments, by a partner or by a relative. Threatening someone's status is a recognized form of coercive control, and there is legal help for it. An immigration attorney or a legal aid office can tell you what protections exist where you live, and a hotline advocate can help you find one.",
+      "The outside stress has moved inward: panic, sleeplessness, hypervigilance in public, or one of you dreading every family event for weeks in advance. If either of you is having thoughts of self-harm or suicide, call or text 988 now.",
       "You keep having the same fight about a child's name, language, schooling, or upbringing and it never moves. A therapist who works with intercultural couples, ideally one who does not assume the local culture is the healthy one, is worth finding.",
       "Either of you is being asked to accept mistreatment as culture. Respect for a tradition never requires a partner to absorb contempt.",
     ],
@@ -258,7 +259,7 @@ export const differenceTracks: Track[] = [
     title: "Jealousy without shame",
     subtitle: "Working with insecurity instead of hiding it or obeying it",
     overview:
-      "Jealousy has a bad reputation, which is exactly why it does so much damage: people hide it until it comes out sideways as checking, testing, snapping, or a rule that appears out of nowhere. It is not a character defect or proof that your relationship is failing, it is a signal, usually pointing at something specific like a need that has gone unmet, an old wound, an agreement that never got said out loud, or a genuine breach. This track treats jealousy as a workable problem with parts you can name and address, for monogamous couples and for consensually non-monogamous ones alike. If you are open, polyamorous, or otherwise negotiating something other than exclusivity, none of this assumes your structure is the problem. In practice the pain usually comes from an agreement that stopped fitting and never got revised, not from the shape of the relationship itself.",
+      "Jealousy has a bad reputation, which is exactly why it does so much damage: people hide it until it comes out sideways as checking, testing, snapping, or a rule that appears out of nowhere. It is not a character defect or proof that your relationship is failing, it is a signal, usually pointing at something specific like a need that has gone unmet, an old wound, an agreement that never got said out loud, or a genuine breach. This track treats jealousy as a workable problem with parts you can name and address, for monogamous couples and for consensually non-monogamous ones alike. If you are open, polyamorous, or otherwise negotiating something other than exclusivity, none of this assumes your structure is the problem. When it hurts, the thing to check first is an agreement that stopped fitting and never got revised, not the shape of the relationship itself.",
     feelings: [
       {
         label: "If you're the one feeling jealous",
@@ -371,9 +372,9 @@ export const differenceTracks: Track[] = [
       "One regular ritual that is only about the two of you, protected from logistics and from anyone else's schedule",
     ],
     seekHelp: [
-      "Jealousy has turned into monitoring: tracking location, reading messages, controlling who your partner sees, what they wear, or where they go. That is coercive control, not insecurity, and the safety page applies regardless of who is doing it.",
-      "Either of you has been threatened, grabbed, cornered, or frightened during one of these conversations. Stop using this track and go to the safety page.",
-      "The intrusive thoughts and checking have become constant and feel impossible to stop even when you believe your partner. That pattern responds well to individual therapy and it is not something a couples exercise can reach.",
+      "Jealousy has turned into monitoring: tracking location, reading messages, demanding passwords, controlling who your partner sees, what they wear, or where they go. That is coercive control, not insecurity, and the safety page applies regardless of who is doing it. In the US, the National Domestic Violence Hotline is 800-799-7233 or text START to 88788.",
+      "Either of you has been threatened, grabbed, cornered, or frightened during one of these conversations. Stop using this track and go to the safety page. In an emergency in the US, call 911.",
+      "The intrusive thoughts and checking have become constant and feel impossible to stop even when you believe your partner. That pattern responds well to individual therapy and it is not something a couples exercise can reach. If it has reached thoughts of self-harm, call or text 988 now.",
       "Consent to the relationship structure was pressured, traded for, or given under threat of leaving. Coerced agreement to an open relationship is coercion, not consent, and no amount of negotiation fixes that.",
       "An agreement was broken and hidden, and honesty is not returning. Rebuilding after a breach usually needs a therapist, and there is a separate track for the aftermath of betrayal.",
       "The jealousy is being fueled by alcohol, drugs, or an untreated mental health condition in either of you. Treat that first, because no conversation holds while it is running.",

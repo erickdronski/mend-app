@@ -139,8 +139,7 @@ One of you can start alone.
 
 [school icon]  What it gives
 The structure and language of real counseling
-frameworks, the kind couples pay hundreds a session
-for. Staged, guided, free.
+frameworks. Staged, guided, free.
 
 [exit icon]  How it ends
 With you deleting it. Mend is designed to get you off
@@ -159,6 +158,12 @@ Edits from v1: "Twenty honest minutes a week, together" now names the two-phone 
 "back into a marriage that holds itself up" becomes "relationship"; the disclaimer says
 "licensed couples or family therapist" instead of "licensed marriage and family
 therapist".
+
+The phrase "the kind couples pay hundreds a session for" is cut and must not come back. It is an
+unsourced price claim in an app that cites everything else, it is stated in one currency on a
+screen shipped in five languages, and it opens the pitch by telling a reader who cannot afford
+counseling how much the thing they cannot afford costs. If a price anchor is ever wanted here it
+belongs in `docs/PRICING.md` with a source URL and a date checked, not in the welcome flow.
 
 The disclaimer stays on the screen in full. It never moves behind a "learn more".
 
@@ -358,7 +363,7 @@ Chips are grouped under three quiet labels. Group order and chip order are fixed
 | `family-vote` | Family has a vote in us |
 | `not-accepted` | Our families don't accept us |
 | `not-out` | One of us is out, one of us isn't |
-| `faith` | Two faiths, one family |
+| `faith` | We believe different things |
 | `blended` | Blended family, or second time around |
 
 **Neither of those**
@@ -476,9 +481,9 @@ Chips, multi-select, no maximum, none preselected:
 | --- | --- | --- |
 | `kids` | There are kids in this | reveals the age row below; unmutes parenting content |
 | `no-kids-by-choice` | No kids, by choice | permanently mutes parenting and baby content and the "when are you having children" framing |
-| `same-sex-couple` | We're a same-sex couple | stops opposite-sex defaults in examples and stories |
+| `queer-couple` | We're a queer couple | examples and stories stop reaching for a man and a woman by default |
 | `not-out` | We're not out to everyone | mutes "tell your people" prompts; offers the app lock |
-| `different-faiths` | We come from different faiths or cultures | foregrounds `faith-gap`, softens holiday prompts |
+| `different-beliefs` | Faith or belief is a line between us | foregrounds `faith-gap`, softens holiday prompts |
 | `own-agreements` | We have our own agreement about exclusivity | mutes monogamy-assuming copy; foregrounds agreements content |
 | `health-condition` | A health condition or disability is part of our life | reveals the "how long" row below |
 | `neurodivergent` | One or both of us processes differently | opens the processing sheet below |
@@ -533,8 +538,17 @@ opposite needs and a couple-level setting would be wrong for one of them by desi
 At the bottom of the sheet, optional and skippable, exactly this wording and no scoring:
 
 ```
-[ I'm autistic ]  [ I have ADHD ]  [ Neither ]  [ Rather not say ]
+[ I'm autistic ]  [ I have ADHD ]  [ Something else ]
+[ Neither of those ]  [ Rather not say ]
 ```
+
+`Something else` reveals a one-line free text, placeholder `In your own words`, and is stored
+verbatim in `ndLabelOther`. It exists because two labels is not a list, it is a pair of doors
+with everyone else standing outside: dyslexia, dyspraxia, Tourette's, OCD, bipolar, an acquired
+brain injury, long COVID brain fog, and undiagnosed-but-certain all belong on this screen, and a
+person whose only options are two names that are not theirs plus the word "Neither" has been told
+the app does not think they exist. Nothing is scored, nothing is validated against a list, and no
+free-text answer changes what the app renders beyond the processing chips above it.
 
 Also in the sheet, three interface defaults, because asking them here is the clearest
 signal the app expects different bodies:
@@ -627,9 +641,9 @@ export type Goal =
 export type ContextTag =
   | "kids"
   | "no-kids-by-choice"
-  | "same-sex-couple"
+  | "queer-couple"
   | "not-out"
-  | "different-faiths"
+  | "different-beliefs"
   | "own-agreements"
   | "health-condition"
   | "neurodivergent"
@@ -659,7 +673,7 @@ export type ProcessingNeed =
   | "side-by-side"
   | "writing-over-speaking";
 
-export type NdLabel = "autistic" | "adhd" | "neither" | "rather-not-say";
+export type NdLabel = "autistic" | "adhd" | "other" | "neither" | "rather-not-say";
 
 /** How the couple wants to be paced. Chosen on the plan screen, changeable any time. */
 export type Pace = "staged" | "loose";
@@ -716,6 +730,8 @@ export type Profile = {
   healthDuration?: HealthDuration;
   processing?: { a?: ProcessingNeed[]; b?: ProcessingNeed[] };
   ndLabel?: { a?: NdLabel; b?: NdLabel };
+  /** free text, only when ndLabel is "other". Stored verbatim, never parsed. */
+  ndLabelOther?: { a?: string; b?: string };
 
   // --- screen 9 and settings ---
   pace?: Pace;
@@ -734,7 +750,7 @@ export function situationsOf(p: Profile | null): Situation[] {
 
 ### 2.2 Sync boundary (hard requirement)
 
-`contextTags`, `kids`, `healthDuration`, `processing`, `ndLabel`, `ownWords`, and
+`contextTags`, `kids`, `healthDuration`, `processing`, `ndLabel`, `ndLabelOther`, `ownWords`, and
 `betterLooksLike` are **local-first and are excluded from any payload written to the
 shared couple space**. They may ride along in the user's own `BackupState` to their own
 account, because that restores to their own device. They must never be readable by
@@ -1213,7 +1229,7 @@ frame.
 | journey stage and progress | pace preference |
 
 **Never inherited, never transmitted, in either direction:** `contextTags`, `kids`,
-`healthDuration`, `processing`, `ndLabel`, and the other partner's `ownWords` and
+`healthDuration`, `processing`, `ndLabel`, `ndLabelOther`, and the other partner's `ownWords` and
 `betterLooksLike` before both have answered. See 2.2.
 
 If B disagrees with an inherited field, they can change it, and the change applies to the
@@ -1265,14 +1281,21 @@ sweep is: every user-facing string reads `{noun}` or is rewritten to need no nou
 | --- | --- | --- | --- | --- | --- |
 | `married` | relationship (marriage is permitted only inside content explicitly about marriage: vows, in-laws by marriage, legal) | spouse | standard | full library | none |
 | `civil-partnership` | relationship | partner | standard | full library | wedding-specific, legal-marriage-specific |
-| `engaged` | relationship | fiancé / fiancée | standard | `first-steps`, `repair`, conflict content | long-history content, empty nest, twenty-year gridlock, menopause |
+| `engaged` | relationship | partner | standard | `first-steps`, `repair`, conflict content | long-history content, empty nest, twenty-year gridlock, menopause |
 | `partnered` | relationship | partner | standard | full library | wedding, legal, in-laws-by-marriage |
 | `together` | relationship | partner | standard | full library | wedding, legal |
-| `dating` | relationship | boyfriend / girlfriend | standard | `first-steps`, `lighter`, repair practice | shared-finances, shared-lease, in-laws, legal, permanence-as-leverage framing |
+| `dating` | relationship | partner | standard | `first-steps`, `lighter`, repair practice | shared-finances, shared-lease, in-laws, legal, permanence-as-leverage framing |
 | `no-word` | relationship | their names | standard | full library | wedding, legal |
 | `self-described` | their word, verbatim | partner | standard | full library | wedding, legal |
 | `separated-coparenting` | co-parenting | co-parent | `untangling` | `repair`, handoff and logistics content | `desire`, `dreams`, reunion framing, date-night rituals |
 | `separated-untangling` | this | their names | `untangling` | `repair`, `first-steps` | `desire`, `dreams`, reunion framing |
+
+**No `{partnerWord}` default is ever gendered.** Every row above defaults to `partner` or to
+`spouse`, `co-parent`, or the couple's own names, and never to boyfriend, girlfriend, husband,
+wife, fiancé, or fiancée. Those words are all offered on screen 5 row 2 and are correct the moment
+a user picks one; derived from a relationship type they are a guess about two people's genders,
+which is the one thing section 0.1 says the app must never do. A dating couple who are two women
+should not have to correct the app before their first session.
 
 Additional rule for every unmarried type: nothing is ever framed as missing, pending,
 partial, or "not yet". A couple who are eleven years in without a licence get the same

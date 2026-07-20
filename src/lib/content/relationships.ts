@@ -32,6 +32,18 @@
  * requirement, sexual orientation as a demographic, religion, income, or
  * anything with the word "yet" attached. Every default here is the wide one.
  *
+ * A LIMIT TO STATE OUT LOUD (inclusivity review, 2026-07-20): this model is
+ * dyadic. Every type, every noun, and the whole shared-space design assume two
+ * people. Mend already speaks to consensually non-monogamous readers, in the
+ * jealousy track and in the agreements content, and it serves them as one pair
+ * inside a larger structure rather than as the structure. That is a real
+ * product limit, not a statement that other shapes are less committed, and it
+ * must not leak into the copy: nothing in this file or downstream of it may
+ * assume exclusivity, describe an open relationship as a risk factor, or offer
+ * a polyamorous reader a "yet". If multi-partner support is ever built, it
+ * starts here, and until then the honest line is that the app holds one pair at
+ * a time.
+ *
  * No imports. This file is pure data plus two pure functions so it can be read
  * from onboarding, the journey engine, content filters, and copy helpers
  * without pulling in the store.
@@ -61,9 +73,16 @@ export type RelationshipType =
 export type Together = "under1" | "1to3" | "3to7" | "7to15" | "over15";
 
 /**
- * Where the two of you sleep most nights. The single highest-value input in the
- * whole flow: it drives micro-moves, rituals, challenge day variants, nudges,
- * and whether a session offers two-device mode.
+ * Where each of you lives most of the time. The single highest-value input in
+ * the whole flow: it drives micro-moves, rituals, challenge day variants,
+ * nudges, and whether a session offers two-device mode.
+ *
+ * Ask it as addresses, never as beds. "Where do you two sleep most nights" is
+ * the wrong question in three directions at once: it is oddly intimate to put
+ * to a separated co-parenting pair, it gives a confusing answer for the many
+ * couples who share a home and not a bed (shift work, pain, a CPAP, a snorer, a
+ * baby), and none of that changes what this field is actually for, which is
+ * whether content may assume one front door.
  *
  * "longDistance" is the modifier that stops the app from assuming a shared
  * address. It is a living situation, not a relationship type, and any couple of
@@ -161,7 +180,7 @@ export const relationshipTypes: RelationshipDef[] = [
     pulseFraming:
       "Keep the five, and add one: whether the old pattern showed up less this week. For most couples here, that trend line is the only number that means anything.",
     celebrates:
-      "Choosing each other twice, and not repeating the ending you already lived through.",
+      "The work of naming the old pattern and doing something different with it. Never the fact of being back together, because staying is not the achievement and leaving again would not be a failure.",
   },
   {
     id: "coparenting",

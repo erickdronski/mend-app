@@ -18,6 +18,7 @@
  */
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { achievements, type Achievement } from "./content/achievements";
+import { tracks } from "./content/tracks";
 import type { JourneyState, PulseEntry, SessionRecord, Plan, Profile } from "./store";
 
 const EARNED_KEY = "mend.achievements";
@@ -71,13 +72,22 @@ const RULES: Record<string, (c: AchievementContext) => boolean> = {
   "both-quiz": (c) => Boolean(c.profile?.lenses?.a && c.profile?.lenses?.b),
 
   // ---- building: the work itself
-  "called-break": (c) => c.journey.doneSteps.includes("called-break"),
+  // NOTE: "called-break" is deliberately NOT here. Calling a break lives
+  // entirely in the session wizard's local state and is never written to
+  // storage, so there is no evidence to read. A rule that can never be true
+  // would be worse than none, because isAutoDetected() would then hide the
+  // "We did this" button and make the achievement permanently unreachable.
+  // It is honor-system, like every other move the app genuinely cannot see.
   "came-back-to-it": (c) => sessionCount(c) >= 2,
   "ten-yeses": (c) => c.dailyAnswers >= 10,
+  // Counting pulses, never reading one. The score is never a condition here;
+  // see rule 1 at the top of this file.
   "told-truth-pulse": (c) => c.pulses.length >= 2,
+  // The session wizard records a track session as "<track title>: <session
+  // title>", so match the real track titles. The literal word "track" never
+  // appears in a recorded title, and no journey step id starts with "track-".
   "track-session": (c) =>
-    c.sessions.some((s) => (s.topicTitle || "").toLowerCase().includes("track")) ||
-    c.journey.doneSteps.some((s) => s.startsWith("track-")),
+    c.sessions.some((s) => tracks.some((t) => (s.topicTitle || "").startsWith(`${t.title}: `))),
   "four-weeks-in": (c) => daysSince(c.profile?.createdAt) >= 28,
   "sixty-six-days": (c) => daysSince(c.profile?.createdAt) >= 66,
   "four-weeks-ritual": (c) => c.plan.rituals.length >= 1 && daysSince(c.profile?.createdAt) >= 28,

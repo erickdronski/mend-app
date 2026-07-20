@@ -53,7 +53,9 @@
  *
  * 9. Inclusive by default. Partner, relationship, the two of you, together.
  *    Never assume marriage, legal status, cohabitation, gender, children, or
- *    religion.
+ *    religion. This also means never rendering an entry the reader's
+ *    relationship makes impossible: filter on `romanticOnly` before display, or
+ *    a co-parenting pair carries a dead romance badge in their list forever.
  *
  * 10. Progress is not clinical improvement. Wherever these are displayed, keep
  *     the "this is an educational tool, not therapy" framing visible so nobody
@@ -95,6 +97,18 @@ export type Achievement = {
   icon: string;
   /** True if one partner can earn this entirely alone, with no participation from the other. */
   solo: boolean;
+  /**
+   * True when the entry only makes sense for a romantic pair. The list must be
+   * filtered with `isRomantic()` from relationships.ts before it is rendered,
+   * so a separated co-parenting pair never sees a permanently unreachable
+   * romance badge sitting in their list. Absent means it applies to everyone,
+   * which is the default and should stay the default.
+   *
+   * Rule 9 below is why this field exists: an achievement nobody in that
+   * relationship could ever earn is a scoreboard entry telling them what shape
+   * their relationship was supposed to be.
+   */
+  romanticOnly?: boolean;
   hue: "moss" | "honey" | "sky" | "plum" | "rose" | "ember";
 };
 
@@ -105,7 +119,7 @@ export const achievements: Achievement[] = [
   {
     id: "first-step",
     title: "You Started",
-    earned: "You set this up and opened your first thing in here.",
+    earned: "You set this up and made a place for the two of you in here.",
     why: "Starting is the step most people never take, and nothing else can happen before it.",
     tier: "first",
     icon: "footsteps-outline",
@@ -155,7 +169,7 @@ export const achievements: Achievement[] = [
   {
     id: "first-week",
     title: "One Week In",
-    earned: "You came back and did something else in your first week.",
+    earned: "You were still here a week after you started, and you came back to look.",
     why: "The second visit is the one that turns an experiment into a practice.",
     tier: "first",
     icon: "today-outline",
@@ -175,7 +189,7 @@ export const achievements: Achievement[] = [
   {
     id: "both-quiz",
     title: "Both Lenses on the Table",
-    earned: "You both finished the lens quiz and read each other's results.",
+    earned: "You both finished the lens quiz, so both lenses are on the table now.",
     why: "A lot of fights are two people following different instructions for the same situation.",
     tier: "first",
     icon: "swap-horizontal-outline",
@@ -209,8 +223,8 @@ export const achievements: Achievement[] = [
   {
     id: "came-back-to-it",
     title: "Came Back to It",
-    earned: "You reopened the conversation you had paused instead of letting it disappear.",
-    why: "A break turns into avoidance the moment nobody comes back to it.",
+    earned: "You came back and went through a second guided session.",
+    why: "One session is an experiment. The second one is where it starts being something you do.",
     tier: "building",
     icon: "return-down-forward-outline",
     solo: true,
@@ -220,7 +234,7 @@ export const achievements: Achievement[] = [
     id: "repair-offered",
     title: "Reached Out Mid Fight",
     earned: "You used a repair line while things were still hot.",
-    why: "Reaching for each other from inside the fight is the move that shows up most in couples who do well.",
+    why: "Reaching for each other from inside the fight is harder than reaching afterward, and it is the half of a repair you can offer without waiting for permission.",
     tier: "building",
     icon: "hand-left-outline",
     solo: true,
@@ -289,8 +303,8 @@ export const achievements: Achievement[] = [
   {
     id: "ten-yeses",
     title: "Ten Small Yeses",
-    earned: "You turned toward ten small moments where they were reaching for your attention.",
-    why: "Connection is mostly built out of tiny moments neither of you would think to call important.",
+    earned: "You answered the daily question on ten different days.",
+    why: "Connection is mostly built out of tiny moments neither of you would think to call important, and ten of them is not nothing.",
     tier: "building",
     icon: "sparkles-outline",
     solo: true,
@@ -329,8 +343,8 @@ export const achievements: Achievement[] = [
   {
     id: "told-truth-pulse",
     title: "Told the Truth on the Pulse",
-    earned: "You logged a pulse check that read worse than your last one.",
-    why: "An honest low reading is what lets this point you somewhere better, and a flattering one is worth nothing.",
+    earned: "You came back and logged a second pulse check, whatever it said.",
+    why: "This can only point you somewhere useful if you keep answering it honestly, and nothing in here ever reads the number to decide what you earned.",
     tier: "building",
     icon: "heart-half-outline",
     solo: true,
@@ -339,8 +353,8 @@ export const achievements: Achievement[] = [
   {
     id: "four-weeks-in",
     title: "Four Weeks In",
-    earned: "You have done something in here in four different weeks.",
-    why: "Whatever is going to start moving usually starts around now, and if nothing has, that is worth knowing rather than hiding.",
+    earned: "You were still coming back four weeks after you started.",
+    why: "Four weeks is enough time to notice what this is and is not doing for the two of you, and noticing that honestly is worth more than another month of hoping.",
     tier: "building",
     icon: "hourglass-outline",
     solo: true,
@@ -349,8 +363,8 @@ export const achievements: Achievement[] = [
   {
     id: "sixty-six-days",
     title: "Sixty Six Days",
-    earned: "You practiced one small move on sixty six days, in any order, with as many gaps as you needed.",
-    why: "New habits take longer to set than anyone expects, and the days you skipped do not erase the days you did.",
+    earned: "Sixty six days after you started, you are still opening this, gaps and all.",
+    why: "New habits take longer to set than anyone expects, and the days you skipped do not erase the days you showed up.",
     tier: "building",
     icon: "flower-outline",
     solo: true,
@@ -383,8 +397,8 @@ export const achievements: Achievement[] = [
   {
     id: "both-directions",
     title: "Both Directions",
-    earned: "Between you, a repair has now been offered and a repair has now been accepted, both ways.",
-    why: "When one person does all the softening, the pattern is still stuck no matter how hard they try.",
+    earned: "On five different days, both of you answered the daily question.",
+    why: "When one person does all the reaching, the pattern is still stuck no matter how hard they try. Five days of both of you answering is the shape of two people showing up.",
     tier: "deep",
     icon: "git-compare-outline",
     solo: false,
@@ -403,7 +417,7 @@ export const achievements: Achievement[] = [
   {
     id: "fight-autopsy",
     title: "Went Back Over a Fight",
-    earned: "You both walked through an old fight without starting it again.",
+    earned: "You finished a full week of the challenge about fighting cleanly and repairing softly.",
     why: "A hard moment can finally be understood once both people are calm enough to look at it.",
     tier: "deep",
     icon: "telescope-outline",
@@ -413,7 +427,7 @@ export const achievements: Achievement[] = [
   {
     id: "stayed-in-room",
     title: "Stayed in the Room",
-    earned: "You both chose to finish a conversation you each marked as hard.",
+    earned: "You went all the way through five guided sessions.",
     why: "Staying present while someone tells you what hurt is most of what repair asks of a person.",
     tier: "deep",
     icon: "people-circle-outline",
@@ -468,6 +482,7 @@ export const achievements: Achievement[] = [
     tier: "deep",
     icon: "flame-outline",
     solo: false,
+    romanticOnly: true,
     hue: "rose",
   },
   {
@@ -493,7 +508,7 @@ export const achievements: Achievement[] = [
   {
     id: "four-weeks-ritual",
     title: "Four Weeks of the Ritual",
-    earned: "You kept your weekly check-in going across four weeks, gaps and all.",
+    earned: "You picked a ritual and it was still in your plan four weeks later, gaps and all.",
     why: "A ritual that holds without anyone chasing it is the point where this stops being an app thing and starts being yours.",
     tier: "deep",
     icon: "calendar-number-outline",

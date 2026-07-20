@@ -277,7 +277,7 @@ export const repairTracks: Track[] = [
     feelings: [
       {
         label: "If you are the one who feels betrayed",
-        body: "Being told nothing happened when your whole body says something did is a specific kind of crazy-making. What hurts is usually not the pixels, it is the hiddenness: the tilt of the screen, the deleted thread, the account you did not know about. That is real information and you are not paranoid for reacting to it. It is also true that checking tends to grow. Most people who start looking find that the relief lasts less and less time, and that the looking itself starts to feel bad. The way out is not more access. It is an agreement you both actually believe in.",
+        body: "Being told nothing happened when your whole body says something did is a specific kind of unmooring: your senses are certain and you are being told to file them as nonsense. What hurts is usually not the pixels, it is the hiddenness: the tilt of the screen, the deleted thread, the account you did not know about. That is real information and you are not paranoid for reacting to it. It is also true that checking tends to grow. Most people who start looking find that the relief lasts less and less time, and that the looking itself starts to feel bad. The way out is not more access. It is an agreement you both actually believe in.",
       },
       {
         label: "If you are the one being checked",
@@ -344,10 +344,10 @@ export const repairTracks: Track[] = [
       {
         title: "Writing the agreement",
         focus:
-          "The build session. Turn the two rulebooks into one written agreement, in specific behaviors rather than principles. Written agreements only work when both partners could actually keep them, so cut anything either of you is quietly planning to break.",
+          "The build session. Turn the two rulebooks into one written agreement, in specific behaviors rather than principles. Written agreements only work when both partners could actually keep them, so cut anything either of you is quietly planning to break. One floor this session cannot go below: nobody has to hand over passwords or passcodes, share their location, or give the other person access to their accounts. If either of you wants an agreement built on access rather than on honesty, that is the thing to talk about, not to sign.",
         prompts: [
           "What are we agreeing to about contact with exes, dating apps, private accounts, and DMs with people we are attracted to?",
-          "What do we agree about hiding: passcodes, deleted threads, apps the other does not know about?",
+          "What do we agree about hiding: deleted threads, or an account the other does not know exists? Note that this is about what is concealed, not about handing over a passcode.",
           "What are we explicitly saying is fine, so neither of us has to guess about ordinary things?",
           "What happens if one of us breaks this: what is the repair, and how does it get raised without a raid?",
           "Is there anything in this agreement I am signing to end the conversation rather than because I mean it? Say it now.",

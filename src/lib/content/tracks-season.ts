@@ -128,9 +128,9 @@ export const seasonTracks: Track[] = [
     seekHelp: [
       "There is active use or a relapse happening right now. Stop the couples work and get treatment support first. Call your partner's treatment provider or program contact, and if there is any risk of overdose, treat it as a medical emergency and call emergency services. Guided conversations do not treat addiction and cannot compete with a substance that is currently winning.",
       "Recovery is early or unstable: detox, the first weeks, a recent relapse, or a treatment plan not yet in place. Couples work waits until individual treatment is established. This is a boundary, not a delay tactic. Doing relationship work on top of untreated addiction tends to destabilize both.",
-      "Either of you is thinking about suicide, or about not being here anymore. Call or text 988 now, not later. Overdose risk rises sharply after a period of not using, so a relapse after time clean is an emergency, not a setback to discuss on Sunday.",
+      "Either of you is thinking about suicide, or about not being here anymore. In the US, call or text 988 now, not later; elsewhere, call your local emergency number or a suicide helpline in your country. Overdose risk rises sharply after a period of not using, so a relapse after time clean is an emergency, not a setback to discuss on Sunday.",
       "The partner not using is carrying untreated damage of their own: panic, sleeplessness, obsessive checking, depression, or their own drinking that has quietly grown. Individual therapy, and family support groups such as Al-Anon, Nar-Anon, or SMART Recovery Family and Friends, exist for exactly this and are not disloyal to the recovery.",
-      "The relationship is being used as leverage over the recovery: threats to expose, to leave over a bad day, to cut off money or access to meetings or to medication. Controlling someone's access to their treatment is abuse. Start with the National Domestic Violence Hotline, not with a conversation exercise.",
+      "The relationship is being used as leverage over the recovery: threats to expose, to leave over a bad day, to cut off money or access to meetings or to medication. Controlling someone's access to their treatment is abuse. Start with a domestic violence service, not with a conversation exercise. In the US, the National Domestic Violence Hotline is 800-799-7233 or text START to 88788; elsewhere, look for the equivalent service in your country.",
       "You keep having the same fight about whether enough time has passed. A therapist who works with addiction and families can hold that question far better than an app can, and the two of you have probably already proved you cannot settle it alone.",
     ],
   },
@@ -234,10 +234,10 @@ export const seasonTracks: Track[] = [
     seekHelp: [
       "Trauma symptoms that are not easing: nightmares, flashbacks, constant alertness, rage that arrives faster than thought, or numbness that has flattened everything. This is treatable, and treatment for it works better than willpower. Trauma-focused therapy is the right tool.",
       "Drinking or substance use that grew during the separation, on either side. This is common after long deployments and long stretches away, and it is much easier to address early than late.",
-      "Thoughts of suicide, of not coming back, or of the family being better off. Call or text 988 now. If either of you is a service member or a veteran, 988 routes to the Veterans Crisis Line, staffed by people who understand military life.",
+      "Thoughts of suicide, of not coming back, or of the family being better off. In the US, call or text 988 now, and if either of you is a service member or a veteran, 988 routes to the Veterans Crisis Line, staffed by people who understand military life. Outside the US, call your local emergency number or a suicide helpline in your country, and if you are serving, your own force will have an equivalent confidential line.",
       "Firearms in the home combined with heavy drinking, sleeplessness, rage, or despair. This is the moment to secure or temporarily store them elsewhere, and to say so to a professional. Not a conversation to postpone.",
-      "Any fear, intimidation, or control in the relationship, including a returning partner reasserting authority through threats or through money. Start with the National Domestic Violence Hotline. Couples exercises are the wrong tool where anyone is afraid.",
-      "Reintegration that is still failing months later, with the same fight on repeat. Military OneSource offers free, confidential non-medical counseling to service members and families, and many employers with rotational work have similar support through an assistance program. A therapist who understands the cycle is worth more than another attempt at the same conversation.",
+      "Any fear, intimidation, or control in the relationship, including a returning partner reasserting authority through threats or through money. Start with a domestic violence service: in the US, the National Domestic Violence Hotline is 800-799-7233 or text START to 88788, and in an emergency call 911. Outside the US, look for the equivalent service and emergency number where you are. Couples exercises are the wrong tool where anyone is afraid.",
+      "Reintegration that is still failing months later, with the same fight on repeat. In the US, Military OneSource offers free, confidential non-medical counseling to service members and families; most other forces run an equivalent confidential service for families, and many employers with rotational work have similar support through an assistance program. A therapist who understands the cycle is worth more than another attempt at the same conversation.",
     ],
   },
   {
@@ -266,7 +266,7 @@ export const seasonTracks: Track[] = [
       "Insight does not survive contact with an empty evening. Any good conversation here needs a structure behind it: one new shared thing, started soon, or the quiet just fills itself back up with television.",
       "Separate lives are part of the answer, not a threat to it. Two people with their own friends, interests, and plans have more to bring back to a shared table than two people watching each other.",
       "The kids stay in your life without staying at the center of it. Constant monitoring and daily crisis management of adult children is often a way of avoiding the marriage that is now in the room.",
-      "Bodies changed while you were busy. Menopause, andropause, medication, sleep, and years of low privacy all leave a mark. Sexual reconnection at this stage takes intention and it can feel awkward to start. Awkward is fine. Silent is what costs you.",
+      "Bodies changed while you were busy, in whatever way your two bodies change. Hormones, menopause, surgery, medication, pain, sleep, and years of low privacy all leave a mark. Sexual reconnection at this stage takes intention and it can feel awkward to start. Awkward is fine. Silent is what costs you.",
     ],
     sessions: [
       {
@@ -349,11 +349,11 @@ export const seasonTracks: Track[] = [
     ],
     seekHelp: [
       "Depression in either of you that has outlasted the adjustment: no pleasure in anything, withdrawal from everyone, hopelessness, sleep that has come apart. This stage sets it off in people who have never had it before, and it is very treatable.",
-      "Any thoughts of self-harm or of not being here anymore. Call or text 988 now, not later.",
+      "Any thoughts of self-harm or of not being here anymore. In the US, call or text 988 now, not later; elsewhere, call your local emergency number or a suicide helpline in your country.",
       "Drinking that has quietly grown to fill the empty evenings, in either of you. It is easier to look at early, and it is the most common thing to slide into at this stage.",
       "One of you is seriously considering ending the relationship. That deserves a couples therapist and an honest conversation, not a silent decision made over months while the other partner has no idea it is happening.",
       "A wound that predates this season and never got dealt with, now surfacing with nothing left to distract from it. An affair, a betrayal, an old resentment that is suddenly loud. Some of those need a professional referee, and the app tracks for those wounds are a starting point, not a substitute.",
-      "Any fear, control, or intimidation in the relationship, including financial control that has become obvious now that the household is smaller. Start with the National Domestic Violence Hotline. Guided conversations are not the right tool where anyone is afraid.",
+      "Any fear, control, or intimidation in the relationship, including financial control that has become obvious now that the household is smaller. Start with the National Domestic Violence Hotline: in the US, 800-799-7233 or text START to 88788, and in an emergency call 911. Guided conversations are not the right tool where anyone is afraid. Later-life abuse is common and under-reported, and leaving after decades is not a failure of the decades.",
     ],
   },
 ];

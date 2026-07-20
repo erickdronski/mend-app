@@ -361,7 +361,7 @@ Keep `arc: "From repaired to chosen. Then you graduate, and delete us."` verbati
 | 128 | chip "Blended or second marriage" | "Blended family, or a second time around" |
 | 131 | hereForYou "You're building a second marriage through family shrapnel." | "You're building this on top of two histories. There's a path for exactly this." |
 | 133 | trackTitle "Blended family and second marriage" | "Blended family and second chapter" |
-| 140 | chip "Two faiths, one family" | "Two faiths, one relationship" |
+| 140 | chip "Two faiths, one family" | "We believe different things" (never "two faiths": one of the two is often the partner who has none, and an interfaith label writes them out of their own chip. Keep `planPhrase` "loving across a line of belief", which is already right.) |
 | 51 | drift `track: ""` | Point at a real track. Drift is the single most common reason a couple opens this app and it is the one answer that returns nothing, hiding the Explore track card entirely (`explore.tsx:90`). Point it at the new `second-decade` track for long relationships, `first-steps` and `go-deeper` decks otherwise. |
 | 155 | just-us hereForYou "No crisis, just care." | "You're here on purpose, not because something broke. That counts." (Four personas were forced into this chip and read "no crisis" as the app calling their problem nothing.) |
 
@@ -708,10 +708,10 @@ never as status:
 |---|---|---|---|
 | "What do the two of you call each other?" | `partnerWord` | partner, boyfriend, girlfriend, husband, wife, spouse, fiance, fiancee, co-parent, just our names, or type your own | "partner" preselected. Frame: "We'll use your words, not ours." This one answer drives every string in section 2. |
 | "And what would you call this?" | `type` + `bondWord` | dating, engaged, partnered, married, remarried, civil partnership, co-parenting, we don't use a word | Flat list, presented as equals. Never ordered as a ladder. The word "yet" must appear nowhere on this screen. |
-| "Where do you two sleep most nights?" | `living` | one home, two homes nearby, long distance, apart for now, two households (co-parenting) | Highest-value single input. |
+| "How do your weeks work?" | `living` | one home, two homes nearby, long distance, apart for now, two households (co-parenting) | Highest-value single input. Do not word this as "where do you two sleep most nights", which was the earlier draft: it is an oddly intimate thing to ask a separated co-parenting pair, and it returns a confusing answer from the many couples who share a home but not a bed (shift work, pain, a CPAP, a snorer, a baby). The field is about addresses, so ask about addresses. |
 | "How often are you actually in the same room?" | `seeEachOther` | most days, a few days a week, about weekly, less than that | Only shown when `living !== "together"`. Feeds challenge pacing. |
 | "Roughly how long have you been together?" | `together` | under a year, 1 to 3 years, 3 to 7, 7 to 15, over 15 | Accepts months by bucket. Never "how long have you been married." Never an anniversary date. |
-| "Are there kids in the picture?" | `kids` | no, ours, from before, both, one on the way, grown | "No" is presented as completely ordinary, never as a gap. |
+| ~~"Are there kids in the picture?"~~ **Cut from this screen.** | `kids` | see note | **Superseded by `docs/ONBOARDING-V2.md` section 1.8, which is the binding version.** Children are asked about only as an opt-in chip on the optional, one-tap-skippable context screen, and silence means the same as no. Asking every couple in the main flow costs more than it returns: it lands as a status question on couples who cannot have children, on couples in treatment, and hardest on the couples the app's own `loss` chip and pregnancy-loss track exist for, who get handed "one on the way" as a selectable option weeks after a miscarriage. Keep `KidsContext` as the stored shape, populate it from 1.8, and never render a kid-shaped blank at anyone. |
 | "Has this relationship had a break in it?" | `history` | no, we split up and came back, we're apart now | Neutral phrasing. Never "have you failed before." Skippable. |
 | "Is there a decision or a date this is pointing at?" (optional) | `decisionAhead` | free text, skippable | Never becomes a countdown, never nagged. |
 
@@ -725,8 +725,13 @@ Every one of these was named by at least two personas as an immediate uninstall.
   option. The word "yet" does the damage on its own.
 - Gender, a husband and wife role picker, or who does which role. `Profile` has no gender field
   today and must not gain one. Pronouns may be offered as optional and skippable.
-- Sexual orientation as a demographic label. Ask what content to show ("same-sex couple" as an
-  opt-in chip on a clearly-explained preferences screen), never what they are.
+- Sexual orientation as a demographic label. Ask what content to show ("We're a queer couple" as
+  an opt-in chip on a clearly-explained preferences screen), never what they are. Do not word that
+  chip as "same-sex": it is a statement about two sexes, so a nonbinary partner and many trans
+  people cannot answer it truthfully, and it frames the couple as a deviation from a default
+  rather than as themselves. For the same reason, what the chip changes is written as "examples
+  stop reaching for a man and a woman", never as "stops opposite-sex defaults", which names the
+  straight couple as the thing the app is really built around.
 - Religion, income, or education outside the specific content that needs them.
 - Frequency of sex, sexual history, or anything resembling a count. For a couple in a long
   silence, one question like that ends the relationship with the app permanently.

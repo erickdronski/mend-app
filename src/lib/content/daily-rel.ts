@@ -5,9 +5,22 @@
  * own time, and one answer stays sealed until the other is written. Nothing
  * here assumes marriage, a shared address, children, or who is who. These are
  * meant to work for people who are dating, people who live a thousand miles
- * apart, people rebuilding after a hard season, and people who share kids and
- * not much else right now. Every question is answerable alone, in a few
- * sentences, and none of them invite a list of complaints.
+ * apart, and people rebuilding after a hard season. Every question is
+ * answerable alone, in a few sentences, and none of them invite a list of
+ * complaints.
+ *
+ * TWO FILTERS THIS POOL DEPENDS ON, and does not yet have (inclusivity review,
+ * 2026-07-20). Do not ship the pool unfiltered.
+ *
+ * 1. Co-parents. Every question here says "partner" and the `desire` category
+ *    asks a separated co-parenting pair to describe being pulled toward each
+ *    other. Route the pool through `isRomantic()` in relationships.ts and drop
+ *    the `desire` category entirely for `coparenting`, and swap the partner
+ *    noun for the one `frameFor()` returns. Until that exists, this file is
+ *    not safe to show a co-parent, whatever the old header claimed.
+ * 2. Apart couples. `DailyQuestion` still has no `contexts` field (see
+ *    docs/RELATIONSHIP-EXPANSION.md section 3.7). Add it and tag anything that
+ *    needs a shared room before this pool goes near a long-distance couple.
  */
 
 import type { DailyQuestion } from "./daily";
@@ -74,7 +87,7 @@ export const extraDailyQuestions: DailyQuestion[] = [
     category: "repair",
   },
   {
-    text: "If you had one extra hour together today, no plans and no phones, how would you want to spend it?",
+    text: "If the two of you got one extra hour today with nothing else claiming it, how would you want to spend it?",
     category: "playful",
   },
   {
@@ -214,7 +227,7 @@ export const extraDailyQuestions: DailyQuestion[] = [
     category: "noticing",
   },
   {
-    text: "What is a photo of the two of you that you would want printed and hung where you would see it every day?",
+    text: "What is a photo of the two of you that you would want somewhere you would see it every day?",
     category: "memory",
   },
   {

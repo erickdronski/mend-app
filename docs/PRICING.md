@@ -1,19 +1,27 @@
 # Mend pricing: the numbers, the arithmetic, and the exact words we may use
 
-Written 2026-07-20. Supersedes the pricing sketch in `docs/MONETIZATION.md`
-(that document still owns the free/Plus split and the revenue checklist; this
-document owns the prices, the comparisons, and the copy).
+Rewritten 2026-07-20, after `docs/review/honesty-review.md`. That review supersedes
+every figure it corrects, and this document has been rebuilt around its rulings.
+`docs/MONETIZATION.md` still owns the free/Plus split and the philosophy. This
+document owns the prices, the comparisons, the public copy, and the go-live
+checklist.
 
-**Every figure in this document traces to `docs/research/counseling-prices.md`
-or `docs/research/competitor-pricing.md`, both compiled 2026-07-19.** No number
-appears here that is not in one of those two reports with a source URL. If you
-need a number that is not here, do the research first and add it there.
+**The prices are decided.** Mend Plus is **$9.99 a month** or **$99 a year**.
+Stripe is already wired with exactly those two prices, and
+`src/lib/premium.tsx` already renders them. Nothing in this document proposes a
+different number.
+
+**Sourcing rule.** Every figure here traces to `docs/research/counseling-prices.md`
+or `docs/research/competitor-pricing.md` (both compiled 2026-07-19) **and** carries
+the verdict from `docs/review/honesty-review.md` (2026-07-20). Where the review
+marked a figure Unverified or Wrong, it does not appear as a usable number here.
+It appears in section 4 or in the gate list in section 7 instead.
 
 **The one rule that governs everything below.** Mend is an educational and
-practice tool. It is not therapy, it is not delivered by licensed clinicians,
-and it does not replace professional care. Every comparison in this document is
-a **cost** comparison and nothing else. We say what things cost. We never say
-what things achieve.
+practice tool. It is not therapy, it is not delivered by licensed clinicians, and
+it does not replace professional care. Every comparison in this document is a
+**cost** comparison and nothing else. We say what things cost. We never say what
+things achieve.
 
 ---
 
@@ -21,396 +29,459 @@ what things achieve.
 
 ### Per session, in person, out of pocket
 
-| Claim | Figure | Source | Accessed |
+| Claim | Figure | Source | Status |
 | --- | --- | --- | --- |
-| Most providers charge, out of pocket | $150 to $250 per session | Thriveworks, "How Much Is Couples Therapy," published 2025-11-06, https://thriveworks.com/help-with/beginning-therapy/how-much-is-couples-therapy/ | 2026-07-19 |
-| Thriveworks' own couples rate, varies by state | $160 to $240 per session | same URL | 2026-07-19 |
-| Marriage counseling per session | $75 to $250, "with most couples paying about $100 a session" | Grow Therapy, page updated 2026-06-24, https://growtherapy.com/blog/how-much-does-marriage-counseling-cost/ | 2026-07-19 |
-| A direct-to-consumer virtual couples therapy provider's own rate | $150 to $200 per session, $50 first session, 50 minute sessions | Ours, https://www.withours.com/blog/how-much-is-couples-therapy/ | 2026-07-19 |
+| Most providers charge, out of pocket | **$150 to $250 per session** | Thriveworks, "How Much Is Couples Therapy," published 2025-11-06, https://thriveworks.com/help-with/beginning-therapy/how-much-is-couples-therapy/ | Verified, exact phrasing confirmed 2026-07-20 (honesty review C1) |
+| Thriveworks' own couples rate, by state | $160 to $240 per session | same URL | Verified 2026-07-20 (C2) |
+| Marriage counseling per session | **$75 to $250**, "with most couples paying around $100 per session" | Grow Therapy, page updated 2026-06-24, https://growtherapy.com/blog/how-much-does-marriage-counseling-cost/ | Verified 2026-07-20 (C3) |
+| Individual therapy, per session | $143 | Thriveworks, same URL | Verified 2026-07-20 (P2). Individual, not couples. Label it that way or do not use it |
 
-**The band we use publicly: $150 to $250 per session, attributed to
-Thriveworks.** It is the best-sourced couples-specific figure we have, it is
-corroborated in range by a competing provider (Ours at $150 to $200), and it is
-published by a therapy provider, which means the bias runs toward the number
-being respectable rather than inflated in our favor.
+**The band we publish: $150 to $250 per session, attributed to Thriveworks by
+name and date.** It is the best-sourced couples-specific figure in the research,
+it is published by a therapy provider (so the bias runs toward the number being
+respectable rather than inflated in our favor), and the honesty review confirmed
+the exact wording on the page.
 
-**Two things we must always attach.**
+**Three things that must always travel with it.**
 
-1. There is **no authoritative national average for couples therapy
-   specifically**. Nobody publishes one with real methodology. Always a range,
-   always attributed, never "the national average."
-2. The Grow Therapy low end of **$75** is real. So any claim of the form "less
-   than one session" must be checked against $75, not against $150, unless the
-   copy names the Thriveworks rate explicitly. Copy that names the rate can use
-   $150. Copy that does not name the rate must clear $75.
+1. There is **no authoritative national average for couples counseling
+   specifically**. Nobody publishes one with real methodology. Range plus
+   attribution, always. Never "the national average."
+2. **Do not publish "$100 to $250."** No source publishes that band. It is a
+   blend of two sources that silently drops Grow Therapy's $75 floor
+   (honesty review C4, and the string currently shipping in `src/app/plus.tsx`
+   is exactly this error). Either quote Thriveworks at $150 to $250, or quote
+   Grow at $75 to $250 with the $100 mode, attributed.
+3. **The $75 floor is real, and it constrains our headline.** See the gate in
+   section 2.
 
-### The verified floor reference (do not mislabel it)
+### Where the "one session" comparison actually sits, given a $99 price
 
-| Claim | Figure | Source | Accessed |
-| --- | --- | --- | --- |
-| National average therapy session rate, 2024, all session types | $139 | SimplePractice, https://www.simplepractice.com/blog/average-therapy-session-rate-by-state/ | 2026-07-19 |
-| Methodology behind it | 104,679,056 session fees collected 2023 to 2024 across nearly 204,000 behavioral health therapists in all 50 states and DC | same URL | 2026-07-19 |
+$99 a year is **less than one session at the Thriveworks band** ($150 to $250).
+$99 a year is **more than one session at Grow Therapy's $75 floor**, and it is
+one dollar under Grow's stated typical rate of about $100.
 
-This is the single best-methodology price in the whole research set, and it is
-**not a couples number**. It covers individual psychotherapy CPT codes (90832,
-90833, 90834, 90836, 90837, 90838). The couples and family code, 90847, is
-excluded. Couples sessions generally price higher. If we cite $139 at all, the
-label is "the national average for a therapy session across all types," never
-"the average cost of couples therapy."
+**Therefore: every "a year for less than one session" line must name the
+$150 to $250 rate and attribute it to a national therapy provider.** An
+unattributed "less than one session" claim is not provable at $99 and does not
+ship. This is the single most important copy rule in this document.
 
 ### A realistic full course
 
-| Claim | Figure | Source | Accessed |
+| Claim | Figure | Source | Status |
 | --- | --- | --- | --- |
-| Typical course length | "couples attend anywhere from eight to 20 sessions" | Thriveworks, https://thriveworks.com/help-with/beginning-therapy/how-much-is-couples-therapy/ | 2026-07-19 |
-| Typical course length, second source | 12 to 20 sessions | Grow Therapy, https://growtherapy.com/blog/how-much-does-marriage-counseling-cost/ | 2026-07-19 |
-| Total course cost, low to mid | about $1,200 to $2,000 (12 to 20 sessions at about $100) | Grow Therapy, same URL | 2026-07-19 |
-| Complex cases | up to 50 sessions, potentially reaching $5,000 | Grow Therapy, same URL | 2026-07-19 |
+| Typical course length | "couples attend anywhere from eight to 20 sessions" | Thriveworks, published 2025-11-06 | Verified 2026-07-20 (C5) |
+| Typical course length, second source | "most couples need 12 to 20 therapy sessions" | Grow Therapy, updated 2026-06-24 | Verified 2026-07-20 (C5) |
+| Typical total course cost | $1,200 to $2,000 | Grow Therapy, same URL | Verified 2026-07-20 (C6) |
+| Complex cases | up to 50 sessions, "about $5,000" | Grow Therapy, same URL | Verified 2026-07-20 (C6) |
 
-Two independent sources converge on roughly **$1,200 at the low end**. The
-public claim we use is:
+Arithmetic on verified inputs: 8 sessions x $150 = **$1,200**. 20 sessions x $250
+= **$5,000**. Grow Therapy independently states $1,200 to $2,000 typical and about
+$5,000 for complex cases. Two independent sources converge on both ends.
+
+**The public claim:**
 
 > A course of in-person couples counseling typically runs eight to twenty
 > sessions, which comes to roughly $1,200 to $5,000 out of pocket.
 
-That sentence is the strongest, safest cost claim we own. It is sourced twice,
-it uses a range, and it does not require us to invent an average.
+The honesty review calls this "the strongest public claim in the pricing brief"
+(C6). **The earlier draft figure of "$1,800 to $7,500" is dead.** It overstated
+both ends by 50 percent, and inflating a number designed to flatter us is exactly
+the error that reads as dishonest if anyone checks.
 
 ### The insurance reality
 
-| Claim | Figure | Source | Accessed |
+| Claim | Figure | Source | Status |
 | --- | --- | --- | --- |
-| The billing code | "CPT code 90847 ... covers a 50-minute couples or family therapy session with the identified patient present" | SimplePractice, https://www.simplepractice.com/blog/billing-couples-family-therapy/ | 2026-07-19 |
-| The coverage condition | "If couples and family therapy are covered by insurance, it will only be covered when the plan deems the treatment medically necessary to treat a diagnosis of one member." | same URL | 2026-07-19 |
-| What is not covered | "These services are typically not covered by insurance when the purpose of therapy is solely relationship growth or communication skills." | same URL | 2026-07-19 |
-| The diagnosis requirement | an identified patient with a DSM-5 diagnosis, "typically something more than a V or Z code" | same URL | 2026-07-19 |
-| Copay when it is covered | $20 to $50 per session | Thriveworks, https://thriveworks.com/help-with/beginning-therapy/how-much-is-couples-therapy/ | 2026-07-19 |
-| Coinsurance when it is covered | 20 to 40 percent of the session fee | same URL | 2026-07-19 |
-| Copay, second source | $30 to $50 per session | Grow Therapy, https://growtherapy.com/blog/how-much-does-marriage-counseling-cost/ | 2026-07-19 |
-| Online couples therapy and insurance | "Most insurance carriers don't currently cover couples therapy at Regain or other online therapy companies." | Regain, page updated 2025-11-05, https://www.regain.us/advice/therapist/how-much-does-regain-cost/ | 2026-07-19 |
+| The billing code | CPT 90847, "a 50-minute couples or family therapy session with the identified patient present" | SimplePractice, https://www.simplepractice.com/blog/billing-couples-family-therapy/ | Verified 2026-07-20 (C7) |
+| The coverage condition | covered "only ... when the plan deems the treatment medically necessary to treat a diagnosis of one member" | same URL | Verified 2026-07-20 (C7) |
+| What is not covered | "typically not covered by insurance when the purpose of therapy is solely relationship growth or communication skills" | same URL | Verified 2026-07-20 (C7) |
+| The diagnosis requirement | an identified patient with a DSM-5 diagnosis, "typically something more than a V or Z code" | same URL | Verified 2026-07-20 (C7) |
+| The relationship code itself | Z63.0, "Problems in relationship with spouse or partner," is a real ICD-10-CM code but "is not sufficient on its own for insurance billing"; most payers require a primary F code first-listed | ICANotes, https://www.icanotes.com/2023/07/07/how-to-bill-for-couples-therapy/ and https://www.aapc.com/codes/icd-10-codes/Z63.0 | Verified 2026-07-20 (honesty review, public figure 3) |
+| Copay when covered | $20 to $50 per session | Thriveworks | Verified 2026-07-20 (C8) |
+| Coinsurance when covered | 20 to 40 percent of the session fee | Thriveworks | Verified 2026-07-20 (C8) |
+| Copay, second source | $30 to $50 per session | Grow Therapy | Verified 2026-07-20 (C8) |
+| Online couples therapy and insurance | "Most online therapy companies don't accept insurance for couples therapy at this time." | Regain, page updated 2025-11-05, https://www.regain.us/advice/therapist/how-much-does-regain-cost/ | Verified 2026-07-20 (C11). This is the correct verbatim quote; an earlier looser paraphrase was in quotation marks and must not be reused |
 
-**The plain-language version, safe to paraphrase anywhere.** US health insurance
-is built around treating a diagnosed condition in one person. Relationship
-problems are not a diagnosis. So couples counseling often is not covered on its
-own. It can be covered when one partner has a diagnosed mental health condition
-and the sessions are treating that condition, billed under code 90847 with that
-partner named as the patient. That means one partner ends up carrying a mental
-health diagnosis in their medical record. Coverage varies by plan, so anyone
-should call their insurer before assuming.
+**The cleared plain-language version, from the honesty review, safe anywhere:**
 
-**Never write "insurance doesn't cover couples counseling."** It is false and it
-is the exact kind of overreach that costs a health-adjacent app its credibility.
-Write "often is not covered on its own."
+> Health insurance often does not cover couples counseling on its own. US plans
+> pay to treat a diagnosed condition in one person, and a relationship problem is
+> not a diagnosis: the relationship code Z63.0 describes a circumstance and will
+> not carry a claim by itself. Couples sessions can be covered, billed under CPT
+> 90847, when one partner is named as the identified patient with a DSM-5
+> diagnosis and the sessions treat that condition. That means one partner ends up
+> with a mental health diagnosis in their medical record. Coverage varies, so call
+> your insurer.
 
-### The low-cost paths (we name these every time we mention cost)
+**Never write "insurance doesn't cover couples counseling."** It is false as an
+absolute. Write "often is not covered on its own."
 
-| Option | Price | Source | Accessed | Confidence |
-| --- | --- | --- | --- | --- |
-| Open Path Collective, one-time membership | $65 US | https://openpathcollective.org/pricing-and-eligibility-for-affordable-therapy/ | 2026-07-19 | Medium-high. Site returned HTTP 403 to automated fetch; re-verify in a browser before this ships |
-| Open Path, couples and family sessions | $40 to $80 per session | same URL | 2026-07-19 | Same caveat |
-| Open Path, student interns | flat $30 per session | same URL | 2026-07-19 | Same caveat |
-| Council for Relationships, intern-led therapy | "$20 to $90 per hour" | https://councilforrelationships.org/fees | 2026-07-19 | High. Page was loaded directly |
-| Federally Qualified Health Centers | required by Section 330 of the Public Health Service Act to run a sliding fee discount program based on the Federal Poverty Guidelines | https://www.integration.samhsa.gov/pbhci-learning-community/Sliding_Fee_Scale_Requirements_for_Health_Centers.doc | 2026-07-19 | High |
-| FQHC locator | findahealthcenter.hrsa.gov | https://findahealthcenter.hrsa.gov/ | 2026-07-19 | High |
-| Free referral line | SAMHSA National Helpline, 1-800-662-4357, 24/7 | https://www.samhsa.gov/find-help/helplines/national-helpline | 2026-07-19 | High |
+### The low-cost paths, which we point toward and never compete with
 
-**Gate before publication.** The Open Path figures must be confirmed by loading
-the page in a browser before they appear in shipped copy. The Council for
-Relationships figure is cleared now. Until Open Path is re-verified, any copy
-that needs a low-cost example uses Council for Relationships and the SAMHSA
-helpline.
+| Option | Figure | Source | Status |
+| --- | --- | --- | --- |
+| Open Path Collective, one-time membership | $65 US | https://openpathcollective.org/pricing-and-eligibility-for-affordable-therapy/ | Verified 2026-07-20 (C13), search-index confirmed; site 403s to automated fetch |
+| Open Path, couples and family sessions | $40 to $80 per session | same URL | Verified 2026-07-20 (C13) |
+| Open Path, student interns ($30) and individual ($40 to $70) | not cleared | same URL | Unverified (C13). Do not publish |
+| Council for Relationships, intern-led therapy | "$20 to $90 per hour" | https://councilforrelationships.org/fees | Needs one re-check before publication (C16), then cleared |
+| Federally Qualified Health Centers | required under Section 330 of the Public Health Service Act to run a sliding fee discount program based on the Federal Poverty Guidelines | https://www.integration.samhsa.gov/pbhci-learning-community/Sliding_Fee_Scale_Requirements_for_Health_Centers.doc | Unverified in the review pass. Re-check before publication |
+| FQHC locator | findahealthcenter.hrsa.gov | https://findahealthcenter.hrsa.gov/ | Unverified in the review pass |
+| SAMHSA National Helpline | 1-800-662-4357, 24/7 | https://www.samhsa.gov/find-help/helplines/national-helpline | **Hand-verify before it ships** (C20). It sits inside a safety guardrail, so it is held to crisis-line standard |
+
+Two crisis numbers are fully verified and ship as-is: the National Domestic
+Violence Hotline at **1-800-799-7233** (honesty review S1) and the **988** Suicide
+and Crisis Lifeline (S11). Those are the numbers that carry the safety block on
+any pricing surface. The SAMHSA referral line is a nice-to-have on a cost page and
+waits for its hand check.
 
 ### The subscription competitors, for context
 
-| Service | Price | What it buys | Source | Accessed |
+| Service | Price | What it buys | Source | Status |
 | --- | --- | --- | --- | --- |
-| Talkspace couples | $109 per week | "Up to four 30 minute video sessions/month for you and your partner" plus unlimited messaging | https://www.talkspace.com/pricing | 2026-07-19 |
-| Talkspace, extra live sessions | $69 each | same page | same URL | 2026-07-19 |
-| Regain (BetterHelp's couples brand) | "$70 to $100 per session," billed monthly | one weekly live session plus in-app messaging, one subscription covers the couple | https://www.regain.us/advice/therapist/how-much-does-regain-cost/ | 2026-07-19 |
+| Talkspace couples | **$109 per week** | "Up to four 30 minute video sessions/month for you and your partner" plus unlimited messaging | https://www.talkspace.com/pricing | Verified 2026-07-20 (C9) |
+| Talkspace, extra live sessions | $69 each | same page | same URL | Verified (C9) |
+| Regain, the couples brand of BetterHelp | **$70 to $100 per session**, billed monthly | one live session a week plus in-app messaging, one subscription covers the couple | https://www.regain.us/advice/therapist/how-much-does-regain-cost/, updated 2025-11-05 | Verified 2026-07-20 (C10) |
+| BetterHelp | $70 to $100 per week, or $260 to $400 per month | **does not offer couples therapy**; routes couples to Regain | https://www.betterhelp.com/advice/general/how-much-does-betterhelp-cost/, updated 2026-07-08 | Verified 2026-07-20 (C12) |
 
-Talkspace's couples plan buys four **30 minute** sessions a month, which is half
-the clock time of a standard 50 minute session. Regain does not state a session
-length on the page cited. Any comparison table we ship must state session length
-and session count, not just dollars.
+Three unit rules that are not negotiable:
+
+- **Talkspace couples is $109 a week, not $99.** $99 is the Talkspace individual
+  video plan. Quoting $99 in a couples comparison understates a competitor by $10
+  a week, which is the flattering direction and therefore the dangerous one
+  (honesty review, public figure 5).
+- **Always state Talkspace's 30-minute session length.** Four 30-minute sessions a
+  month is half the clock time of a standard 50-minute in-person session. A dollar
+  comparison without that is misleading.
+- **Regain publishes per session, not per week**, and its page states no session
+  length. Do not convert the unit and do not claim minutes (C10, public figure 4).
+  Never list BetterHelp in a couples comparison without the sentence that it does
+  not offer couples therapy.
 
 ---
 
-## 2. Recommended Mend Plus pricing
+## 2. The prices, and the arithmetic behind the positioning
 
 ### The prices
 
-| Product | Suggested ID | Price | Effective rate |
+| Product | Price | Effective rate | Wiring |
 | --- | --- | --- | --- |
-| Plus monthly | `mend.plus.monthly` | **$7.99 a month** | $7.99 a month |
-| Plus annual | `mend.plus.annual` | **$47.99 a year** | $4.00 a month, billed yearly |
-| Founding lifetime | `mend.founder.lifetime` | **$119.99 once**, launch window only | one payment, no renewal |
+| Mend Plus monthly | **$9.99 a month** | $9.99 a month | `PRICING.monthly` in `src/lib/premium.tsx`, Stripe `STRIPE_PRICE_MONTHLY` |
+| Mend Plus annual | **$99 a year** | **$8.25 a month, billed yearly** | `PRICING.annual`, Stripe `STRIPE_PRICE_ANNUAL` |
 
-**Why these numbers.**
+$99 / 12 = $8.25 exactly. The app already renders "$8.25 a month, billed yearly,"
+so the displayed rate and Stripe agree today. Keep them agreeing: Stripe is the
+source of truth for what is actually charged, `PRICING` is only what we render.
 
-- `docs/MONETIZATION.md` calls for a low single-digit monthly price and an
-  annual at roughly six times monthly. $7.99 and $47.99 hit both:
-  $7.99 x 6 = $47.94, so the annual is six months of monthly, rounded to a
-  clean price point.
-- Twelve months at the monthly rate is $95.88. The annual at $47.99 saves
-  $47.89, just under half. That is a large enough gap that annual is the
-  obvious pick, which is what we want for a product designed to be deleted.
-- $47.99 a year lands inside the verified category band. Paired's App Store
-  annual SKUs run $29.99 to $74.99, Coral's run $39.99 to $89.99, Lasting
-  Premium runs $11.99 to $79.99, and Relish charges $99.99 for six months
-  covering two people (sources: Apple App Store listings and vendor FAQ, per
-  `docs/research/competitor-pricing.md`, accessed 2026-07-19). We are neither
-  the cheapest nor a premium outlier, which is the honest place to be.
-- The founding lifetime at $119.99 clears the "less than one session at the
-  published $150 to $250 rate" test with room, and it is the only SKU that
-  captures value from a couple who graduates in four months, which many will.
+Annual versus twelve months of monthly: 12 x $9.99 = $119.88, so the annual plan
+saves **$20.88 a year, about 17 percent**. That is arithmetic on our own prices,
+publishable without a source.
 
-**Change from what is currently in the app.** `src/lib/premium.tsx` ships
-`PRICING` as `$9.99` monthly and `$99` annual. Those need to change to `$7.99`
-and `$47.99`, and Stripe's prices must change with them, since Stripe is the
-source of truth for what is actually charged. The $99 annual is also the reason
-the current paywall claim is fragile: at $99 the "less than one session" line
-only clears the Grow Therapy typical rate of about $100 by one dollar. At
-$47.99 it clears every verified figure in the research by a wide margin.
+### Against one session
 
-### The arithmetic, computed only from verified figures
+All comparisons below use the Thriveworks band, $150 to $250 per session,
+published 2025-11-06, verified 2026-07-20.
 
-All comparisons use the Thriveworks per-session band ($150 to $250, published
-2025-11-06) or the two-source course total ($1,200 to $5,000). Every line below
-is arithmetic on those numbers and nothing else.
-
-| Comparison | The math | Result |
+| Comparison | The math | The provable statement |
 | --- | --- | --- |
-| Annual vs one session at the low end | $47.99 x 3 = $143.97, against $150 | **Three years of Mend Plus costs less than one counseling session** at the $150 low end |
-| Annual vs one session at the high end | $47.99 x 5 = $239.95, against $250 | Five years costs less than one session at the $250 high end |
-| Annual vs the low end of a full course | $47.99 x 25 = $1,199.75, against $1,200 | **The cheapest realistic course of counseling would pay for twenty-five years of Mend Plus** |
-| Annual vs the high end of a full course | $5,000 / $47.99 = 104.2 | A $5,000 course is more than one hundred years of Mend Plus |
-| Annual as a share of the low-end course | $47.99 / $1,200 = 4.0% | A year of Plus is about four percent of the cheapest realistic course |
-| Monthly vs one session at the low end | $7.99 x 18 = $143.82, against $150 | Eighteen months of Mend Plus costs less than one session at the $150 low end |
-| Lifetime vs one session | $119.99 against $150 to $250 | One payment, less than one session at the published rate |
-| Lifetime vs the low-end course | $119.99 / $1,200 = 10.0%, and $119.99 is less than $120 | Under ten percent of the cheapest realistic course |
-| Annual vs one week of Talkspace couples | $47.99 against $109 | A year of Mend Plus costs less than one week of Talkspace's couples plan |
-| Annual vs one week of Regain at its low end | $47.99 against $70 | A year of Mend Plus costs less than one week of Regain |
+| A year of Plus vs one session at the low end | $99 against $150 | **A full year of Mend Plus costs less than one counseling session at the $150 low end**, with $51 left over |
+| A year of Plus vs one session at the high end | $99 x 2 = $198, against $250 | Two full years of Mend Plus cost less than one session at the $250 high end |
+| How many sessions a year of Plus is | $99 / $150 = 0.66 | A year of Plus is about two thirds the price of a single session at the low end |
+| Monthly plan vs one session at the low end | $9.99 x 15 = $149.85, against $150 | Fifteen months on the monthly plan cost less than one session at the $150 low end |
+| Monthly plan vs one session at the high end | $9.99 x 25 = $249.75, against $250 | Twenty-five months on the monthly plan cost less than one session at $250 |
 
-**The one comparison we do not publish.** $47.99 a year is less than Open Path
-Collective's $65 one-time membership fee. That is true, and we will never say
-it, because we are not going to price-shame the cheapest legitimate route to a
-real therapist. Low-cost counseling is something we point people toward, not
-something we compete against.
+**The gate, again, because it is the easiest rule to break.** Grow Therapy's
+verified floor is $75 a session and its typical rate is about $100. At $99 a year
+we clear $150 comfortably and we clear $100 by one dollar. So a "less than one
+session" line **only ships with the $150 to $250 rate named and attributed**. No
+bare version. No shortened version that drops the attribution to fit a button.
 
-**Framing that must ride along with any of the rows above.** Mend is not
-therapy, is not delivered by a licensed clinician, and does not replace
-counseling. A comparison table that puts a Mend price next to a therapy price
-without saying what each one buys is dishonest and is a regulatory risk. The
-rule from the research holds: state session length and session count, or do not
-build the table.
+### Against a full course
+
+Course total: $1,200 to $5,000, two independent sources, verified 2026-07-20.
+
+| Comparison | The math | The provable statement |
+| --- | --- | --- |
+| A year of Plus as a share of the cheapest realistic course | $99 / $1,200 = 8.25% | A year of Mend Plus is about eight percent of the cheapest realistic course of counseling |
+| A year of Plus as a share of the top of the range | $99 / $5,000 = 1.98% | About two percent of a $5,000 course |
+| Years of Plus inside the low-end course | $99 x 12 = $1,188, against $1,200 | **Twelve years of Mend Plus cost less than the cheapest realistic course of counseling** |
+| Years of Plus inside the high-end course | $5,000 / $99 = 50.5 | A $5,000 course is more than fifty years of Mend Plus |
+| Monthly plan against the low-end course | $1,200 / $9.99 = 120.1 months | The cheapest realistic course is about ten years on the monthly plan |
+
+### Against a week of the subscription competitors
+
+| Comparison | The math | The provable statement |
+| --- | --- | --- |
+| A year of Plus vs one week of Talkspace couples | $99 against $109 | **A full year of Mend Plus costs less than one week of Talkspace's couples plan**, which is $109 a week for up to four 30-minute video sessions a month for both partners plus messaging |
+| A year of Plus vs one Regain session | $99 against Regain's published $70 to $100 per session | A year of Mend Plus costs about what Regain charges for a single session at the top of its published $70 to $100 per-session range. **Note: $99 is more than Regain's $70 floor.** Any Regain line names the full range |
+| Ten months of the monthly plan vs one Talkspace week | $9.99 x 10 = $99.90, against $109 | Ten months on the monthly plan cost less than one week of Talkspace couples |
+
+**Do not publish a Regain "per week" number** and do not attach a session length
+to Regain. **Do not publish BetterHelp** in any couples comparison without its own
+sentence that it does not offer couples therapy.
+
+An annualized Talkspace figure (52 x $109 = $5,668) is arithmetic on a verified
+weekly rate, but it assumes a full year of continuous subscription that Talkspace
+does not itself publish as a plan. If it is ever used, label it as arithmetic on
+the published weekly rate, not as a Talkspace price.
+
+### The comparison we will never publish
+
+$99 a year is more than Open Path Collective's $65 one-time membership, and it is
+in the same territory as one or two Open Path couples sessions at $40 to $80. We
+will never build a comparison against Open Path, community health centers,
+training clinics, or the SAMHSA helpline in either direction. Those are the paths
+we send people toward. We do not compete with them on price, and we do not
+price-shame the cheapest legitimate route to a real professional.
+
+### The framing that rides along with every row above
+
+Mend is not therapy, is not delivered by a licensed clinician, and does not
+replace counseling. A table that puts a Mend price next to a therapy price without
+saying what each one buys is dishonest and is a regulatory risk. State session
+length and session count, or do not build the table.
 
 ---
 
 ## 3. The exact lines we may use
 
-Every line below is cleared. Use them verbatim or shorten them, but do not add
-a number that is not in section 1. Each is annotated with the source that backs
-it and the date that source was read.
+Every line below is cleared for the app, the App Store listing, and the landing
+page. Use them verbatim or cut them shorter, but **do not add a number that is not
+in section 1, and do not drop an attribution to save space.** If a line will not
+fit with its attribution, the line is too long, not the attribution.
 
 ### Paywall (`src/app/plus.tsx`)
 
 **P1. Hero title.**
-> A year for less than one session.
 
-Backed by: $47.99 x 3 = $143.97, which is less than a single session at the
-$150 low end of Thriveworks' published $150 to $250 out-of-pocket band
-(https://thriveworks.com/help-with/beginning-therapy/how-much-is-couples-therapy/,
-published 2025-11-06, accessed 2026-07-19). This line also clears the Grow
-Therapy low end of $75 and its typical rate of about $100
-(https://growtherapy.com/blog/how-much-does-marriage-counseling-cost/, updated
-2026-06-24, accessed 2026-07-19), so it is safe without naming a rate.
+> A year of Plus costs less than one counseling session.
+
+Backed by: $99 against Thriveworks' published band of $150 to $250 per session out
+of pocket, "most providers charge between $150 and $250 per session when paying
+out of pocket," published 2025-11-06,
+https://thriveworks.com/help-with/beginning-therapy/how-much-is-couples-therapy/,
+verbatim confirmed 2026-07-20. **This line only ships on the same screen as P3,
+which names the rate.** On its own it does not clear Grow Therapy's verified $75
+floor.
 
 **P2. Hero subtitle.**
+
 > The heart of Mend is free forever. Plus opens the full breadth.
 
-Backed by: the free tier defined in `docs/MONETIZATION.md` and shipped in
-`src/app/plus.tsx`. Product fact, not a research claim.
+Backed by: the free tier in `docs/MONETIZATION.md`, shipped in `src/app/plus.tsx`.
+Product fact, not a research claim.
 
-**P3. The cost panel, replacing the current copy.**
+**P3. The cost panel. Replaces the string currently shipping.**
+
 > A national therapy provider puts couples counseling at $150 to $250 a session
-> out of pocket, and a typical course runs eight to twenty sessions. Insurance
-> often will not cover it on its own, because plans pay to treat a diagnosed
-> condition in one person, and relationship trouble is not a diagnosis.
+> out of pocket, and a typical course at eight to twenty sessions. Insurance often
+> will not cover it on its own, because plans pay to treat a diagnosed condition
+> in one person, and relationship trouble is not a diagnosis.
 
-Backed by: Thriveworks for the rate and the eight to twenty course length
-(published 2025-11-06, accessed 2026-07-19); SimplePractice's billing guidance
-for the insurance sentence, which states coverage applies only "when the plan
-deems the treatment medically necessary to treat a diagnosis of one member" and
-that these services "are typically not covered by insurance when the purpose of
-therapy is solely relationship growth or communication skills"
-(https://www.simplepractice.com/blog/billing-couples-family-therapy/, accessed
-2026-07-19).
+Backed by: Thriveworks for both the rate and the eight to twenty session course
+(published 2025-11-06, verbatim confirmed 2026-07-20); SimplePractice for the
+insurance sentence, which states coverage applies only "when the plan deems the
+treatment medically necessary to treat a diagnosis of one member" and that these
+services are "typically not covered by insurance when the purpose of therapy is
+solely relationship growth or communication skills"
+(https://www.simplepractice.com/blog/billing-couples-family-therapy/, confirmed
+2026-07-20).
 
-Note: this replaces the shipped string "Couples counseling typically runs $100
-to $250 for a single session," which matches neither source exactly. Thriveworks
-says $150 to $250. Grow Therapy says $75 to $250. Pick one and attribute it.
+This replaces the shipped string "Couples counseling typically runs $100 to $250
+for a single session," which matches no source and is flagged Wrong in the honesty
+review (C4).
 
-**P4. The safety line under the cost panel, keep as shipped.**
-> Mend is not therapy and does not replace it. If you can see a counselor, see
-> one.
+**P4. The safety line under the cost panel. Ships exactly as written.**
 
-Backed by: the positioning guardrails in
-`docs/research/counseling-prices.md`. This line is not optional and does not get
-shortened. It is the whole reason we are allowed to talk about price at all.
+> Mend is not therapy and does not replace it. If you can see a counselor, see one.
 
-**P5. The low-cost pointer, add below P4.**
-> Lower-cost counseling exists. Nonprofit training clinics offer intern-led
-> sessions from $20 an hour, community health centers run sliding-scale
-> programs, and SAMHSA's free helpline at 1-800-662-4357 will point you to both.
+Backed by: the positioning guardrails in `docs/research/counseling-prices.md`,
+reaffirmed as a standing rule in `docs/review/honesty-review.md`. This line is not
+optional and does not get shortened. It is the reason we are allowed to discuss
+price at all.
 
-Backed by: Council for Relationships fee page, "CFR interns provide therapy for
-$20 to $90 per hour" (https://councilforrelationships.org/fees, accessed
-2026-07-19, page loaded directly); Federally Qualified Health Centers are
-required to run a sliding fee discount program under Section 330 of the Public
-Health Service Act
-(https://www.integration.samhsa.gov/pbhci-learning-community/Sliding_Fee_Scale_Requirements_for_Health_Centers.doc,
-accessed 2026-07-19); SAMHSA National Helpline
-(https://www.samhsa.gov/find-help/helplines/national-helpline, accessed
-2026-07-19).
+**P5. The low-cost pointer, below P4.**
 
-Add Open Path Collective to this line only after its numbers are re-verified in
-a browser.
+> Lower-cost counseling exists. Community health centers are required by federal
+> law to run sliding-scale fee programs, and nonprofit training clinics offer
+> intern-led sessions well under private-practice rates.
+
+Backed by: Section 330 of the Public Health Service Act sliding fee requirement
+(https://www.integration.samhsa.gov/pbhci-learning-community/Sliding_Fee_Scale_Requirements_for_Health_Centers.doc)
+and Council for Relationships (https://councilforrelationships.org/fees).
+**Both need one re-check before this ships** (honesty review C16 and the FQHC row
+above), which is why this version states no dollar figure. Once Council for
+Relationships is re-checked, "intern-led sessions from $20 an hour" may be
+substituted. Add the SAMHSA helpline number only after C20 is hand-verified. Add
+Open Path Collective ($65 one-time membership, $40 to $80 per couples session,
+verified 2026-07-20) only as a resource, never as a price we compare ourselves to.
 
 **P6. Under the plan picker.**
-> $4.00 a month, billed yearly. Cancel anytime.
 
-Backed by: $47.99 / 12 = $3.999. Arithmetic on our own price.
+> $8.25 a month, billed yearly. Cancel anytime.
 
-**P7. The honest-churn line, optional, use on the annual card.**
+Backed by: $99 / 12 = $8.25. Arithmetic on our own price. Already shipping in
+`PRICING.annual.perMonth`.
+
+**P7. On the annual card, optional.**
+
 > If Mend works and you stop needing it, cancel. That is the point.
 
-Backed by: product philosophy in `docs/MONETIZATION.md` ("designed to be
-deleted"). No research claim.
+Backed by: the "designed to be deleted" philosophy in `docs/MONETIZATION.md`. No
+research claim.
 
-**P8. Founding lifetime card, launch window only.**
-> Founding member, one payment, yours for good. Less than a single counseling
-> session at the $150 to $250 rate a national provider publishes.
+**P8. Annual savings, optional.**
 
-Backed by: $119.99 against Thriveworks' published $150 to $250 band (accessed
-2026-07-19). The rate must be named in this line, because $119.99 does not clear
-Grow Therapy's $75 low end.
+> $99 a year, or $9.99 a month. The yearly plan saves $20.88.
 
-### App Store description
+Backed by: 12 x $9.99 = $119.88, minus $99 = $20.88. Arithmetic on our own prices.
 
-**A1. Opening, first two lines.**
+### App Store listing
+
+**A1. Opening.**
+
 > Mend is a guided repair tool for couples. The five-stage journey, the guided
-> sessions, and the entire safety net are free forever.
+> sessions, the daily question, and the entire safety net are free forever.
 
-Backed by: product. `docs/MONETIZATION.md`.
+Backed by: `docs/MONETIZATION.md`. Product fact.
 
-**A2. The honesty paragraph. This is required, not optional.**
+**A2. The honesty paragraph. Required, not optional.**
+
 > Mend is an educational and practice tool. It is not therapy, it is not
-> counseling, and it is not delivered by licensed clinicians. It does not
-> diagnose or treat anything. If you are in crisis, or if there is violence or
-> fear in your relationship, Mend will show you the crisis lines first and it
-> will not ask you to pay for them.
+> counseling, and it is not delivered by licensed clinicians. It does not diagnose
+> or treat anything. If you are in crisis, or if there is violence or fear in your
+> relationship, Mend shows you the crisis lines first and never asks you to pay
+> for them.
 
-Backed by: the guardrails in `docs/research/counseling-prices.md`, and the
-category analysis in `docs/research/competitor-pricing.md`, which documents
-that the leading competitor's App Store subtitle is "Guided Relationship
-Counseling" while its own disclaimer says its materials "are not intended to,
-and do not constitute, medical, psychological, or mental health advice, or
-diagnosis" (https://apps.apple.com/us/app/lasting-marriage-couples/id1225049619,
-accessed 2026-07-19). Saying the plain thing is our position.
+Backed by: the guardrails in `docs/research/counseling-prices.md`; the standing
+rules restated in `docs/review/honesty-review.md` ("Nothing about the DV gate, the
+crisis resources, the educational tool, not therapy framing, or the per-track red
+flags may sit behind a paywall"); and the category analysis in
+`docs/research/competitor-pricing.md`, which documents that a leading competitor's
+App Store subtitle is "Guided Relationship Counseling" while its own disclaimer
+says its materials "are not intended to, and do not constitute, medical,
+psychological, or mental health advice, or diagnosis"
+(https://apps.apple.com/us/app/lasting-marriage-couples/id1225049619, accessed
+2026-07-19). Saying the plain thing is our position.
 
 **A3. Cost line for the description body.**
+
 > A course of in-person couples counseling typically runs eight to twenty
-> sessions, roughly $1,200 to $5,000 out of pocket. Mend Plus is $47.99 a year.
+> sessions, roughly $1,200 to $5,000 out of pocket. Mend Plus is $99 a year.
 
 Backed by: Thriveworks for eight to twenty sessions at $150 to $250 (published
-2025-11-06); Grow Therapy for $1,200 to $2,000 for a typical course and up to
-$5,000 for complex cases (updated 2026-06-24). Both accessed 2026-07-19. Two
-independent sources converge on roughly $1,200 at the low end.
+2025-11-06); Grow Therapy for $1,200 to $2,000 typical and about $5,000 for
+complex cases (updated 2026-06-24). Both confirmed 2026-07-20. Two independent
+sources converge on both ends.
 
-**A4. Insurance line, optional in the description, required if cost is
-mentioned twice.**
+**A4. Insurance line. Required if cost is mentioned more than once.**
+
 > Couples counseling often is not covered by insurance on its own, because plans
 > pay to treat a diagnosed condition in one person.
 
-Backed by: SimplePractice billing guidance (accessed 2026-07-19).
+Backed by: SimplePractice billing guidance, confirmed 2026-07-20.
 
 **A5. Inclusivity line.**
-> Built for every committed relationship. Married or not, living together or
-> not, any two people who want to do the work.
 
-Backed by: product scope. No research claim. Noted in
-`docs/research/competitor-pricing.md` as an open lane, since the category's
-verified positioning language is overwhelmingly marriage-framed.
+> Built for every committed relationship. Married or not, living together or not,
+> any two people who want to do the work.
 
-**A6. Free-tier line, near the in-app purchase disclosure.**
-> Mend Plus adds every card deck, the full game shelf, every seven-day
-> challenge, and complete healing-track programs. The journey, the safety net,
-> the daily question, and every track's red flags stay free.
+Backed by: product scope. No research claim. `docs/research/competitor-pricing.md`
+documents that the category's verified positioning language is overwhelmingly
+marriage-framed, which makes this both true and distinctive.
 
-Backed by: `docs/MONETIZATION.md`. Product fact. This line also does real work
-at App Review, because it shows the paywall does not sit in front of safety.
+**A6. Free-tier line, near the purchase disclosure.**
+
+> Mend Plus adds every card deck, the full game shelf, every seven-day challenge,
+> and complete healing-track programs. The journey, the safety net, the daily
+> question, the shared space, the plan, the pulse checks, and every track's red
+> flags stay free.
+
+Backed by: `docs/MONETIZATION.md`. Product fact, and it does real work at App
+Review because it shows the paywall does not sit in front of safety.
 
 ### Landing page
 
-**L1. Headline.**
+**L1. Headline.** Ships only with L2 on the same screen.
+
 > Repair costs less than you think.
 
-Backed by: nothing on its own, it is a claim of tone, and it is immediately
-substantiated by L2 directly beneath it. Never ship L1 without L2 on the same
-screen.
+Backed by: nothing on its own. It is tone, and L2 immediately substantiates it.
 
 **L2. Subhead, the substantiation.**
-> A national therapy provider puts couples counseling at $150 to $250 a session,
-> and a typical course at eight to twenty sessions. Mend Plus is $47.99 a year.
 
-Backed by: Thriveworks (published 2025-11-06, accessed 2026-07-19),
+> A national therapy provider puts couples counseling at $150 to $250 a session,
+> and a typical course at eight to twenty sessions. Mend Plus is $99 a year.
+
+Backed by: Thriveworks, published 2025-11-06, confirmed 2026-07-20,
 https://thriveworks.com/help-with/beginning-therapy/how-much-is-couples-therapy/.
 
-**L3. The comparison block, with the mandatory framing.**
-> One counseling session, at the low end of that range, costs more than three
-> years of Mend Plus. That is a price comparison and only a price comparison.
-> A counselor is a trained professional in the room with you. Mend is a
-> structured tool you use on your own time. If you can see a counselor, see one.
+**L3. The comparison block, with its mandatory framing.**
 
-Backed by: $47.99 x 3 = $143.97 against Thriveworks' $150 low end (accessed
-2026-07-19). The second half is the required framing from
-`docs/research/counseling-prices.md`.
+> One counseling session, at the low end of that range, costs more than a full
+> year of Mend Plus. That is a price comparison and only a price comparison. A
+> counselor is a trained professional in the room with you. Mend is a structured
+> tool you use on your own time. If you can see a counselor, see one.
 
-**L4. Insurance explainer.**
-> Insurance often will not cover couples counseling on its own. Plans pay to
-> treat a diagnosed condition in one person, and relationship trouble is not a
-> diagnosis. It can be covered when one partner has a mental health diagnosis
-> and the sessions are treating it, which means that partner carries the
-> diagnosis in their medical record. Coverage varies, so call your plan.
+Backed by: $99 against Thriveworks' $150 low end. The second half is the required
+framing and does not get cut.
+
+**L4. The subscription-competitor line, optional.**
+
+> A year of Mend Plus costs less than one week of Talkspace's couples plan, which
+> is $109 a week for up to four 30-minute video sessions a month for both partners
+> plus messaging. Those sessions are with a licensed therapist. Mend's are not
+> sessions with anyone.
+
+Backed by: https://www.talkspace.com/pricing, confirmed 2026-07-20 ($109/week,
+"Up to four 30 minute video sessions/month for you and your partner"). The 30
+minutes and the last sentence are both mandatory.
+
+**L5. Insurance explainer.**
+
+> Insurance often will not cover couples counseling on its own. US plans pay to
+> treat a diagnosed condition in one person, and a relationship problem is not a
+> diagnosis: the relationship code Z63.0 describes a circumstance and will not
+> carry a claim by itself. Couples sessions can be covered, billed under CPT
+> 90847, when one partner is named as the identified patient with a DSM-5
+> diagnosis and the sessions treat that condition. That means one partner ends up
+> with a mental health diagnosis in their medical record. Coverage varies, so call
+> your insurer.
 
 Backed by: SimplePractice, "Couples and family therapy CPT codes for billing"
-(https://www.simplepractice.com/blog/billing-couples-family-therapy/, accessed
-2026-07-19).
+(https://www.simplepractice.com/blog/billing-couples-family-therapy/); ICANotes,
+"How to bill for couples therapy"
+(https://www.icanotes.com/2023/07/07/how-to-bill-for-couples-therapy/); code
+description at https://www.aapc.com/codes/icd-10-codes/Z63.0. All confirmed
+2026-07-20. This is the honesty review's cleared wording, verbatim.
 
-**L5. Low-cost counseling block. Required on any page that mentions cost.**
-> If money is the obstacle, counseling still might not be. Nonprofit training
-> clinics offer intern-led sessions from $20 an hour. Community health centers
-> are required by federal law to run sliding-scale fee programs. SAMHSA's free
-> helpline, 1-800-662-4357, is open around the clock and will point you to both.
+**L6. Low-cost counseling block. Required on any page that mentions cost.**
 
-Backed by: Council for Relationships (https://councilforrelationships.org/fees,
-loaded directly, accessed 2026-07-19); Section 330 sliding fee requirement
-(https://www.integration.samhsa.gov/pbhci-learning-community/Sliding_Fee_Scale_Requirements_for_Health_Centers.doc,
-accessed 2026-07-19); SAMHSA National Helpline
-(https://www.samhsa.gov/find-help/helplines/national-helpline, accessed
-2026-07-19).
+> If money is the obstacle, counseling still might not be out of reach. Community
+> health centers are required by federal law to run sliding-scale fee programs,
+> nonprofit training clinics offer intern-led sessions well below private-practice
+> rates, and Open Path Collective lists couples sessions at $40 to $80 after a
+> one-time $65 membership.
 
-**L6. Safety block. Required on every page, above the fold on the pricing page.**
+Backed by: Section 330 sliding fee requirement (re-check pending); Council for
+Relationships (re-check pending, so no dollar figure yet); Open Path Collective
+$65 membership and $40 to $80 couples sessions, verified 2026-07-20 (honesty
+review C13). Do not add Open Path's $30 intern or $40 to $70 individual rates,
+which remain unverified.
+
+**L7. Safety block. Required on every page, above the fold on the pricing page.**
+
 > If you are in danger, none of this pricing matters. The National Domestic
-> Violence Hotline is 1-800-799-7233. The Suicide and Crisis Lifeline is 988.
-> Both are free.
+> Violence Hotline is 1-800-799-7233. The Suicide and Crisis Lifeline is 988. Both
+> are free.
 
-Backed by: `docs/research/counseling-prices.md` guardrails. These numbers are
-already shipped in the app's safety net.
+Backed by: https://www.thehotline.org and https://988lifeline.org, both fetched
+and verified 2026-07-20 (honesty review S1 and S11).
 
-**L7. What Plus is, in one line.**
-> Plus is breadth: every deck, every game, every challenge, every complete
-> track. It is not the difference between getting help and not.
+**L8. What Plus is, in one line.**
+
+> Plus is breadth: every deck, every game, every challenge, every complete track.
+> It is not the difference between getting help and not.
 
 Backed by: `docs/MONETIZATION.md`.
 
@@ -418,116 +489,128 @@ Backed by: `docs/MONETIZATION.md`.
 
 ## 4. Never say this
 
-This list is binding. If a line is on it, it does not ship, no matter who wrote
-it or how well it converts. Anything in this category that overstates itself
-does not just risk App Review, it risks doing real harm to a person deciding
-whether to see a professional.
+Binding. If a line is on this list it does not ship, no matter who wrote it or how
+well it converts. In this category, overstatement does not merely risk App Review.
+It risks changing whether a real person goes to see a professional.
 
-### Clinical and outcome claims. All prohibited.
+### Clinical and outcome claims. All prohibited, without exception.
 
-1. **"As effective as therapy."** Or "just as good as," "the same as," "a
-   replacement for," "instead of." We have demonstrated no clinical efficacy and
-   will not imply any.
-2. **"Clinically proven," "evidence-based," "research-backed," "counseling-grade"
-   as an efficacy claim.** We have not run a trial. `docs/MONETIZATION.md` uses
-   "counseling-grade" internally to describe production quality. It must never
-   appear in shipped copy as a claim about results.
-3. **"Saves marriages," "fixes your relationship," "prevents divorce," "X% of
-   couples improve."** No outcome claims of any kind, hedged or not.
-4. **Any success rate, satisfaction rate, or improvement percentage.** We have
-   no methodology. Note that a leading competitor publishes "89% see positive
-   changes in their relationship in 3 months" with no linked methodology
-   (`docs/research/competitor-pricing.md`, accessed 2026-07-19). We do not copy
-   that behavior and we do not cite it.
-5. **"Therapy," "counseling," "therapist," or "counselor" as a description of
-   what Mend does or provides.** We may say those words when pointing someone
-   toward a real professional. We may never use them as a label for our own
-   product, our sessions, our tracks, or our decks.
-6. **Any citation of research literature or effect sizes.** The primary sources
-   could not be read during research
-   (`docs/research/counseling-prices.md`, do-not-claim item 11). We cite
-   practice pricing pages, not studies.
+1. **"As effective as therapy."** And every cousin: "just as good as," "the same
+   as," "a replacement for," "instead of," "so you don't need therapy." Mend has
+   demonstrated no clinical efficacy and will not imply any. This is the single
+   most important line on the list.
+2. **"Clinically proven," "clinically validated," "evidence-based,"
+   "research-backed," "science-backed," "counseling-grade"** as claims about
+   results. `docs/MONETIZATION.md` uses "counseling-grade" internally to describe
+   production quality; it never ships as a claim about outcomes.
+3. **"Saves marriages," "fixes your relationship," "prevents divorce," "heals
+   your relationship."** No outcome claims of any kind, hedged or not.
+4. **Any success rate, satisfaction rate, or improvement percentage about Mend.**
+   We have no methodology and no outcome data. Note that a leading competitor
+   publishes "89% see positive changes in their relationship in 3 months" with no
+   linked methodology (`docs/research/competitor-pricing.md`). We do not copy that
+   behavior and we do not cite it.
+5. **"Therapy," "counseling," "therapist," or "counselor" as a description of what
+   Mend is or provides.** We use those words only when pointing someone toward a
+   real professional. Never as a label for our product, our sessions, our tracks,
+   or our decks.
+6. **Any citation of research literature, effect size, or study.** The honesty
+   review found the entire research layer either unverified or requiring hand
+   confirmation, and it rules that "Mend has no outcome data of its own. No
+   success rate, no improvement percentage, and no claim that any research effect
+   size applies to Mend." We cite practice pricing pages, not studies.
+7. **Any claim or implication that a quiz, a pulse score, or a behavior predicts
+   whether a relationship will end.** Standing rule from
+   `docs/review/honesty-review.md`, binding across every surface.
+8. **The 86% / 33% "turning toward" pair, the 5:1 ratio as a causal claim, "90+
+   percent divorce prediction accuracy," and "81% of marriages self destruct."**
+   All ruled unpublishable. They circulate constantly and will resurface in
+   drafts.
 
 ### Cost claims that are not verifiable
 
-7. **"41% of couples cite cost as a barrier (KFF, 2021)."** Could not be located
-   in any KFF publication. Appears only on content-farm aggregators. Looks
-   fabricated. Never publish.
-8. **"35% of couples are unable to afford therapy (Pew, 2022)."** Same. No
-   matching Pew publication exists. Never publish.
-9. **Any figure sourced to worldmetrics.org, wifitalents.com, costinsighthub.com,
-   carecostindex.com, costtrends.org, nationalmentalhealthsupport.com, or any
-   similar statistics or cost-guide domain.** No methodology, no named authors,
-   no primary data, and mutually contradictory numbers across sites.
-10. **"The national average cost of couples therapy is $X."** No organization
+9. **"41% of couples cite cost as a barrier (KFF, 2021)."** Not located in any KFF
+   publication. Appears only on content-farm aggregators. Looks fabricated. The
+   honesty review independently concurs (C19).
+10. **"35% of couples are unable to afford therapy (Pew, 2022)."** Same. No
+    matching Pew publication exists.
+11. **Any figure sourced to worldmetrics.org, wifitalents.com, costinsighthub.com,
+    carecostindex.com, costtrends.org, nationalmentalhealthsupport.com, or any
+    similar "statistics" or "cost guide" domain.** No methodology, no named
+    authors, no primary data, mutually contradictory numbers.
+12. **"The national average cost of couples therapy is $X."** No organization
     publishes an audited national average for couples therapy specifically.
-    Range plus attribution, always.
-11. **"$139 is the average cost of couples therapy."** That figure is individual
-    psychotherapy CPT codes only and excludes the couples code 90847
-    (SimplePractice, accessed 2026-07-19). Mislabeling it is a factual error.
-12. **A specific rural versus urban dollar gap.** Only content-farm sourcing
-    exists, and the real state-level data cuts against the simple story: the
-    highest state average is North Dakota at $227 (SimplePractice, accessed
-    2026-07-19).
-13. **"Employee Assistance Programs cover 3 to 8 free couples sessions."** No
-    authoritative source for that range. EAP benefits vary enormously by
-    employer. Do not state a number.
-14. **"Talkspace starts at $436 a month."** Conflicts with Talkspace's own
-    public pricing page, which says $109 per week
-    (https://www.talkspace.com/pricing, accessed 2026-07-19). Use $109.
-15. **Any single price for Paired, Lasting, Coral, Evergreen, or Blueheart.**
-    Those are App Store SKU ranges under active price testing, not list prices
-    (`docs/research/competitor-pricing.md`). Quote a range or say pricing is
-    personalized.
-16. **Any OurRitual price.** Not published. Third-party figures do not
-    reconcile.
-17. **Any Open Path Collective figure, until it is re-verified in a browser.**
-    The site returned HTTP 403 to automated fetch on 2026-07-19.
-18. **Any Ours figure, until it is re-verified in a browser.** The site refused
-    the connection on 2026-07-19.
-19. **A session length for Regain.** Regain's own page does not state one.
+13. **"$100 to $250 per session."** No source publishes that band. It is a blend
+    that drops Grow Therapy's verified $75 floor. Ruled Wrong (C4). This string is
+    currently shipping in `src/app/plus.tsx` and must be replaced with P3.
+14. **"$1,800 to $7,500 for a full course."** Ruled Wrong. Overstates both ends by
+    50 percent. The correct figure is $1,200 to $5,000.
+15. **"$139 is the average cost of couples therapy."** That SimplePractice figure
+    covers individual psychotherapy CPT codes only and excludes couples code
+    90847, and the honesty review left it Unverified (C15). If an
+    individual-therapy figure is ever needed, use Thriveworks' verified $143 and
+    label it "individual therapy," never couples.
+16. **"Talkspace is about $99 a week"** in any couples context. $99 is the
+    individual plan. Couples is $109 a week.
+17. **"Regain is $70 to $100 per week"** or any Regain session length. Regain
+    publishes per session and states no length.
+18. **BetterHelp in any couples price comparison** without the sentence that
+    BetterHelp does not offer couples therapy and routes couples to Regain.
+19. **Any single price for Paired, Lasting, Coral, Evergreen, or Blueheart.**
+    Those are App Store SKU ranges under active price testing, not list prices.
+    Blueheart may be dormant and stays out of comparisons entirely.
+20. **Any OurRitual price.** Not published; third-party figures do not reconcile.
+21. **Any figure from Ours (withours.com).** The site was unreachable to both the
+    research pass and the review pass. Ruled do-not-publish (C14, P3).
+22. **A specific rural versus urban dollar gap.** Only content-farm sourcing
+    exists, and real state-level data cuts against the simple story.
+23. **"Employee Assistance Programs cover 3 to 8 free couples sessions."** No
+    authoritative source for that range.
+24. **Open Path's $30 intern rate or $40 to $70 individual rate**, and the SAMHSA
+    helpline number, until each clears its own check.
 
-### Savings claims that depend on assumptions we cannot support
+### Savings claims that rest on assumptions we cannot support
 
-20. **"Save $2,000 a year."** Or any dollar figure of savings. It assumes the
+25. **"Save $2,000 a year,"** or any dollar figure of savings. It assumes the
     person would otherwise have paid for counseling, and would have stopped
-    because of Mend. Both assumptions are unverifiable, and the second one is
-    the exact thing we do not want to be true.
-21. **"Replaces N sessions of counseling."** Mend does not replace any session.
-22. **"Cheaper than therapy" without naming what each buys.** A bare price
-    comparison implies equivalence. State session length and session count, or
-    do not run the comparison.
-23. **"Insurance doesn't cover couples counseling."** False as an absolute. Say
+    because of Mend. Both assumptions are unverifiable, and the second is the
+    thing we least want to be true.
+26. **"Replaces N sessions of counseling."** Mend replaces zero sessions.
+27. **"Cheaper than therapy" without naming what each side buys.** A bare price
+    comparison implies equivalence.
+28. **"Insurance doesn't cover couples counseling."** False as an absolute. Say
     "often is not covered on its own."
-24. **Any comparison that positions Mend against Open Path, community health
-    centers, training clinics, or the SAMHSA helpline.** Those are the paths we
-    send people toward. We never compete with them on price.
+29. **Any comparison positioning Mend against Open Path, community health centers,
+    training clinics, or the SAMHSA helpline.** Those are the paths we send people
+    toward.
 
-### Pressure and framing
+### Pressure, fear, and framing
 
-25. **Urgency or scarcity around a relationship in trouble.** No countdown
-    timers, no "your relationship can't wait," no "prices go up in 24 hours."
-    The founding lifetime offer may say it is limited to the launch window,
-    stated once, plainly, with no timer.
-26. **Any implication that not paying means not getting help.** The free tier is
-    the spine and it stays complete. Copy that implies otherwise is false about
-    our own product.
-27. **Fear framing about divorce, abandonment, or a partner leaving.**
-28. **Any claim that Mend is a substitute for medical care, medication, or
+30. **Urgency or scarcity aimed at a relationship in trouble.** No countdown
+    timers, no "your relationship can't wait," no "price goes up tonight."
+31. **Any implication that not paying means not getting help.** The free tier is
+    the complete spine. Copy that implies otherwise is false about our own
+    product.
+32. **Fear framing about divorce, abandonment, or a partner leaving.**
+33. **Any claim that Mend substitutes for medical care, medication, or
     professional crisis support.**
+34. **Any paywall, upsell, interstitial, or "upgrade to continue" placed in front
+    of, or in the path to, a crisis resource, the domestic violence gate, a red
+    flag screen, or a "when to see a professional" screen.** Not a copy rule, a
+    build rule, and it is absolute.
 
 ---
 
 ## 5. Free versus Plus
 
-This section is a restatement of `docs/MONETIZATION.md`. If the two ever
-disagree, `docs/MONETIZATION.md` wins and this section gets corrected.
+A restatement of `docs/MONETIZATION.md`. If the two ever disagree,
+`docs/MONETIZATION.md` wins and this section gets corrected.
 
 ### Free forever, no exceptions
 
 - The five-stage journey, start to graduation
 - Guided sessions, including the flooding break and the timed floor
-- **The entire safety net: crisis lines, red flags, get-help-now, the domestic
+- **The entire safety net: crisis lines, red flags, get-help-now, and the domestic
   violence gate**
 - The daily question
 - The shared space
@@ -537,8 +620,8 @@ disagree, `docs/MONETIZATION.md` wins and this section gets corrected.
 - The quiz, in full, always. The journey requires both partners to take it, and
   the journey is the free spine
 - Every healing track's first session
-- **Every healing track's red flags and its "when to see a professional"
-  content, in every track, always**
+- **Every healing track's red flags and its "when to see a professional" content,
+  in every track, always**
 - The First Steps deck and the Repair deck, which is the crisis deck
 - The "Do you still know me?" game
 - The starter week challenge, and the crisis week challenge, "The last line"
@@ -546,74 +629,130 @@ disagree, `docs/MONETIZATION.md` wins and this section gets corrected.
 ### Mend Plus adds
 
 - Every card deck beyond First Steps and Repair
-- The full game shelf
+- The full game shelf beyond "Do you still know me?"
 - Every seven-day challenge beyond the starter week and "The last line"
 - Complete healing-track programs beyond each track's first session
 - Everything new we build, first
 
 ### The rules that govern the split
 
-1. **Money never gates safety.** Not the crisis lines, not the domestic violence
-   gate, not the red flags, not any track's "when to see a professional"
-   content. This is not a launch-period concession. It is permanent.
+1. **Money never gates safety.** Not the crisis lines, not the DV gate, not the
+   red flags, not any track's "when to see a professional" content. Permanent, not
+   a launch-period concession.
 2. **Nothing in a pricing or upsell flow may sit in front of, delay, or obscure
-   safety content.** No paywall interstitial before a crisis resource. No
-   "upgrade to continue" on a red-flag screen. If a screen has any chance of
-   being the screen someone reaches in a bad moment, it has no paywall on it.
+   safety content.** If a screen has any chance of being the screen someone
+   reaches in a bad moment, it carries no paywall.
 3. **The couple in acute crisis never hits a paywall on the way to stability.**
-   That is what the crisis deck, the crisis week challenge, and the free first
-   session of every track are for.
+   That is what the crisis deck, the crisis week challenge, and every track's free
+   first session exist for.
 4. **Plus is breadth and depth, never rescue.** If a Plus feature ever becomes
    load-bearing for someone's safety, it moves to free. No discussion.
 5. **No ads, ever.** A couple in crisis is not inventory.
-6. **No selling or sharing relationship data in any form.**
+6. **No selling or sharing relationship data, in any form.**
+7. **Nothing here assumes marriage, legal status, cohabitation, children, or any
+   particular genders.** Copy that does is a bug.
 
-### Open decision: does one subscription cover both partners
+### Open decision, unchanged: does one subscription cover both partners
 
-`docs/MONETIZATION.md` does not specify this. The verified category norm is
-couple-linked single-payer: Paired's own support documentation states that "if
-one partner purchases a Paired Premium subscription, premium access will
-automatically be granted to the other's Paired account"
+The verified category norm is couple-linked single-payer. Paired's own support
+documentation states that "if one partner purchases a Paired Premium subscription,
+premium access will automatically be granted to the other's Paired account"
 (https://support.paired.com/en/articles/164624-does-my-partner-have-to-pay-to-use-paired-premium-as-well,
-accessed 2026-07-19), and Relish, Lasting, Evergreen, Coral, and Love Nudge all
-follow the same model
-(`docs/research/competitor-pricing.md`, accessed 2026-07-19).
-
-**Recommendation: one Plus subscription unlocks both linked partners.** Mend's
-core loop already requires two people, charging twice for one shared journey
-contradicts the brand, and the paying partner becomes the distribution channel.
-This is an owner decision with an engineering consequence, since
-`mend_entitlements` is currently keyed per account. It is not decided here.
+accessed 2026-07-19), and Relish, Lasting, Evergreen, Coral, and Love Nudge follow
+the same model. Mend's core loop already requires two people, and charging twice
+for one shared journey contradicts the brand. This is an owner decision with an
+engineering consequence, since `mend_entitlements` is keyed per account. It is not
+decided here, and it does not change the prices.
 
 ---
 
-## 6. Wiring notes and open items
+## 6. Owner checklist: switching Stripe from test mode to live
 
-1. **`src/lib/premium.tsx`** ships `PRICING` at `$9.99` monthly and `$99`
-   annual. Change to `$7.99` and `$47.99`, with `perMonth` reading
-   "$4.00 a month, billed yearly." Stripe's `STRIPE_PRICE_MONTHLY` and
-   `STRIPE_PRICE_ANNUAL` must change in the same shipment, since Stripe is what
-   actually charges.
-2. **`src/app/plus.tsx`** carries the string "Couples counseling typically runs
-   $100 to $250 for a single session." That range matches neither source
-   exactly. Replace with P3 above.
-3. **No lifetime SKU exists in code.** `Plan` is `"monthly" | "annual"`. The
-   founding lifetime needs a third plan, a Stripe one-time price, and a
-   permanent entitlement write rather than a subscription.
-4. **P5, the low-cost pointer, is not in the paywall yet.** It should be, and it
-   belongs on any surface that mentions what counseling costs.
-5. **Payment rails.** `docs/MONETIZATION.md` describes Apple In-App Purchase.
-   `src/app/plus.tsx` and `src/lib/premium.tsx` implement Stripe Checkout
-   opened in the browser, citing Guideline 3.1.1(a) link-outs on the US
-   storefront. These two documents disagree. That is an owner and App Review
-   decision, not a pricing decision, but it needs resolving before the paywall
-   goes live, and the prices above work under either rail.
-6. **Re-verification gate before any of this ships publicly.** Open Path
-   Collective and Ours both need a manual browser check. Every other figure in
-   section 1 should be re-checked before a major marketing push and at minimum
-   every six months. Online therapy pricing moves fast: BetterHelp's own pricing
-   page was updated 2026-07-08, eleven days before the research was compiled.
-7. **Whoever edits marketing copy after this** works from section 3 only. If a
-   number is needed that is not in section 1, it gets researched and added to
-   `docs/research/counseling-prices.md` with a source URL and an access date
-   first. No exceptions, including for a number that "everyone knows."
+The prices are already configured in test mode at $9.99 a month and $99 a year.
+This is the sequence to charge real money. Do them in order.
+
+1. **Activate the Stripe account.** Business details, bank account for payouts,
+   tax details, and identity verification. Until activation clears, live keys do
+   not exist. Confirm the account shows "Activated" and payouts are enabled.
+2. **Create the two live-mode prices.** Test-mode products and prices do not carry
+   over. In live mode, create the Mend Plus product with a **$9.99 monthly**
+   recurring price and a **$99 yearly** recurring price. Confirm the currency is
+   USD and both are recurring, not one-time. Copy the two live price IDs
+   (`price_...`).
+3. **Set the live secrets on the checkout function.** The `mend-checkout` Supabase
+   edge function reads `STRIPE_PRICE_MONTHLY` and `STRIPE_PRICE_ANNUAL`. Replace
+   both with the live price IDs, and replace the Stripe secret key with the live
+   key (`sk_live_...`). Nothing in the client holds a Stripe key, and it stays
+   that way.
+4. **Create the live webhook endpoint.** Stripe Dashboard, live mode, pointing at
+   the Supabase webhook function. Subscribe to at minimum
+   `checkout.session.completed`, `customer.subscription.updated`,
+   `customer.subscription.deleted`, and `invoice.payment_failed`. Copy the live
+   signing secret (`whsec_...`) into the function's environment and confirm the
+   handler rejects unsigned or badly signed requests.
+5. **Confirm the entitlement path end to end in live mode.** The webhook, and only
+   the webhook, writes `mend_entitlements`, keyed by Supabase user id, and
+   `mend_my_tier()` stays the single source of truth the client reads. The client
+   must never be able to grant itself Plus. Verify by running a real card through
+   checkout, watching the row appear, and watching the app flip to Plus on
+   refresh.
+6. **Confirm cancellation and downgrade.** Cancel that live subscription and
+   verify the tier drops back to free at period end, that the app handles the
+   downgrade without losing the user's data, and that no safety content or free
+   spine feature is affected in either direction.
+7. **Turn on the customer portal in live mode**, so "cancel anytime" is literally
+   true and one click away, and link it from Settings. Copy that promises
+   cancellation must be backed by a working cancel path.
+8. **Set the billing surface details**: statement descriptor that reads clearly on
+   a shared bank statement (this matters more than usual for a relationship app on
+   a joint account), receipt emails on, and Stripe Tax configured if it is being
+   used.
+9. **Update the displayed prices only if Stripe changes.** `PRICING` in
+   `src/lib/premium.tsx` currently reads `$9.99` monthly and `$99` annual with
+   "$8.25 a month, billed yearly," which matches the live prices above. If those
+   ever diverge, Stripe wins and the constant gets corrected in the same shipment.
+10. **Replace the P3 cost string in `src/app/plus.tsx`.** The shipped "$100 to
+    $250" line is ruled Wrong and must not go live with the paywall. Add P5 while
+    that file is open.
+11. **Flip `PLUS_PREVIEW` to `false`** in `src/lib/premium.tsx` and ship the
+    build. Until that flips, every tester has Plus and no purchase is required or
+    real.
+12. **Resolve the payment-rail question before the paywall goes public.**
+    `docs/MONETIZATION.md` describes Apple In-App Purchase under Guideline 3.1.1.
+    `src/lib/premium.tsx` and `src/app/plus.tsx` implement Stripe Checkout opened
+    in the browser, citing the US-storefront link-out allowance. Those two
+    documents disagree. It is an owner and App Review decision, not a pricing
+    decision, and $9.99 / $99 works under either rail. Update the App Review notes
+    and the App Privacy answers for whichever rail ships.
+13. **Run the safety pass on the live paywall before submitting.** Walk the crisis
+    deck, the DV gate, every track's red flags, and every "when to see a
+    professional" screen while signed in as a free account, and confirm not one of
+    them shows a paywall, an upsell, or a Plus badge in the path.
+
+---
+
+## 7. Verification gates and open items
+
+These block publication, not development.
+
+1. **Council for Relationships** ($20 to $90 per hour) needs one re-check before
+   any dollar figure appears in P5 or L6 (honesty review C16).
+2. **The Section 330 FQHC sliding-fee citation** and the **HRSA locator** need one
+   re-check. The claim in P5 and L6 is written to survive without a number in the
+   meantime.
+3. **The SAMHSA National Helpline number** must be hand-verified to crisis-line
+   standard before it ships anywhere (C20). The DV Hotline and 988 are already
+   verified and carry L7 on their own.
+4. **Ours (withours.com)** stays unpublishable until someone loads the site in a
+   browser (C14, P3).
+5. **SimplePractice's $139** stays out of copy. If an individual-therapy number is
+   needed, Thriveworks' $143 is the verified one, labeled as individual.
+6. **Every pricing figure in section 1 gets re-checked before any major marketing
+   push, and at minimum every six months.** This category moves fast: BetterHelp
+   updated its own pricing page 2026-07-08, eleven days before the research was
+   compiled, and Grow Therapy updated on 2026-06-24.
+7. **Anyone editing marketing copy works from section 3 only.** If a number is
+   needed that is not in section 1, it gets researched, added to
+   `docs/research/counseling-prices.md` with a source URL and an access date, and
+   run past the standard in `docs/review/honesty-review.md` first. No exceptions,
+   including for a number that "everyone knows." Blank beats invented.

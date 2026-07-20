@@ -10,6 +10,22 @@
  * Safety note for anyone editing: threatening to out a partner is a control
  * tactic, not a fight, and it stays in seekHelp. Nothing in this file may be
  * paywalled, softened, or removed.
+ *
+ * Voice rule: this is written from inside the experience, for that reader. It
+ * never explains queer life to a straight onlooker, never treats a queer
+ * relationship as the variation on a norm, and never uses "we" to mean the
+ * app's authors talking about a group. Crisis lines named here are US ones and
+ * are labeled as such, because an unlabeled US number is a dead end for
+ * everyone else.
+ *
+ * KNOWN GAP, do not let it stand (inclusivity review, 2026-07-20): both tracks
+ * in this file are organized around pressure from outside, so the only queer
+ * content in the product is content about being harmed. A queer couple whose
+ * problem is an ordinary one currently has to read themselves into a track
+ * written for a straight couple. The backlog item is a third track here with no
+ * hostility in it at all: desire, division of labor, money, or the long middle,
+ * written for two queer people and nobody else. Until it exists, do not add
+ * another suffering-shaped track to this file.
  */
 
 import type { Track } from "./tracks";
@@ -119,10 +135,10 @@ export const queerTracks: Track[] = [
       "One visible thing in a space we fully control, chosen together, that says this is real",
     ],
     seekHelp: [
-      "Your partner threatens to out you, or hints that they might, to win an argument or keep you from leaving. That is a control tactic, not a fight, and it needs someone outside the relationship. The Trevor Project (thetrevorproject.org) and Trans Lifeline (translifeline.org) are two starting points, and the LGBT National Help Center takes calls from any age.",
-      "Your partner monitors your phone, accounts, or whereabouts, or decides who you are allowed to see. Isolation lands harder when the people you could have called are already gone.",
-      "A family member's contact has moved past disapproval into threats, showing up, or contacting your job. That is a safety matter, not a relationship matter.",
-      "Concealment has turned into panic attacks, drinking to get through family events, not sleeping, or thoughts of ending your life. Individual therapy with a therapist who works with LGBTQ+ clients treats what a conversation between the two of you cannot.",
+      "Your partner threatens to out you, or hints that they might, to win an argument or keep you from leaving. That is a control tactic, not a fight, and it needs someone outside the relationship. In the US, the National Domestic Violence Hotline is 800-799-7233 or text START to 88788. The Trevor Project (thetrevorproject.org) and Trans Lifeline (translifeline.org) are two more starting points, and the LGBT National Help Center takes calls from any age. Those particular lines may not reach you from outside the US, so if you are somewhere else, look for an LGBTQ+ helpline or a domestic violence service in your own country. There is almost always one, and using it is not an overreaction.",
+      "Your partner monitors your phone, accounts, or whereabouts, demands your passwords, or decides who you are allowed to see. Isolation lands harder when the people you could have called are already gone. Go to the safety page.",
+      "A family member's contact has moved past disapproval into threats, showing up, or contacting your job. That is a safety matter, not a relationship matter. In an emergency in the US, call 911.",
+      "Concealment has turned into panic attacks, drinking to get through family events, not sleeping, or thoughts of ending your life. If you are thinking about suicide, call or text 988 now, not later. Once you are steady, individual therapy with a therapist who works with LGBTQ+ clients treats what a conversation between the two of you cannot.",
       "Every version of this conversation now ends in the same ultimatum. A couples therapist can hold a negotiation that has stopped being possible in your kitchen.",
       "You are being pushed toward a disclosure you have not agreed to, by your partner or by anyone else. Bring in a professional before you bring in your family. Mend is a structured conversation tool, not therapy or care.",
     ],
@@ -136,7 +152,7 @@ export const queerTracks: Track[] = [
     feelings: [
       {
         label: "If your family is gone or hostile",
-        body: "You have probably learned to say it lightly, because the full version makes people uncomfortable. Underneath, there is a specific loneliness: no one who remembers you as a kid, no one obligated to show up, no default plan for the last week of December. You may also be carrying something you would not say to your partner, which is a fear of needing them too much and using them up. Needing people is not a defect you have to manage quietly. It is what the roster is for.",
+        body: "You have probably learned to say it lightly, because the full version makes people uncomfortable. Underneath, there is a specific loneliness: no one who remembers you as a kid, no one obligated to show up, and nowhere to be on whatever the big family days are where you live. You may also be carrying something you would not say to your partner, which is a fear of needing them too much and using them up. Needing people is not a defect you have to manage quietly. It is what the roster is for.",
       },
       {
         label: "If your family is still there, with conditions",
@@ -154,6 +170,7 @@ export const queerTracks: Track[] = [
       "Be family back. A roster built only on what you need from people quietly turns into a list of people avoiding you. Reciprocity is the whole engine.",
       "Grief here is not a phase you complete. It comes back on birthdays, weddings, diagnoses, and the first time someone asks who to call.",
       "Fights about holidays and chores are often the load talking. Check for the load before you litigate the dishes.",
+      "Chosen family is a tradition, not a consolation prize. Queer people have been building kinship out of friends, exes, elders, and neighbors for a very long time, and the version you are making is a real family with its own history behind it, not a patch over the one you did not get.",
     ],
     sessions: [
       {
@@ -216,21 +233,22 @@ export const queerTracks: Track[] = [
         focus:
           "Two hard tests: high days and crisis days. Plan both now, while nothing is on fire. If any of the legal pieces apply where you live, note them here and take that part to a lawyer rather than guessing.",
         prompts: [
-          "What do we want the December stretch to look like, built by us instead of survived?",
+          "Whatever the big family stretch is on our calendar, what do we want it to look like, built by us instead of survived?",
           "If one of us went to the hospital tonight, who gets called, and who is listed on the form?",
           "Which practical protections, if any, do we need to look into for where we live, and who is finding out?",
           "What is our plan for the birthdays and anniversaries nobody else remembers?",
         ],
       },
       {
-        title: "The grief that comes back",
+        title: "The grief, and what you built anyway",
         focus:
-          "Make room for the part that does not get fixed by a good roster. The goal is for each of you to be able to say it out loud without the other rushing to solve it.",
+          "Two halves, in this order. First, make room for the part that does not get fixed by a good roster, with each of you able to say it out loud without the other rushing to solve it. Then spend the same amount of time on the thing you have actually made, because a life that gets discussed only as a wound stops being visible to the people living it.",
         prompts: [
           "What do I still grieve about the family I came from?",
           "What sets it off in me that you might not see coming?",
           "When it hits, what do I want from you: company, distraction, space, or just being believed?",
           "What have we built that I am genuinely proud of, that nobody handed us?",
+          "What is good about this life that has nothing to do with what it cost to get here?",
         ],
       },
     ],
@@ -238,14 +256,15 @@ export const queerTracks: Track[] = [
       "A standing monthly dinner or call with one person outside the two of you, on the calendar, that does not depend on anybody feeling social that week",
       "A written emergency list on both phones: who to call, in what order, and who to tell what",
       "A pre-visit and post-visit ritual around any contact with a family of origin, agreed in advance, including a way to leave early with no argument",
-      "A December plan made in October, built around what the two of you actually want instead of what is left over",
+      "A plan for the hardest family stretch of your year, made two months before it arrives and built around what the two of you actually want instead of what is left over",
       "One deliberate act of showing up for someone else each month, so the roster runs both directions",
     ],
     seekHelp: [
-      "A family member's contact has escalated into threats, stalking, showing up uninvited, or contacting your workplace. That is a safety issue and it needs police, a lawyer, or an advocate, not a better conversation.",
+      "Your partner threatens to out you, or hints that they might, to keep you close to them and away from everyone else. Outing is a control tactic, not a fight, and it is especially effective when your family of origin is already gone. Go to the safety page. In the US, the National Domestic Violence Hotline is 800-799-7233 or text START to 88788.",
+      "A family member's contact has escalated into threats, stalking, showing up uninvited, or contacting your workplace. That is a safety issue and it needs police, a lawyer, or an advocate, not a better conversation. In an emergency in the US, call 911.",
       "Your partner is steering you away from your friends or your chosen family, or making the cost of seeing them high enough that you stopped. Isolation is a control tactic, and it works fastest on people whose family is already gone.",
       "Contact with your family reliably leaves you unable to function for days, or brings back memories of childhood harm. Trauma-focused individual therapy is the right tool for that, and it is not something a couple can process alone.",
-      "Either of you is drinking or using more to get through family contact or the holidays, or is having thoughts of not wanting to be here. Get individual help now. The Trevor Project (thetrevorproject.org), Trans Lifeline (translifeline.org), and the LGBT National Help Center are places to start if you want someone who will not need the basics explained.",
+      "Either of you is drinking or using more to get through family contact or the holidays, or is having thoughts of not wanting to be here. If you are thinking about suicide, call or text 988 now. The Trevor Project (thetrevorproject.org), Trans Lifeline (translifeline.org), and the LGBT National Help Center are places to start if you want someone who will not need the basics explained. If you are outside the US, those lines may not reach you, and an LGBTQ+ service in your own country is the equivalent.",
       "You are being asked to care for a parent who harmed you, and the two of you cannot get through the conversation without it turning into a fight about loyalty. A therapist can hold that in a way this app cannot.",
       "One of you has become the other's only relationship, and every attempt to widen the circle ends in a fight. That pattern needs a professional set of eyes. Mend is a structured conversation tool, not therapy or care.",
     ],

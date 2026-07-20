@@ -21,7 +21,7 @@ export const extraChallenges: Challenge[] = [
     title: "Seven Calls",
     tagline: "Seven days of small acts that make the distance smaller.",
     forWhom:
-      "For couples living apart: different cities, deployments, travel seasons, or a stretch of months you did not choose. Works even if one of you is busier, worse at texting, or on the wrong side of the clock.",
+      "For couples living apart: different cities, deployments, travel seasons, or a stretch of months you did not choose. Works even if one of you is busier, worse at texting, or on the wrong side of the clock. None of these days ask you to account for where you were or who you were with. If distance is being used to check up on you, this is the wrong tool and the safety resources in this app are the right place to start.",
     days: [
       {
         title: "Name the window",
@@ -35,12 +35,12 @@ export const extraChallenges: Challenge[] = [
       },
       {
         title: "Ten minutes, no logistics",
-        task: "Call or video for ten minutes with a rule: nothing about money, schedules, flights, or the plan. If it goes quiet, let it be quiet.",
+        task: "Take ten minutes on whatever channel you have, call, video, sign, or a back-and-forth of voice notes, with one rule: nothing about money, schedules, flights, or the plan. If it goes quiet, let it be quiet.",
         why: "When all your talk time is spent on coordination, you slowly become project managers who miss each other.",
       },
       {
         title: "Ask about what you cannot see",
-        task: "Ask one question about a part of their life you have no window into: the coworker they keep mentioning, the route they walk, what their apartment sounds like at night. Ask one follow-up.",
+        task: "Ask one question about a part of their life you have no window into: what the coffee is like there, what their apartment sounds like at night, what the best part of their week looked like. Ask one follow-up. This is curiosity, not an account of their movements, so if it starts to feel like being checked on, say so and drop it.",
         why: "People apart drift because their days stop being imaginable to each other, and a follow-up question is how you get the picture back.",
       },
       {
@@ -50,8 +50,8 @@ export const extraChallenges: Challenge[] = [
       },
       {
         title: "Send something physical",
-        task: "Put one physical thing in the mail or in a delivery: a card, a snack they like, a photo, a cheap paperback. It does not need to be clever or expensive.",
-        why: "Something they can hold outlasts a message they will scroll past, and it proves you thought about them on a day they could not see you.",
+        task: "Send one thing they get to keep. Posted, if postage is easy where you are: a card, a snack they like, a photo, a cheap paperback. If postage is not in the budget, or the border makes it a nightmare, make something instead: a playlist, a photo of a note in your handwriting, a voice memo they can save, a drawing that is objectively bad. Cost is not the variable here.",
+        why: "Something they can keep outlasts a message they will scroll past, and it proves you thought about them on a day they could not see you.",
       },
       {
         title: "Put the next one on the calendar",
@@ -109,7 +109,7 @@ export const extraChallenges: Challenge[] = [
     title: "Low Spoons",
     tagline: "Seven days of connection that cost almost nothing.",
     forWhom:
-      "For couples running on empty: illness, disability, chronic pain, caregiving, a newborn, depression, or opposite shifts that mean you barely overlap. Every task here takes under five minutes and none of them require you to seem cheerful.",
+      "For couples running on empty: illness, disability, chronic pain, caregiving, a newborn, depression, or opposite shifts that mean you barely overlap. Every task here takes under five minutes and none of them require you to seem cheerful, and none of them are a test either of you can fail. If there is fear or control in the relationship, the safety resources in this app are the place to start instead.",
     days: [
       {
         title: "Lower the bar out loud",
@@ -123,18 +123,18 @@ export const extraChallenges: Challenge[] = [
       },
       {
         title: "Sixty seconds of contact",
-        task: "Spend one full minute in contact with no conversation: a hand on their back, sitting shoulder to shoulder, feet touching under the blanket. If touch is hard right now, sit in the same room for a minute doing nothing.",
-        why: "Bodies settle near each other without either person having to find words, which is exactly what a wrung out day has none of.",
+        task: "Spend one full minute in contact with no conversation: a hand on their back, sitting shoulder to shoulder, feet touching under the blanket. If touch is hard right now, sit in the same room for a minute doing nothing. If you are not in the same place tonight, sit on an open line for a minute without talking, or play the same song at the same time.",
+        why: "Bodies settle near each other, and a minute of company with nothing asked of it does some of the same work at a distance, which is exactly what a wrung out day has none of.",
       },
       {
         title: "Take one small thing off their plate",
-        task: "Do one tiny thing they would otherwise have to do: refill the water bottle, answer the one text, put the trash out, set out the pills. Pick the smallest one you can actually manage.",
-        why: "In a low energy household, one less task is felt more directly than any compliment.",
+        task: "Do one tiny thing they would otherwise have to do: refill the water bottle, answer the one text, put the trash out, set out the pills. From a distance it still works: make the phone call they have been dreading, find the opening hours, order the thing, send the form already filled in. Pick the smallest one you can actually manage.",
+        why: "When someone is running on empty, one less task is felt more directly than any compliment.",
       },
       {
         title: "Leave something where they land",
-        task: "Leave one short note, or a snack, or their charger, somewhere they will find it when you are not there: the pillow, the car seat, the counter by the coffee. Two lines maximum.",
-        why: "Opposite shifts and sick days mean you often miss each other in person, and something left behind carries the moment across the gap.",
+        task: "Leave one short note, or a snack, or their charger, somewhere they will find it when you are not there: the pillow, the car seat, the counter by the coffee. If you do not share a space, schedule the equivalent: a message timed to land when they wake, or a voice note waiting for the end of their shift. Two lines maximum.",
+        why: "Opposite shifts, sick days, and separate addresses all mean you miss each other in person, and something waiting carries the moment across the gap.",
       },
       {
         title: "Ask a one-word question",
@@ -162,7 +162,7 @@ export const extraChallenges: Challenge[] = [
       },
       {
         title: "Softened startup, tiny stakes",
-        task: "Raise one genuinely small thing in this shape: how you feel, about what situation, and one specific request. \"I felt swamped when the kitchen was left last night. Could we split it tonight?\" The dishes, not the relationship.",
+        task: "Raise one genuinely small thing in this shape: how you feel, about what situation, and one specific request. If you share a place: \"I felt swamped when the kitchen was left last night. Could we split it tonight?\" If you do not: \"I felt dropped when Thursday got moved with no warning. Could you tell me the day before next time?\" The dishes or the calendar, not the relationship.",
         why: "Aiming at the problem instead of the person is a skill, and skills have to be practiced on something small before they show up on something big.",
       },
       {

@@ -222,10 +222,10 @@ export default function Challenges() {
                     </Muted>
                   </View>
                 </View>
-                <Muted
-                  style={[{ marginTop: 10 }, heavy && { color: p.surface, opacity: 0.85 }]}
-                  numberOfLines={2}
-                >
+                {/* Never clamp this. Several challenges carry their "if there is
+                    fear, control, or violence, this is the wrong tool" line at the
+                    end of forWhom, and a numberOfLines cap cut it off. */}
+                <Muted style={[{ marginTop: 10 }, heavy && { color: p.surface, opacity: 0.85 }]}>
                   {c.forWhom}
                 </Muted>
                 <View style={{ flexDirection: "row", gap: 8, marginTop: 12 }}>

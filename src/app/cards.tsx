@@ -43,9 +43,12 @@ function shuffle<T>(arr: T[]): T[] {
   return out;
 }
 
-/** The free tier keeps the on-ramp and the crisis deck; Plus opens the rest.
- *  Money never gates the heavy seasons (see docs/MONETIZATION.md). */
-const FREE_DECKS = new Set(["first-steps", "repair"]);
+/** The free tier keeps the on-ramp and the crisis decks; Plus opens the rest.
+ *  Money never gates the heavy seasons (see docs/MONETIZATION.md).
+ *  "back-from-the-brink" is free because its guidance carries the deck's
+ *  safety floor (stop signal, no interrogating the injury, the fear/coercion
+ *  line). Safety copy may never sit behind the paywall. */
+const FREE_DECKS = new Set(["first-steps", "repair", "back-from-the-brink"]);
 
 export default function Cards() {
   const p = usePalette();
@@ -55,6 +58,11 @@ export default function Cards() {
   const [order, setOrder] = useState<number[]>([]);
   const [index, setIndex] = useState(0);
   const [showFollowUp, setShowFollowUp] = useState(false);
+  // Every deck's `guidance` carries its house rules, and for the repair-shaped
+  // decks it carries the safety floor too (stop signal, no interrogating the
+  // injury, the fear/coercion line). It has to be read before the first card,
+  // so opening a deck lands here first. Never skip or gate this step.
+  const [intro, setIntro] = useState(false);
   const swiper = useRef<DeckSwiperHandle>(null);
 
   function openDeck(d: Deck) {
@@ -62,6 +70,7 @@ export default function Cards() {
     setOrder(shuffle(d.cards.map((_, i) => i)));
     setIndex(0);
     setShowFollowUp(false);
+    setIntro(true);
   }
 
   function next() {
@@ -118,6 +127,39 @@ export default function Cards() {
   );
   const hue = deckHues[deckIndex % deckHues.length];
   const h = p.hues[hue];
+
+  if (intro) {
+    return (
+      <Screen>
+        <Press onPress={() => setDeck(null)}>
+          <Muted style={{ marginTop: 8 }}>← All decks</Muted>
+        </Press>
+        <Eyebrow hue={hue} style={{ marginTop: 16 }}>
+          Before you draw
+        </Eyebrow>
+        <H1 style={{ marginTop: 8 }}>{deck.title}</H1>
+        <P style={{ marginTop: 10 }}>{deck.description}</P>
+        <Card tone="panel" style={{ marginTop: 18 }}>
+          <H2>How this deck works</H2>
+          <P style={{ marginTop: 8, fontSize: 14 }}>{deck.guidance}</P>
+        </Card>
+        <Card style={{ marginTop: 12, borderColor: p.ember }}>
+          <P style={{ fontSize: 14 }}>
+            These cards are an educational tool, not therapy. If either of you is afraid of the
+            other, or is being pressured, monitored, or controlled, this is the wrong tool and
+            free confidential help is the right one.
+          </P>
+          <Btn
+            label="Free & low-cost help"
+            kind="ghost"
+            onPress={() => router.push("/safety" as Href)}
+            style={{ marginTop: 12 }}
+          />
+        </Card>
+        <Btn label="Start the deck" onPress={() => setIntro(false)} style={{ marginTop: 18 }} />
+      </Screen>
+    );
+  }
 
   if (index >= order.length) {
     return (

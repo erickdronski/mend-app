@@ -17,9 +17,9 @@ export const extraDecks: Deck[] = [
     tagline: "Real closeness without the interrogation.",
     vibe: "gentle",
     description:
-      "For dating and for couples still finding out who the other person is. These cards skip the resume questions and go straight at the things that actually tell you about someone: how they rest, what they need when it's a bad day, what they're proud of. Nothing here asks for a confession or a body count, and nothing assumes where this is headed. Answer at whatever depth feels right tonight; the deck works at any of them.",
+      "For dating and for couples still finding out who the other person is. These cards skip the resume questions and go straight at the things that actually tell you about someone: how they rest, what they need when it's a bad day, what they're proud of. Nothing here asks for a confession, a tally of who came before, or a status you have not agreed on, and nothing assumes where this is headed. Answer at whatever depth feels right tonight; the deck works at any of them.",
     guidance:
-      "Take turns drawing, and whoever draws gets to choose whether to answer first or hand it over. Depth is optional: a one-line answer to a big card is still a real answer, and following up with genuine curiosity beats trading speeches. Don't treat an answer as a promise about the future. Anyone may pass any card, no explanation owed.",
+      "Take turns drawing, and whoever draws gets to choose whether to answer first or hand it over. Depth is optional: a one-line answer to a big card is still a real answer, and following up with genuine curiosity beats trading speeches. Don't treat an answer as a promise about the future. If there is fear, pressure, or control in this relationship, this deck is the wrong tool and the safety resources in the app are the right place to start. Anyone may pass any card, no explanation owed.",
     cards: [
       {
         text: "What are you into right now that you could talk about for an hour without getting bored?",
@@ -100,10 +100,10 @@ export const extraDecks: Deck[] = [
     description:
       "For couples living apart: different cities, different countries, different shifts, deployments, school, work, family. A call can turn into a status update pretty fast, two people reciting their schedules until someone yawns. These cards do the opposite. They pull in the ordinary texture of your day, name the parts of distance that are genuinely hard, and keep the plan for closing the gap on the table instead of under it.",
     guidance:
-      "Pick a call where neither of you is about to fall asleep, and put the other screens away. Draw one card at a time and both of you answer it; being on video makes it easy to talk over each other, so leave a beat after each answer. Describing things out loud is the whole point here, so be specific about rooms, weather, food, faces. Anyone may pass any card, no explanation owed.",
+      "Use whatever channel you actually have. On a call, pick one where neither of you is about to fall asleep, put the other screens away, and leave a beat after each answer, because voice and video both make it easy to talk over each other. If your channel is text, sign, voice notes, or letters, take one card a day instead of a stack in one sitting; the deck works fine at that speed and answering in your own time is not a lesser version of it. Detail is the whole point here, so be specific about rooms, weather, food, faces. Nothing in this deck is an account you owe anybody: no card here is a request to prove where you were, who you were with, or what you were doing, and if it is being used that way, stop and open the safety resources in the app. Anyone may pass any card, no explanation owed.",
     cards: [
       {
-        text: "Walk me through today from the moment you woke up. Include the boring parts.",
+        text: "What is one ordinary moment from today you would have told me about if I had been in the room?",
       },
       {
         text: "What's in your line of sight right now? Describe it like I've never seen that room.",
@@ -133,7 +133,7 @@ export const extraDecks: Deck[] = [
         text: "What routine have you built on your own that you'd want to keep even once we're in the same place?",
       },
       {
-        text: "Who in your life there knows about us, and how do you describe me to them?",
+        text: "When you do talk about me to someone there, what do you find yourself saying? Only if that is a comfortable question tonight.",
       },
       {
         text: "What's the thing you most worry I don't understand about your life from this far away?",
