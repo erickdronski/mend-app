@@ -168,6 +168,7 @@ function Shell() {
           <Stack.Screen name="safety" options={{ title: "Get help now" }} />
           <Stack.Screen name="settings" options={{ title: "Settings" }} />
           <Stack.Screen name="plus" options={{ title: "Mend Plus" }} />
+          <Stack.Screen name="achievements" options={{ title: "Milestones" }} />
           <Stack.Screen name="space" options={{ title: "Our space" }} />
           <Stack.Screen name="notes" options={{ title: "Little notes" }} />
           <Stack.Screen name="plan" options={{ title: "Our plan" }} />

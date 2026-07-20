@@ -14,6 +14,7 @@ import {
   getPulses,
   getSessions,
   saveLocalDaily,
+  countDailyAnswer,
   type JourneyState,
 } from "@/lib/store";
 import { getStage, stepDone, type StepContext } from "@/lib/journey";
@@ -139,6 +140,10 @@ export default function Today() {
       if (space) {
         await submitAnswer(space, question.text, draft);
         setAnswers(await getTodayAnswers(space));
+        // Milestones count days answered, whether the answer went to a shared
+        // space or stayed on this phone, so joining a space later never resets
+        // the record of showing up.
+        await countDailyAnswer(todayKey());
       } else {
         await saveLocalDaily(todayKey(), draft.trim());
         setLocalAnswer(draft.trim());
@@ -296,6 +301,20 @@ export default function Today() {
           </View>
         </Card>
       </Rise>
+
+      {/* Milestones: the quiet proof that the work is adding up */}
+      <Press onPress={() => router.push("/achievements" as Href)}>
+        <Card style={{ marginTop: 12, flexDirection: "row", alignItems: "center", gap: 12 }}>
+          <IconChip name="ribbon-outline" hue="honey" size={38} />
+          <View style={{ flex: 1 }}>
+            <Eyebrow hue="honey">Your milestones</Eyebrow>
+            <Muted style={{ marginTop: 2, fontSize: 12.5 }}>
+              What the two of you have practiced so far.
+            </Muted>
+          </View>
+          <Ionicons name="chevron-forward" size={16} color={p.muted} />
+        </Card>
+      </Press>
 
       {/* Browse everything: one calm tap target, four little rooms hinted */}
       <Press onPress={() => router.push("/explore")}>

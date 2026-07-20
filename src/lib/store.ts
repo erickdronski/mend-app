@@ -6,6 +6,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { LensId, ConflictRole } from "./content/quiz";
 import type { Situation } from "./situation";
+import type { RelationshipType, Together, LivingSituation } from "./content/relationships";
 
 export type Profile = {
   a: string;
@@ -14,6 +15,16 @@ export type Profile = {
   createdAt: string;
   /** what the couple is carrying, chosen at onboarding; personalizes the app */
   situation?: Situation;
+  /**
+   * The relationship model. All optional so every profile written before the
+   * expansion keeps working: the app falls back to neutral wording rather
+   * than assuming marriage. See lib/content/relationships.ts.
+   */
+  relationshipType?: RelationshipType;
+  together?: Together;
+  living?: LivingSituation;
+  /** Situations can stack (a couple is rarely carrying exactly one thing). */
+  situations?: Situation[];
   lenses?: { a?: LensId; b?: LensId };
   roles?: { a?: ConflictRole; b?: ConflictRole };
 };
@@ -48,6 +59,7 @@ const KEYS = {
   journey: "mend.journey",
   language: "mend.language",
   localDaily: "mend.localDaily",
+  dailyDays: "mend.dailyDays",
 } as const;
 
 async function read<T>(key: string, fallback: T): Promise<T> {
@@ -105,8 +117,25 @@ export async function getLocalDaily(dateKey: string): Promise<string | null> {
   const d = await read<LocalDaily | null>(KEYS.localDaily, null);
   return d && d.date === dateKey ? d.answer : null;
 }
-export const saveLocalDaily = (dateKey: string, answer: string) =>
-  write(KEYS.localDaily, { date: dateKey, answer });
+export async function saveLocalDaily(dateKey: string, answer: string) {
+  await write(KEYS.localDaily, { date: dateKey, answer });
+  await countDailyAnswer(dateKey);
+}
+
+/**
+ * How many distinct days this person has answered the daily question, whether
+ * they answered locally or inside a shared space. Counting days (not answers)
+ * means re-editing today's answer never inflates it, and there is no streak
+ * to break: a missed day costs nothing, it simply is not counted.
+ */
+export async function countDailyAnswer(dateKey: string): Promise<number> {
+  const days = await read<string[]>(KEYS.dailyDays, []);
+  if (days.includes(dateKey)) return days.length;
+  const next = [...days, dateKey];
+  await write(KEYS.dailyDays, next);
+  return next.length;
+}
+export const getDailyAnswerCount = async () => (await read<string[]>(KEYS.dailyDays, [])).length;
 
 // ——— sessions ———
 export const getSessions = () => read<SessionRecord[]>(KEYS.sessions, []);
