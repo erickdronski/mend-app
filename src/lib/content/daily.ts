@@ -8,6 +8,7 @@
  * that only makes sense in year one or year thirty, nothing that assumes the
  * marriage is thriving or assumes it is on fire.
  */
+import { extraDailyQuestions } from "./daily-rel";
 
 export type DailyCategory =
   | "appreciation"
@@ -247,6 +248,12 @@ export const dailyQuestions: DailyQuestion[] = [
     category: "repair",
   },
 ];
+
+// Questions that work for every relationship type, not just marriages.
+// Idempotent so a hot-reload / double module eval cannot duplicate them.
+for (const q of extraDailyQuestions) {
+  if (!dailyQuestions.some((x) => x.text === q.text)) dailyQuestions.push(q);
+}
 
 export function questionForDate(date: Date): DailyQuestion {
   const start = Date.UTC(date.getFullYear(), 0, 0);

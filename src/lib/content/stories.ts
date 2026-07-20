@@ -7,6 +7,7 @@
  * labels them that way. The situations are common; the couples are invented.
  */
 import { extraStories } from "./stories-extra";
+import { relStories } from "./stories-rel";
 
 export type Story = {
   id: string;
@@ -327,7 +328,7 @@ export const stories: Story[] = [
 // Representation stories (same-sex, interfaith, working-poor, high-conflict,
 // long caregiving) added after user testing found the first ten too narrow.
 // Idempotent so a hot-reload / double module eval cannot duplicate them.
-for (const s of extraStories) {
+for (const s of [...extraStories, ...relStories]) {
   if (!stories.some((x) => x.id === s.id)) stories.push(s);
 }
 

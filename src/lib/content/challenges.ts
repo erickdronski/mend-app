@@ -6,6 +6,7 @@
  * one moment. Nothing here requires a good mood, a long talk, or a partner
  * who is fully on board yet.
  */
+import { extraChallenges } from "./challenges-rel";
 
 export type ChallengeDay = { title: string; task: string; why: string };
 
@@ -296,6 +297,12 @@ export const microMoves: MicroMove[] = [
     when: "at the end of a hard day",
   },
 ];
+
+// Challenges for long distance, reconciling, low energy, and clean fighting.
+// Idempotent so a hot-reload / double module eval cannot duplicate them.
+for (const c of extraChallenges) {
+  if (!challenges.some((x) => x.id === c.id)) challenges.push(c);
+}
 
 export function getChallenge(id: string): Challenge | undefined {
   return challenges.find((c) => c.id === id);

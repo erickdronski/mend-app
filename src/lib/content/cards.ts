@@ -6,6 +6,7 @@
  * for a lot. The universal rule sits in every deck's guidance: anyone may pass
  * any card, and no explanation is owed.
  */
+import { extraDecks } from "./cards-rel";
 
 export type PromptCard = { text: string; followUp?: string };
 
@@ -487,6 +488,12 @@ export const decks: Deck[] = [
     ],
   },
 ];
+
+// Decks for couples the first six did not serve: early days, long distance,
+// and coming back after a break. Idempotent so a hot-reload cannot duplicate.
+for (const d of extraDecks) {
+  if (!decks.some((x) => x.id === d.id)) decks.push(d);
+}
 
 export function getDeck(id: string): Deck | undefined {
   return decks.find((d) => d.id === id);

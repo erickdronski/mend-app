@@ -6,6 +6,11 @@
  * where an app is no longer the right tool.
  */
 import { extraTracks } from "./tracks-extra";
+import { earlyTracks } from "./tracks-early";
+import { queerTracks } from "./tracks-queer";
+import { repairTracks } from "./tracks-repair";
+import { differenceTracks } from "./tracks-difference";
+import { seasonTracks } from "./tracks-season";
 
 export type TrackSession = {
   title: string;
@@ -518,9 +523,18 @@ export const tracks: Track[] = [
 ];
 
 // Tracks added after user testing found couples with no track for their
-// situation (desire gap, blended family, interfaith, long caregiving, scarcity).
-// Idempotent so a hot-reload / double module eval cannot duplicate them.
-for (const t of extraTracks) {
+// situation. First wave: desire gap, blended family, interfaith, long
+// caregiving, scarcity. Second wave (the relationship expansion): tracks for
+// couples who are not married at all, plus difference, repair, and season
+// tracks. Idempotent so a hot-reload / double module eval cannot duplicate.
+for (const t of [
+  ...extraTracks,
+  ...earlyTracks,
+  ...queerTracks,
+  ...repairTracks,
+  ...differenceTracks,
+  ...seasonTracks,
+]) {
   if (!tracks.some((x) => x.slug === t.slug)) tracks.push(t);
 }
 
