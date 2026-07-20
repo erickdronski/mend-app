@@ -1,16 +1,23 @@
 /**
  * Mend Plus: the paywall that keeps the promise. The free tier is stated
- * first and stays generous; Plus is breadth, not rescue. No purchase flow
- * yet: during the beta everything is unlocked, and this screen says so
- * honestly instead of showing dead price buttons.
+ * first and stays generous; Plus is breadth, not rescue.
+ *
+ * Every price comparison on this screen is verifiable and sourced (see
+ * docs/PRICING.md). We compare cost to counseling, and we NEVER claim to
+ * be as effective as therapy or make any clinical outcome claim.
+ *
+ * Payment opens Stripe Checkout in the browser. On the US storefront Apple
+ * permits linking out with no entitlement and no commission (Guideline
+ * 3.1.1(a), post Epic v. Apple).
  */
-import { Pressable, View } from "react-native";
+import { useState } from "react";
+import { Pressable, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { usePremium } from "@/lib/premium";
+import { PRICING, usePremium, type Plan } from "@/lib/premium";
 import { useAuth } from "@/lib/auth";
 import { useRouter } from "expo-router";
-import { Card, Chip, Eyebrow, Hero, IconChip, Muted, P, Screen, usePalette } from "@/components/ui";
-import { Reveal } from "@/components/motion";
+import { Btn, Card, Chip, Eyebrow, Hero, IconChip, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Press, Reveal } from "@/components/motion";
 
 const FREE_FOREVER: { icon: keyof typeof Ionicons.glyphMap; label: string }[] = [
   { icon: "trail-sign-outline", label: "The five-stage journey, start to graduation" },
@@ -31,14 +38,22 @@ export default function Plus() {
   const p = usePalette();
   const router = useRouter();
   const { session } = useAuth();
-  const { tier, previewOnly } = usePremium();
+  const { tier, previewOnly, startCheckout, busy } = usePremium();
+  const [plan, setPlan] = useState<Plan>("annual");
+  const [error, setError] = useState<string | null>(null);
+
+  async function buy() {
+    setError(null);
+    const err = await startCheckout(plan);
+    if (err) setError(err);
+  }
 
   return (
     <Screen>
       <Hero
         hue="ember"
         eyebrow="Mend Plus"
-        title="The whole toolbox, for the long seasons"
+        title="A year for less than one session"
         sub="The heart of Mend is free forever. Plus opens the full breadth."
         style={{ marginTop: 12 }}
       >
@@ -62,7 +77,7 @@ export default function Plus() {
           ))}
         </Card>
         <Muted style={{ marginTop: 8, fontSize: 12.5 }}>
-          Money never gates safety. If you can&apos;t pay, the parts that keep a marriage alive are still yours.
+          Money never gates safety. If you can&apos;t pay, the parts that keep a relationship alive are still yours.
         </Muted>
       </Reveal>
 
@@ -78,7 +93,63 @@ export default function Plus() {
         </Card>
       </Reveal>
 
+      {/* The cost comparison. Every figure here is verified and sourced in
+          docs/PRICING.md. We compare COST ONLY. Mend is an educational tool,
+          not therapy, and never claims otherwise. */}
       <Reveal index={2} style={{ marginTop: 22 }}>
+        <Eyebrow hue="sky">What counseling costs</Eyebrow>
+        <Card tone="panel" style={{ marginTop: 8 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+            <IconChip name="cash-outline" hue="sky" size={32} />
+            <P style={{ flex: 1, fontSize: 14 }}>
+              Couples counseling typically runs $100 to $250 for a single session, and insurance
+              usually will not cover it, because insurers require a mental health diagnosis rather
+              than relationship help.
+            </P>
+          </View>
+          <Muted style={{ marginTop: 10, fontSize: 12.5 }}>
+            Mend is not therapy and does not replace it. If you can see a counselor, see one. This
+            is about what is available at 11pm on a Tuesday, for the price of a couple of coffees.
+          </Muted>
+        </Card>
+      </Reveal>
+
+      {/* Plan picker */}
+      <Reveal index={3} style={{ marginTop: 22 }}>
+        <Eyebrow hue="ember">Choose your plan</Eyebrow>
+        <View style={{ flexDirection: "row", gap: 10, marginTop: 8 }}>
+          {(["annual", "monthly"] as const).map((k) => {
+            const selected = plan === k;
+            const best = k === "annual";
+            return (
+              <Press key={k} onPress={() => setPlan(k)} style={{ flex: 1 }} haptic>
+                <Card
+                  style={{
+                    borderColor: selected ? p.hues.ember.accent : p.line,
+                    borderWidth: selected ? 2 : 1,
+                    backgroundColor: selected ? p.hues.ember.bg : undefined,
+                    paddingVertical: 16,
+                  }}
+                >
+                  {best ? <Chip label="Best value" hue="honey" style={{ marginBottom: 8 }} /> : null}
+                  <Text style={{ fontSize: 26, fontWeight: "800", color: p.ink }}>
+                    {PRICING[k].amount}
+                  </Text>
+                  <Muted style={{ marginTop: 2 }}>{PRICING[k].cadence}</Muted>
+                  {k === "annual" ? (
+                    <Muted style={{ marginTop: 6, fontSize: 12 }}>{PRICING.annual.perMonth}</Muted>
+                  ) : null}
+                </Card>
+              </Press>
+            );
+          })}
+        </View>
+        <Muted style={{ marginTop: 10, fontSize: 12.5 }}>
+          A year of Mend Plus costs less than one typical counseling session. Cancel anytime.
+        </Muted>
+      </Reveal>
+
+      <Reveal index={4} style={{ marginTop: 20 }}>
         {tier === "plus" ? (
           <Card tone="fern">
             <P style={{ fontSize: 14 }}>
@@ -86,20 +157,35 @@ export default function Plus() {
             </P>
           </Card>
         ) : (
-          <Card tone="panel">
-            <P style={{ fontSize: 14 }}>
-              {previewOnly
-                ? "While Mend is in beta, Plus is unlocked for every tester. Pricing arrives with the public launch, and it will stay a fraction of one counseling session."
-                : "Purchases aren't available yet in this version."}
-            </P>
+          <View>
+            <Btn
+              label={busy ? "Opening checkout..." : `Get Plus for ${PRICING[plan].amount} ${PRICING[plan].cadence}`}
+              onPress={buy}
+              disabled={busy}
+            />
+            {error ? (
+              <Muted style={{ marginTop: 10, color: p.ember }}>{error}</Muted>
+            ) : (
+              <Muted style={{ marginTop: 10, fontSize: 12, textAlign: "center" }}>
+                Secure checkout opens in your browser. Cancel anytime, no questions asked.
+              </Muted>
+            )}
+            {previewOnly ? (
+              <Card tone="panel" style={{ marginTop: 14 }}>
+                <P style={{ fontSize: 13.5 }}>
+                  While Mend is in beta, everything above is already unlocked for you at no cost.
+                  Subscribing now is only for testing the checkout.
+                </P>
+              </Card>
+            ) : null}
             {!session ? (
               <Pressable onPress={() => router.push("/sign-in")}>
-                <Muted style={{ marginTop: 10, textDecorationLine: "underline" }}>
-                  Create a free account so your access follows you
+                <Muted style={{ marginTop: 12, textDecorationLine: "underline", textAlign: "center" }}>
+                  Add an account so your access follows you to a new phone
                 </Muted>
               </Pressable>
             ) : null}
-          </Card>
+          </View>
         )}
       </Reveal>
     </Screen>
