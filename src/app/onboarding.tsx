@@ -189,7 +189,7 @@ export default function Onboarding() {
                   <H2>What it asks</H2>
                   <Muted style={{ marginTop: 6 }}>
                     Twenty honest minutes a week. In the same room if you have one, on two phones
-                    if you don't. Honesty on the pulse checks. Patience measured in months, not
+                    if you don&apos;t. Honesty on the pulse checks. Patience measured in months, not
                     moods.
                   </Muted>
                 </View>

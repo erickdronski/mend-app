@@ -219,7 +219,7 @@ export default function JourneyScreen() {
             <Chip label={`Stage ${stage.n} complete`} hue="ember" />
             <H2 style={{ color: p.surface, marginTop: 10 }}>{t("journey.stageComplete")}</H2>
             <P style={{ marginTop: 8, color: p.surface, opacity: 0.9 }}>
-              Every step of stage {stage.n} is done. Move when you're both ready; the stages ahead
+              Every step of stage {stage.n} is done. Move when you&apos;re both ready; the stages ahead
               assume the ground this one built.
             </P>
             <Btn

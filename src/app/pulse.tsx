@@ -152,8 +152,8 @@ export default function Pulse() {
           })}
         </View>
         <Muted style={{ marginTop: 20 }}>
-          Answer for the season, not for today's mood. And answer for yourself; your partner
-          can't see this screen.
+          Answer for the season, not for today&apos;s mood. And answer for yourself; your partner
+          can&apos;t see this screen.
         </Muted>
       </Screen>
     );
@@ -186,7 +186,7 @@ export default function Pulse() {
       <Screen>
         <H1>Thanks, {names[who]}</H1>
         {prevAvg !== null && (
-          <Muted style={{ marginTop: 8 }}>Saved. Your last stage's average was {prevAvg.toFixed(1)}.</Muted>
+          <Muted style={{ marginTop: 8 }}>Saved. Your last stage&apos;s average was {prevAvg.toFixed(1)}.</Muted>
         )}
         <Card style={{ marginTop: 20, backgroundColor: p.hues.ember.bg, borderColor: "transparent" }}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>

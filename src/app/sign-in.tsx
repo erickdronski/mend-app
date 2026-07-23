@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { KeyboardAvoidingView, Platform, Pressable, Text, View, useColorScheme } from "react-native";
+import { KeyboardAvoidingView, Platform, Pressable, View, useColorScheme } from "react-native";
 import { useTranslation } from "react-i18next";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { supabase } from "@/lib/supabase";

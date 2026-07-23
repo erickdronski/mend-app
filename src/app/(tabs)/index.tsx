@@ -56,7 +56,7 @@ const EXPLORE_DOTS = [
 export default function Today() {
   const p = usePalette();
   const router = useRouter();
-  const { session, guest } = useAuth();
+  const { session } = useAuth();
   const [space, setSpace] = useState<Space | null>(null);
   const [answers, setAnswers] = useState<DailyAnswer[]>([]);
   const [localAnswer, setLocalAnswer] = useState<string | null>(null);
@@ -72,6 +72,23 @@ export default function Today() {
 
   const question = questionForDate(new Date());
   const nudge = nudgeForDate(new Date());
+
+  const computeNextStep = useCallback((ctx: StepContext, journey: JourneyState) => {
+    if (journey.graduatedAt) {
+      setJourneyDone(true);
+      setNextStep(null);
+      return;
+    }
+    const stage = getStage(Math.min(journey.stage, 5));
+    const step = stage?.steps.find((s) => !stepDone(s, ctx, journey));
+    if (step) {
+      setJourneyDone(false);
+      setNextStep({ title: step.title, body: step.body, href: step.href, label: step.hrefLabel });
+    } else {
+      setJourneyDone(false);
+      setNextStep({ title: "Stage complete", body: "You've finished this stage. Open your path to move on when you're both ready.", href: "/journey", label: "Open your path" });
+    }
+  }, []);
 
   const reload = useCallback(() => {
     (async () => {
@@ -103,30 +120,13 @@ export default function Today() {
         setSpace(null);
       }
     })().catch(() => setLoaded(true));
-  }, [session]);
+  }, [computeNextStep, session]);
 
   // Load on mount too: useFocusEffect does not re-fire for the initial tab
   // after SSR hydration on web, so the focus effect alone leaves Today blank.
   useEffect(() => {
     reload();
   }, [reload]);
-
-  function computeNextStep(ctx: StepContext, journey: JourneyState) {
-    if (journey.graduatedAt) {
-      setJourneyDone(true);
-      setNextStep(null);
-      return;
-    }
-    const stage = getStage(Math.min(journey.stage, 5));
-    const step = stage?.steps.find((s) => !stepDone(s, ctx, journey));
-    if (step) {
-      setJourneyDone(false);
-      setNextStep({ title: step.title, body: step.body, href: step.href, label: step.hrefLabel });
-    } else {
-      setJourneyDone(false);
-      setNextStep({ title: "Stage complete", body: "You've finished this stage. Open your path to move on when you're both ready.", href: "/journey", label: "Open your path" });
-    }
-  }
 
   const mine = answers.find((a) => a.user_id === myId);
   const theirs = answers.find((a) => a.user_id !== myId);

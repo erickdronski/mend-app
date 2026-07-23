@@ -10,7 +10,7 @@ import { getProfile, saveLanguage, saveProfile, type Profile } from "@/lib/store
 import { isLockEnabled, lockAvailable, setLockEnabled } from "@/lib/lock";
 import { situations } from "@/lib/situation";
 import { usePremium } from "@/lib/premium";
-import { Btn, Card, Chip, Divider, H1, H2, IconChip, Input, Label, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Btn, Card, Chip, Divider, H2, IconChip, Input, Label, Muted, P, Screen, usePalette } from "@/components/ui";
 
 const SITE = "https://mend-drab-pi.vercel.app";
 

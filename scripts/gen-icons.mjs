@@ -7,6 +7,7 @@
  */
 import sharp from "sharp";
 import { mkdirSync } from "node:fs";
+import { Buffer } from "node:buffer";
 
 const MOSS = "#38553f";
 const BONE = "#f4f4ee";

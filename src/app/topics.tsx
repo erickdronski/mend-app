@@ -21,13 +21,12 @@ export default function Topics() {
   const router = useRouter();
 
   // Precompute per-category groups plus a running index for staggered reveals.
-  let running = 1;
-  const groups = topicCategories.map((cat) => {
+  const groups = topicCategories.reduce<{ cat: string; items: typeof topics; start: number }[]>((acc, cat) => {
     const items = topics.filter((t) => t.category === cat);
-    const start = running;
-    running += items.length;
-    return { cat, items, start };
-  });
+    const previous = acc.at(-1);
+    const start = previous ? previous.start + previous.items.length : 1;
+    return [...acc, { cat, items, start }];
+  }, []);
 
   return (
     <Screen>
