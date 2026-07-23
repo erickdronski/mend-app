@@ -1,7 +1,7 @@
 /**
  * Additional healing tracks, same structure and voice as tracks.ts. These
- * cover marriages that came up repeatedly in testing and weren't served by the
- * first six: low or absent desire, blended and second marriages, mixed-faith
+ * cover relationships that came up repeatedly in testing and weren't served by the
+ * first six: low or absent desire, blended families, mixed-faith
  * homes, the long haul of caregiving, and chronic financial scarcity. Every
  * track signposts professional help and names the red flags where an app is
  * the wrong tool.
@@ -13,9 +13,9 @@ export const extraTracks: Track[] = [
   {
     slug: "desire-gap",
     title: "When desire has gone quiet",
-    subtitle: "A marriage where the wanting stopped matching",
+    subtitle: "A relationship where the wanting stopped matching",
     overview:
-      "For a lot of couples the sex quietly slows, then stops, and then becomes the one subject the whole marriage tiptoes around. The trap is a story each partner tells alone: the one who wants more decides they are unwanted, the one who wants less decides they are broken or being graded. Both stories are usually wrong. Desire is not a fixed amount one of you is withholding from the other; it responds to stress, health, resentment, exhaustion, and the pressure of being needed on a schedule. This track is for saying the quiet things out loud and rebuilding an honest closeness, without either of you being cast as the problem.",
+      "For a lot of couples the sex quietly slows, then stops, and then becomes the one subject the whole relationship tiptoes around. The trap is a story each partner tells alone: the one who wants more decides they are unwanted, the one who wants less decides they are broken or being graded. Both stories are usually wrong. Desire is not a fixed amount one of you is withholding from the other; it responds to stress, health, resentment, exhaustion, and the pressure of being needed on a schedule. This track is for saying the quiet things out loud and rebuilding an honest closeness, without either of you being cast as the problem.",
     feelings: [
       {
         label: "If you're the lower-desire partner",
@@ -28,16 +28,16 @@ export const extraTracks: Track[] = [
     ],
     principles: [
       "Desire is not owed, and it cannot be extracted. Nothing good rebuilds around obligation or a scoreboard, and the lower-desire partner is not a defect to be corrected.",
-      "There is spontaneous desire (wanting that arrives out of nowhere) and responsive desire (wanting that shows up after warmth and safety). Neither one is the real kind, and many long marriages run mostly on the responsive one.",
+      "There is spontaneous desire (wanting that arrives out of nowhere) and responsive desire (wanting that shows up after warmth and safety). Neither one is the real kind, and many long relationships run mostly on the responsive one.",
       "Pressure kills the thing it's chasing. When every touch might be a request, the lower-desire partner stops offering any touch at all. De-escalating touch, meaning affection that goes nowhere on purpose, is how the ground recovers.",
-      "Bodies are real. Hormones, medication side effects, pain, menopause, low testosterone, and exhaustion are medical facts, not verdicts on the marriage, and some of this belongs to a doctor rather than an argument.",
+      "Bodies are real. Hormones, medication side effects, pain, menopause, low testosterone, and exhaustion are medical facts, not verdicts on the relationship, and some of this belongs to a doctor rather than an argument.",
       "The higher-desire partner's loneliness and the lower-desire partner's dread are both true at the same time. This is a gap between two okay people, not proof that one is cold or the other is demanding.",
       "Talk about it with clothes on, outside the bedroom, when nothing is pending. The worst possible moment to discuss desire is right after one of you reached and the other flinched.",
     ],
     sessions: [
       {
         title: "The two stories we've been telling",
-        focus: "Each partner says out loud the private story they built in the silence: what the distance has come to mean about them and about the marriage. No fixing, no defending.",
+        focus: "Each partner says out loud the private story they built in the silence: what the distance has come to mean about them and about the relationship. No fixing, no defending.",
         prompts: [
           "What have I decided your no (or your reaching) means about me? Said plainly, even the ugly version.",
           "What do I miss most: the sex itself, or something underneath it (being wanted, being close, being chosen)?",
@@ -101,36 +101,36 @@ export const extraTracks: Track[] = [
   },
   {
     slug: "blended",
-    title: "Blended family and second marriage",
-    subtitle: "Building one marriage on top of two histories",
+    title: "Blended family and second chances",
+    subtitle: "Building one relationship on top of two histories",
     overview:
-      "A second marriage is not a fresh start on a blank page. It is a marriage built on top of everyone's history: children who did not choose this, a first spouse who is present whether through divorce or death, houses and money and holidays that each carry their own gravity. The couple is often the newest and most fragile relationship in a house full of older, deeper ones. Loving each other is rarely the hard part. Building one team when every person in the home is loyal to a different map is the hard part. This track is for the second (or third) marriage at any age, whether you are blending small children or navigating grown kids and grandchildren.",
+      "A blended relationship is not a fresh start on a blank page. It is a relationship built on top of everyone's history: children who did not choose this, a former partner who is present whether through separation or death, houses and money and holidays that each carry their own gravity. The couple is often the newest and most fragile relationship in a house full of older, deeper ones. Loving each other is rarely the hard part. Building one team when every person in the home is loyal to a different map is the hard part. This track is for any blended family at any age, whether you are blending small children or navigating grown kids and grandchildren.",
     feelings: [
       {
         label: "If these are your children",
-        body: "You may find yourself defending your kids on instinct, before you've even decided anything, and then watching it wound your spouse in their own home. The pull is old and strong: you and your children were a unit, often through something hard, long before this marriage existed. Wanting to protect them is not a flaw. But a child who senses they outrank your spouse learns they can split the two of you, and a spouse who is always overruled slowly stops trying. You are allowed to love your children fiercely and still build a marriage they cannot veto.",
+        body: "You may find yourself defending your kids on instinct, before you've even decided anything, and then watching it wound your partner in their own home. The pull is old and strong: you and your children were a unit, often through something hard, long before this relationship existed. Wanting to protect them is not a flaw. But a child who senses they outrank your partner learns they can split the two of you, and a partner who is always overruled slowly stops trying. You are allowed to love your children fiercely and still build a relationship they cannot veto.",
       },
       {
-        label: "If you married into the family",
+        label: "If you joined the family",
         body: "You may never be sure which role you're allowed to play: parent one minute, stranger the next, asked to step up and then to step back. Correcting a child who resents you can feel like walking into a wall, and being met with coldness in your own house is a specific loneliness. It is also real that you may be grieving the closeness you expected, or feeling like a guest where you pay the bills. None of that makes you an intruder. It means you joined a family that already existed, which is harder and slower than anyone admits.",
       },
     ],
     principles: [
-      "The couple is the foundation, and in a blended home it is also the newest, thinnest wall. Protecting the marriage is not choosing it over the kids. A steady couple is the safest thing a child in a blended home can have.",
+      "The couple is the foundation, and in a blended home it is also the newest, thinnest wall. Protecting the relationship is not choosing it over the kids. A steady couple is the safest thing a child in a blended home can have.",
       "Loyalty binds are real. A child being cold to a step-parent is usually not cruelty; it's a kid trying not to betray an absent or a deceased parent. Name it gently instead of taking it personally.",
       "The parent leads discipline with their own kids, especially early on. The step-parent builds a relationship first and earns authority slowly. Trying to be an instant parent usually backfires; being a reliable adult who doesn't quit works.",
-      "The first spouse is in the house whether or not anyone says the name, through the children, the schedule, the co-parenting, or the grief if they died. Pretending otherwise doesn't make them leave. Deciding together how they fit does.",
+      "The first partner is in the house whether or not anyone says the name, through the children, the schedule, the co-parenting, or the grief if they died. Pretending otherwise doesn't make them leave. Deciding together how they fit does.",
       "Adult and grown children get a version of the same rules. Resentment, holidays, and 'you're not my parent' don't expire at eighteen; they just go quieter and turn into questions about time and money.",
       "Money and inheritance are an intimacy topic, not only a legal one. Fear about whose children are protected, whose house it really is, and what happens if one of you dies will poison closeness if it stays unspoken. Say it, then get the paperwork honest.",
     ],
     sessions: [
       {
         title: "The families we each came from",
-        focus: "Before solving anything, each partner tells the honest story of the family that existed before this marriage: what it survived, what the kids carry, what you swore to protect.",
+        focus: "Before solving anything, each partner tells the honest story of the family that existed before this relationship: what it survived, what the kids carry, what you swore to protect.",
         prompts: [
           "What did my children and I go through before you, and what did I promise them, out loud or silently?",
           "What am I most protective of, and where does that protectiveness actually come from?",
-          "What did I hope this marriage would give my kids, and where has it fallen short of that?",
+          "What did I hope this relationship would give my kids, and where has it fallen short of that?",
           "What do I need you to understand about my children that you might be reading wrong?",
         ],
       },
@@ -146,9 +146,9 @@ export const extraTracks: Track[] = [
       },
       {
         title: "The one who came before",
-        focus: "The conversation couples avoid: how the previous spouse, through divorce or through death, still lives in this home, and how to hold that honestly.",
+        focus: "The conversation couples avoid: how the previous partner, through divorce or through death, still lives in this home, and how to hold that honestly.",
         prompts: [
-          "How is your first marriage still present here (the ex, the co-parenting, the grief, the comparisons)?",
+          "How is your first relationship still present here (the ex, the co-parenting, the grief, the comparisons)?",
           "Where do I feel like I'm competing with a ghost or an ex, and is that fair to say out loud?",
           "What do we owe the kids' other parent in how we speak and coordinate, and where's the line?",
           "If the comparison runs the other way and I feel measured against them, how do we talk about that kindly?",
@@ -159,19 +159,19 @@ export const extraTracks: Track[] = [
         focus: "Bringing the fear about inheritance, property, and provision into the open, as a closeness issue first and a legal one second.",
         prompts: [
           "What am I quietly afraid of about money, the house, or what my children inherit?",
-          "If one of us died, would each of us trust that our kids and the other spouse would both be okay? Honestly?",
+          "If one of us died, would each of us trust that our kids and the other partner would both be okay? Honestly?",
           "What have we avoided putting in writing because it felt unromantic or frightening to raise?",
           "What would 'fair to everyone we love' actually look like, and who do we need to make it real (not tonight, but soon)?",
         ],
       },
       {
-        title: "The marriage we're building on purpose",
+        title: "The relationship we're building on purpose",
         focus: "Deciding what this specific family is going to be, and defending a couple relationship that the household's older loyalties will always crowd.",
         prompts: [
           "What do we want this blended family to feel like in five years, and what has to change now to get there?",
           "What's ours alone, protected from the kids, the exes, and the logistics?",
           "What house rules do we both actually stand behind, so the kids stop finding daylight between us?",
-          "What has this marriage given each of us that the first one didn't, that we want to keep sight of?",
+          "What has this relationship given each of us that the first one didn't, that we want to keep sight of?",
         ],
       },
     ],
@@ -197,20 +197,20 @@ export const extraTracks: Track[] = [
     feelings: [
       {
         label: "If your faith runs deep",
-        body: "Your religion may be not a preference but the ground you stand on: how you understand your life, your death, and your children's souls. Watching it treated as one option among many, or as a scheduling problem, can feel like being asked to shrink the truest part of you. There may also be a grief you rarely say out loud: that you're raising children who may not share what has held you, or that you're facing your own community's disappointment. That grief is real, and it is not a license to steamroll the person you married.",
+        body: "Your religion may be not a preference but the ground you stand on: how you understand your life, your death, and your children's souls. Watching it treated as one option among many, or as a scheduling problem, can feel like being asked to shrink the truest part of you. There may also be a grief you rarely say out loud: that you're raising children who may not share what has held you, or that you're facing your own community's disappointment. That grief is real, and it is not a license to steamroll the person you love.",
       },
       {
         label: "If you believe differently, or not at all",
-        body: "You may feel like a guest in your own marriage on the big days, or like you're forever negotiating how much of someone else's practice to absorb. Being pressed toward a belief you don't hold, or watching your children pulled somewhere you can't follow, is its own kind of loneliness. It's also easy to read your partner's devotion as a rejection of you, or as pressure, when for them it may simply be love. Your convictions, including a lack of them, are as legitimate as theirs, and honesty about them is kinder than a quiet yes you don't mean.",
+        body: "You may feel like a guest in your own relationship on the big days, or like you're forever negotiating how much of someone else's practice to absorb. Being pressed toward a belief you don't hold, or watching your children pulled somewhere you can't follow, is its own kind of loneliness. It's also easy to read your partner's devotion as a rejection of you, or as pressure, when for them it may simply be love. Your convictions, including a lack of them, are as legitimate as theirs, and honesty about them is kinder than a quiet yes you don't mean.",
       },
     ],
     principles: [
-      "This track does not pick a winner between your faiths. The goal is a marriage where both people can be honest about what they believe without it becoming a fight over who is right.",
+      "This track does not pick a winner between your faiths. The goal is a relationship where both people can be honest about what they believe without it becoming a fight over who is right.",
       "Practice can be closeness or it can be distance, and you each get to say which it is for you. Praying together, keeping a holiday, or sitting respectfully at someone else's table can be a bond. Being made to perform a belief you don't hold breeds resentment.",
       "The children question deserves a real, ongoing conversation, not a vague truce or a promise made before the wedding and never revisited. What they're taught, what they're exposed to, and what they get to choose later all belong on the table, more than once.",
       "Holidays and observances are where the abstract turns concrete. Decide the calendar on purpose and in advance (whose, when, and how the other takes part) so the season stops being an annual ambush.",
       "Close-knit extended families are usually love, not a boundary violation. In many faiths and cultures, parents and community being deeply woven into your religious life is the normal, expected thing. The task is a united couple inside that closeness, not walling the families out.",
-      "A conversion 'on paper but not in heart' has to be sayable without the marriage ending. Performing a belief you don't hold to keep the peace costs more over years than the honest conversation ever would.",
+      "A conversion 'on paper but not in heart' has to be sayable without the relationship ending. Performing a belief you don't hold to keep the peace costs more over years than the honest conversation ever would.",
     ],
     sessions: [
       {
@@ -220,7 +220,7 @@ export const extraTracks: Track[] = [
           "What does my faith, or my not believing, actually give me, deep down?",
           "What do I most wish you understood about it that you might have wrong?",
           "Where have I felt my beliefs treated as a scheduling problem or a passing phase?",
-          "If I converted or agreed to something before we married, what's the honest truth of where I actually stand now?",
+          "If I converted or agreed to something earlier in the relationship, what's the honest truth of where I actually stand now?",
         ],
       },
       {
@@ -254,7 +254,7 @@ export const extraTracks: Track[] = [
         ],
       },
       {
-        title: "The marriage across the difference",
+        title: "The relationship across the difference",
         focus: "Deciding what closeness looks like when you may never fully share a faith, and what you're building that's bigger than the gap.",
         prompts: [
           "Where could our different beliefs actually bring us closer instead of pushing us apart?",
@@ -282,11 +282,11 @@ export const extraTracks: Track[] = [
     title: "The long haul of caregiving",
     subtitle: "Love in a season that doesn't end",
     overview:
-      "There is a lot of help for the crisis: the diagnosis, the surgery, the frightening first months. There is almost none for year six, or year twelve, when the illness or disability is simply the weather now and everyone else has moved on. This track is for the long haul: the marriage where one of you lives with a chronic or progressive condition, the casseroles stopped coming years ago, the family that rallied has long since burned out, and respite costs money you may not have. It refuses the story of crisis and recovery, because your story isn't shaped like that. It is for staying married, and staying two people, inside a season with no end date on it.",
+      "There is a lot of help for the crisis: the diagnosis, the surgery, the frightening first months. There is almost none for year six, or year twelve, when the illness or disability is simply the weather now and everyone else has moved on. This track is for the long haul: the relationship where one of you lives with a chronic or progressive condition, the casseroles stopped coming years ago, the family that rallied has long since burned out, and respite costs money you may not have. It refuses the story of crisis and recovery, because your story isn't shaped like that. It is for staying connected, and staying two people, inside a season with no end date on it.",
     feelings: [
       {
         label: "If you're the one living with the illness",
-        body: "Years in, the fear has usually settled into something heavier: the grind of a body that won't cooperate, and the guilt of watching your partner's life bend around yours with no end in sight. You may hate being the reason plans keep shrinking, and hate needing help with things you once did without a thought. It's common to feel like less of a spouse and more of a task, and to be angry at the one person who has stayed. You are not a burden you owe repayment on. You are still a whole person, and still their partner, not only their patient.",
+        body: "Years in, the fear has usually settled into something heavier: the grind of a body that won't cooperate, and the guilt of watching your partner's life bend around yours with no end in sight. You may hate being the reason plans keep shrinking, and hate needing help with things you once did without a thought. It's common to feel like less of a partner and more of a task, and to be angry at the one person who has stayed. You are not a burden you owe repayment on. You are still a whole person, and still their partner, not only their patient.",
       },
       {
         label: "If you're the caregiver",
@@ -295,7 +295,7 @@ export const extraTracks: Track[] = [
     ],
     principles: [
       "This is not a crisis with a recovery waiting on the other side, and pretending it is only adds shame when the finish line never comes. The goal is a livable, honest long season, not a cure to perform hope about.",
-      "Patient and caregiver are jobs, not the whole of either of you. Protecting time where the illness is not the subject and care is not the activity is how the marriage survives underneath the roles.",
+      "Patient and caregiver are jobs, not the whole of either of you. Protecting time where the illness is not the subject and care is not the activity is how the relationship survives underneath the roles.",
       "The caregiver's needs stay legitimate no matter how long this lasts. Rest, help, and a life of your own are not disloyalty, and burning out helps no one, least of all the person being cared for.",
       "The ill partner keeps agency and keeps contributing in whatever form is possible. Being cared for should not mean being managed, decided for, or treated as fragile in every room.",
       "Respite is real, and it often costs money or a favor you've already spent. Naming honestly what relief is actually available, and what isn't, beats waiting for help that isn't coming. Some seasons there is simply less than you need.",
@@ -316,7 +316,7 @@ export const extraTracks: Track[] = [
         title: "Spouse and patient, caregiver and person",
         focus: "Naming how far the roles have taken over, and deliberately protecting the two people underneath them.",
         prompts: [
-          "When do I still feel like your spouse, and when do I feel only like your patient or your nurse?",
+          "When do I still feel like your partner, and when do I feel only like your patient or your nurse?",
           "What did we used to be to each other that the illness has crowded out, and do we both miss it?",
           "What's one part of our week we could guard from the illness entirely?",
           "What can the ill partner still own or contribute that would restore a little footing?",
@@ -344,7 +344,7 @@ export const extraTracks: Track[] = [
       },
       {
         title: "A life, not just a schedule",
-        focus: "Building something that is still a marriage and still a life inside the ongoing season, and facing the forward questions with company instead of alone.",
+        focus: "Building something that is still a relationship and still a life inside the ongoing season, and facing the forward questions with company instead of alone.",
         prompts: [
           "What do we still want our days to hold besides appointments and management?",
           "What small joys are actually available to us, and are we taking them?",
@@ -371,7 +371,7 @@ export const extraTracks: Track[] = [
     title: "When money is always tight",
     subtitle: "Staying close when there's never enough",
     overview:
-      "This is not the story of a lost job you're waiting to recover from. This is the marriage where the money has always been tight, and there is no season on the horizon where it isn't: hourly or gig work with no cushion, no benefits to fall back on, an account that empties every month before it fills. Advice built for people with savings to reorganize or help to accept lands as an insult here, because there is nothing to triage and the help often isn't there. What scarcity does to a marriage is quieter and more corrosive than a single crisis: the low hum of never-enough, the bone tiredness, the way it can turn two exhausted people against each other. This track is about protecting the us when the money can't be fixed by wanting it fixed.",
+      "This is not the story of a lost job you're waiting to recover from. This is the relationship where the money has always been tight, and there is no season on the horizon where it isn't: hourly or gig work with no cushion, no benefits to fall back on, an account that empties every month before it fills. Advice built for people with savings to reorganize or help to accept lands as an insult here, because there is nothing to triage and the help often isn't there. What scarcity does to a relationship is quieter and more corrosive than a single crisis: the low hum of never-enough, the bone tiredness, the way it can turn two exhausted people against each other. This track is about protecting the us when the money can't be fixed by wanting it fixed.",
     feelings: [
       {
         label: "If you carry the daily juggling",
@@ -383,7 +383,7 @@ export const extraTracks: Track[] = [
       },
     ],
     principles: [
-      "The enemy is the scarcity, never the spouse. When there's no slack, every disagreement wants to become a referendum on each other. Us against the shortage is the only version that survives it.",
+      "The enemy is the scarcity, never the partner. When there's no slack, every disagreement wants to become a referendum on each other. Us against the shortage is the only version that survives it.",
       "'Just budget better' is usually a lie told to people who already track every dollar. You cannot cut your way out of wages that don't cover the basics. Skip the shame of imaginary mistakes and deal with the real math.",
       "Scarcity is a tax on attention: it eats focus, patience, and sleep, and it makes everyone in its grip more reactive. Naming that out loud (we're short-fused because we're stretched, not because we've stopped loving each other) keeps it from reading as contempt.",
       "Some help exists and some doesn't, and pretending it's always there is its own cruelty. Chase what's real (benefits you may qualify for, a program, a clinic, a food resource) without shame, and don't punish each other over doors that aren't open.",
@@ -432,7 +432,7 @@ export const extraTracks: Track[] = [
         ],
       },
       {
-        title: "The marriage the money can't take",
+        title: "The relationship the money can't take",
         focus: "Protecting the relationship itself through a season with no clear end, because couples who only grind arrive at each other as strangers.",
         prompts: [
           "What's a free version of something we used to love that we could still do?",
@@ -451,7 +451,7 @@ export const extraTracks: Track[] = [
     seekHelp: [
       "Depression or hopelessness settling in under the grind: sleeping all day, numbness, no way out in sight. It's common under chronic strain and it's treatable; community health centers offer care on a sliding scale.",
       "Nonprofit credit counseling (for example, NFCC-affiliated agencies) and 211 (which connects to local assistance in many areas) are free or low-cost and know what help actually exists near you. Using them is not failure.",
-      "Financial pressure turning into hidden debt, or into fights that escalate past words. Concealed money wounds a marriage like other betrayals, and conflict turning into fear means it's time for the safety page.",
+      "Financial pressure turning into hidden debt, or into fights that escalate past words. Concealed money wounds a relationship like other betrayals, and conflict turning into fear means it's time for the safety page.",
       "A benefits or legal question you can't crack alone (eviction, wage theft, disability, a denied claim). Legal aid and benefits navigators are often free and exist for exactly this.",
     ],
   },

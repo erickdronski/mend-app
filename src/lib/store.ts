@@ -1,6 +1,6 @@
 /**
- * Local-first storage on AsyncStorage. The device owns the couple's data;
- * Supabase auth exists for identity and (later) couple sync, never as a
+ * Local-first storage on AsyncStorage. The device owns the relationship's data;
+ * Supabase auth exists for identity and (later) shared sync, never as a
  * requirement to heal.
  */
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -13,7 +13,7 @@ export type Profile = {
   b: string;
   safetyAck: boolean;
   createdAt: string;
-  /** what the couple is carrying, chosen at onboarding; personalizes the app */
+  /** what the relationship is carrying, chosen at onboarding; personalizes the app */
   situation?: Situation;
   /**
    * The relationship model. All optional so every profile written before the
@@ -23,7 +23,7 @@ export type Profile = {
   relationshipType?: RelationshipType;
   together?: Together;
   living?: LivingSituation;
-  /** Situations can stack (a couple is rarely carrying exactly one thing). */
+  /** Situations can stack (a relationship is rarely carrying exactly one thing). */
   situations?: Situation[];
   lenses?: { a?: LensId; b?: LensId };
   roles?: { a?: ConflictRole; b?: ConflictRole };

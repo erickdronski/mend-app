@@ -44,7 +44,7 @@ export const challenges: Challenge[] = [
       {
         title: "Greet before logistics",
         task: "The first time you see each other today after being apart, greet the person before the schedule: eye contact, a real hello, maybe a hug that lasts one beat longer than usual. The plumber and the pickup times can wait two minutes.",
-        why: "Reunions set the tone for the whole evening. When the first exchange of the night is about logistics, you become co-managers instead of partners. Two minutes of actual greeting is a cheap way to feel married again.",
+        why: "Reunions set the tone for the whole evening. When the first exchange of the night is about logistics, you become co-managers instead of partners. Two minutes of actual greeting is a cheap way to feel chosen again.",
       },
       {
         title: "Decline warmly",
@@ -126,7 +126,7 @@ export const challenges: Challenge[] = [
       },
       {
         title: "One soft startup, small stakes",
-        task: "Pick one genuinely small annoyance and raise it gently: “I feel [feeling] about [situation]. Could we [one specific request]?” Small means small. The dishes, not the marriage.",
+        task: "Pick one genuinely small annoyance and raise it gently: “I feel [feeling] about [situation]. Could we [one specific request]?” Small means small. The dishes, not the relationship.",
         why: "A soft startup aims at the problem instead of the person, and it changes how the whole conversation goes. Practicing on something tiny means the skill exists before you need it on something big. Nobody learns to swim in a storm.",
       },
       {
@@ -137,7 +137,7 @@ export const challenges: Challenge[] = [
       {
         title: "Catch one repair",
         task: "Watch today for your partner's attempt to lower the temperature (a joke, a touch, “can we start over?”) and take it, out loud: “Yes. Let's start over.” If nothing tense happens, ask them instead: “What do I do mid-argument that's me trying to make peace? I'll tell you mine.”",
-        why: "Couples who last don't fight less; they catch the rope when the other one throws it. Repairs get missed because they arrive disguised, often as bad jokes at bad moments. Accepting one isn't conceding the argument. It's refusing to let the argument eat the marriage.",
+        why: "Couples who last don't fight less; they catch the rope when the other one throws it. Repairs get missed because they arrive disguised, often as bad jokes at bad moments. Accepting one isn't conceding the argument. It's refusing to let the argument eat the relationship.",
       },
       {
         title: "Own your two percent",
@@ -147,7 +147,7 @@ export const challenges: Challenge[] = [
       {
         title: "The small repair conversation",
         task: "Set aside twenty minutes (yes, more than ten today) and pick your smallest unfinished fight. Each of you describes your side; the other paraphrases it back until it's right. No verdicts, no winner. Then close it and leave it closed.",
-        why: "Unfinished fights don't dissolve; they wait. Doing a calm autopsy on a small one teaches you both the moves for the bigger ones. The goal is not agreeing on what happened. It's both realities getting heard inside one marriage.",
+        why: "Unfinished fights don't dissolve; they wait. Doing a calm autopsy on a small one teaches you both the moves for the bigger ones. The goal is not agreeing on what happened. It's both realities getting heard inside one relationship.",
       },
     ],
   },
@@ -166,7 +166,7 @@ export const challenges: Challenge[] = [
       {
         title: "One civil sentence",
         task: "Say one plain, ordinary sentence you'd say to a decent stranger: “Coffee's still hot.” “Drive safe.” Not warm, not loaded. Just civil.",
-        why: "Neutral is a real step up from hostile, and it doesn't ask you to perform feelings you don't have. Civility is honest at a stage where warmth would be fake. A marriage can be rebuilt from neutral; it can't be rebuilt from contempt.",
+        why: "Neutral is a real step up from hostile, and it doesn't ask you to perform feelings you don't have. Civility is honest at a stage where warmth would be fake. A relationship can be rebuilt from neutral; it can't be rebuilt from contempt.",
       },
       {
         title: "One quiet useful thing",
@@ -191,7 +191,7 @@ export const challenges: Challenge[] = [
       {
         title: "Name the thread",
         task: "Say one honest sentence (or write it, if saying it is too much): “I don't know where we end up. But I don't want us talking to each other the way we have been.” Then let it be. No demand for a reply.",
-        why: "This sentence promises nothing it can't keep, which is why it can be said even now. It doesn't ask your partner to forgive anything or decide anything; it only puts on record that one of you would rather stop swinging. A week like this doesn't fix a marriage, but it can be the thread that makes the real work (a counselor, the harder conversations) feel possible.",
+        why: "This sentence promises nothing it can't keep, which is why it can be said even now. It doesn't ask your partner to forgive anything or decide anything; it only puts on record that one of you would rather stop swinging. A week like this doesn't fix a relationship, but it can be the thread that makes the real work (a counselor, the harder conversations) feel possible.",
       },
     ],
   },

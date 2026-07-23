@@ -93,7 +93,7 @@ export default function Games() {
         key: "wyr",
         icon: "swap-horizontal" as const,
         title: "Would you rather",
-        desc: "Harmless dilemmas, answered out loud at the same time. Half the fun is finding out you married someone with terrible opinions.",
+        desc: "Harmless dilemmas, answered out loud at the same time. Half the fun is finding out your person has terrible opinions.",
         free: false,
         go: () => {
           setWyrList(shuffle(wouldYouRather));

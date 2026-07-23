@@ -227,7 +227,7 @@ export default function Quiz() {
       <Card tone="fern" style={{ marginTop: 16 }}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
           <IconChip name="heart" hue="sky" />
-          <H2 style={{ flex: 1 }}>What this gives your marriage</H2>
+          <H2 style={{ flex: 1 }}>What this gives your relationship</H2>
         </View>
         {lens.strengths.map((s) => (
           <P key={s} style={{ marginTop: 8, fontSize: 14 }}>

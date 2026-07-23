@@ -203,7 +203,7 @@ export default function Onboarding() {
                 <View style={{ flex: 1 }}>
                   <H2>What it gives</H2>
                   <Muted style={{ marginTop: 6 }}>
-                    The structure and language of real counseling frameworks, the kind couples pay
+                    The structure and language of real counseling frameworks, the kind partners pay
                     hundreds a session for. Staged, guided, free.
                   </Muted>
                 </View>
@@ -218,7 +218,7 @@ export default function Onboarding() {
                   <H2>How it ends</H2>
                   <Muted style={{ marginTop: 6 }}>
                     With you deleting it. Mend is designed to get you off the app and back into a
-                    marriage that holds itself up. Graduation is the feature.
+                    relationship that holds itself up. Graduation is the feature.
                   </Muted>
                 </View>
               </View>
@@ -227,8 +227,8 @@ export default function Onboarding() {
         </View>
         <Muted style={{ marginTop: 20, fontSize: 12.5, lineHeight: 18 }}>
           Mend is an educational tool, not therapy. It gives you structure and language; it does
-          not diagnose or treat, and it is not a substitute for a licensed marriage and family
-          therapist or crisis care.
+          not diagnose or treat, and it is not a substitute for a licensed relationship therapist
+          or crisis care.
         </Muted>
         <Btn label="We understand" onPress={() => setStep("gate")} style={{ marginTop: 16 }} />
       </Screen>

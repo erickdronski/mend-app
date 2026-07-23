@@ -1,5 +1,5 @@
 /**
- * Healing tracks: guided multi-session paths for marriages carrying a specific
+ * Healing tracks: guided multi-session paths for relationships carrying a specific
  * wound. Grounded in clinical frameworks (Gottman's atone→attune→attach for
  * affair recovery, grief-styles research from Doka & Martin, EFT), written
  * plainly. Every track signposts professional help and names the red flags
@@ -48,7 +48,7 @@ export const tracks: Track[] = [
       },
     ],
     principles: [
-      "The affair was a choice made by one person. Whatever was wrong in the marriage before it (and something usually was) gets examined later, as context, never as justification.",
+      "The affair was a choice made by one person. Whatever was wrong in the relationship before it (and something usually was) gets examined later, as context, never as justification.",
       "Full no-contact with the affair partner, verified and permanent. Trust cannot rebuild around an open channel.",
       "Honesty going forward is absolute. Each new discovered lie, even a small, kind one, resets the clock to zero.",
       "Questions get answered. One nuance: many couples in recovery find that graphic sexual detail deepens the trauma without adding truth. Answering 'what/when/where/how long' fully while pausing before the most explicit details is a decision to make together, possibly with a therapist.",
@@ -78,11 +78,11 @@ export const tracks: Track[] = [
       },
       {
         title: "The conditions, not the excuse",
-        focus: "Later, only when the betrayed partner says the atonement phase has genuinely landed. Examining the marriage the affair happened in. This is context-gathering as teammates, and it is never blame-shifting.",
+        focus: "Later, only when the betrayed partner says the atonement phase has genuinely landed. Examining the relationship the affair happened in. This is context-gathering as teammates, and it is never blame-shifting.",
         prompts: [
           "When did each of us start feeling far from the other, long before the affair?",
           "What needs went unspoken, and why didn't they feel speakable?",
-          "What did each of us do with loneliness inside the marriage?",
+          "What did each of us do with loneliness inside the relationship?",
           "What has to be different this time, not to excuse anything, so that 'us' is a different place to live?",
         ],
       },
@@ -97,8 +97,8 @@ export const tracks: Track[] = [
         ],
       },
       {
-        title: "A different marriage",
-        focus: "The attach phase: deciding what the two of you are building: not the old marriage restored, a new one with the lights on.",
+        title: "A different relationship",
+        focus: "The attach phase: deciding what the two of you are building: not the old relationship restored, a new one with the lights on.",
         prompts: [
           "What do I want us to protect ferociously this time?",
           "What early-warning signal should either of us be able to raise, and how will we receive it?",
@@ -211,17 +211,17 @@ export const tracks: Track[] = [
   {
     slug: "grief",
     title: "Death of a loved one",
-    subtitle: "When grief moves into the marriage",
+    subtitle: "When grief moves into the relationship",
     overview:
-      "A death in the family (a parent, a sibling, a child, a best friend) reorganizes the griever from the inside. The marriage suddenly contains a person in a country the other can't fully visit. Grieving partners commonly withdraw, rage at safe targets (guess who's safest), or disappear into logistics. This track helps the two of you keep a rope tied between you while one of you walks through it.",
+      "A death in the family (a parent, a sibling, a child, a best friend) reorganizes the griever from the inside. The relationship suddenly contains a person in a country the other can't fully visit. Grieving partners commonly withdraw, rage at safe targets (guess who's safest), or disappear into logistics. This track helps the two of you keep a rope tied between you while one of you walks through it.",
     feelings: [
       {
         label: "If you're the one grieving",
-        body: "You may have less to give the marriage right now (patience, desire, attention) and feel guilty about it. Grief also has a long tail: the world expects you 'back' in weeks, while the real timeline runs in seasons. Your partner cannot read which days are heavy. The kindest skill you can learn is saying 'today is a bad one' out loud.",
+        body: "You may have less to give the relationship right now (patience, desire, attention) and feel guilty about it. Grief also has a long tail: the world expects you 'back' in weeks, while the real timeline runs in seasons. Your partner cannot read which days are heavy. The kindest skill you can learn is saying 'today is a bad one' out loud.",
       },
       {
         label: "If you're the partner",
-        body: "You can't fix this, and trying to can register as rushing them. Your job is presence and logistics, not repair. It's also real that being married to grief is lonely. You're allowed to have needs during their loss; the skill is timing and gentleness, not silence.",
+        body: "You can't fix this, and trying to can register as rushing them. Your job is presence and logistics, not repair. It's also real that loving someone through grief is lonely. You're allowed to have needs during their loss; the skill is timing and gentleness, not silence.",
       },
     ],
     principles: [
@@ -229,7 +229,7 @@ export const tracks: Track[] = [
       "Presence beats fixing. 'I'm here' outperforms every piece of advice ever given to a griever.",
       "The griever sets the pace on talking about the person who died, but total silence usually means fear, not peace. Keep the door visibly open.",
       "The non-grieving partner needs support too, and shouldn't draw it all from the griever. Friends, family, their own outlets.",
-      "Watch for grief becoming the third person in the marriage no one mentions. Speak about it, together, on purpose.",
+      "Watch for grief becoming the third person in the relationship no one mentions. Speak about it, together, on purpose.",
     ],
     sessions: [
       {
@@ -283,7 +283,7 @@ export const tracks: Track[] = [
       "Grief that a year+ on still blocks basic functioning, or numbness that never breaks. Prolonged grief responds well to specialized therapy.",
       "Any talk of joining them, hopelessness, or self-harm: 988, immediately.",
       "Heavy self-medication (drinking, pills) as the primary coping channel.",
-      "If the loss was a child you share: couples grief counseling early, even 'preventively'. That specific loss strains even strong marriages beyond what any app should be trusted with.",
+      "If the loss was a child you share: couples grief counseling early, even 'preventively'. That specific loss strains even strong relationships beyond what any app should be trusted with.",
     ],
   },
   {
@@ -291,11 +291,11 @@ export const tracks: Track[] = [
     title: "Serious illness",
     subtitle: "Staying partners when you've become patient and caregiver",
     overview:
-      "A serious diagnosis quietly rewrites the job descriptions of a marriage. One of you becomes a patient (body, identity, and future suddenly negotiable) and one becomes a caregiver, a role nobody applied for. The marriage's task is to keep a third thing alive underneath those roles: the two of you. This track is for saying the unsayable things illness brings, and for protecting the marriage from becoming only a care arrangement.",
+      "A serious diagnosis quietly rewrites the job descriptions of a relationship. One of you becomes a patient (body, identity, and future suddenly negotiable) and one becomes a caregiver, a role nobody applied for. The relationship's task is to keep a third thing alive underneath those roles: the two of you. This track is for saying the unsayable things illness brings, and for protecting the relationship from becoming only a care arrangement.",
     feelings: [
       {
         label: "If you're the one who's ill",
-        body: "Alongside fear, expect grief for your old body and old plans, guilt about 'being a burden' (your illness is not a debt), and sometimes resentment of your own partner's health. Wanting to be treated as a spouse and not a project is legitimate. Say it before the distance does.",
+        body: "Alongside fear, expect grief for your old body and old plans, guilt about 'being a burden' (your illness is not a debt), and sometimes resentment of your own partner's health. Wanting to be treated as a partner and not a project is legitimate. Say it before the distance does.",
       },
       {
         label: "If you're the caregiver",
@@ -304,7 +304,7 @@ export const tracks: Track[] = [
     ],
     principles: [
       "You're allowed to talk about the hard outcomes. Couples often protect each other into total silence: each carrying the fear alone, together. Speaking it usually shrinks it.",
-      "Patient and caregiver are roles, not identities. Schedule time where the illness is not the topic and care is not the activity: spouse time, not shift work.",
+      "Patient and caregiver are roles, not identities. Schedule time where the illness is not the topic and care is not the activity: partner time, not shift work.",
       "The ill partner keeps agency: choices, information, and jobs within the family that are theirs. Being cared for shouldn't mean being managed.",
       "The caregiver gets real relief (outside help, family shifts, respite) and takes it without guilt. This is logistics, not loyalty.",
       "Medical uncertainty is its own trauma. You can't fix not-knowing for each other, but you can refuse to wait alone.",
@@ -324,7 +324,7 @@ export const tracks: Track[] = [
         title: "The roles we've fallen into",
         focus: "Naming the patient/caregiver drift and negotiating it deliberately instead of letting it calcify.",
         prompts: [
-          "When do I feel like your spouse right now, and when do I feel like your patient/nurse?",
+          "When do I feel like your partner right now, and when do I feel like your patient/nurse?",
           "What care do you actually want from me, and what would you rather I let go, delegate, or let you keep doing yourself?",
           "What did you used to count on me for that illness has interrupted, and what could I still carry?",
           "What's one part of our week we can quarantine from the illness entirely?",
@@ -369,7 +369,7 @@ export const tracks: Track[] = [
     title: "Job loss & financial crisis",
     subtitle: "Staying a team when the ground gives out",
     overview:
-      "Financial crisis attacks a marriage at two levels at once: the practical (bills, housing, debt) and the invisible (shame, identity, blame, fear from each partner's oldest money wounds). Couples usually fight about the second level while pretending it's the first. This track separates them (feelings first, spreadsheet second) because no budget survives two flooded nervous systems.",
+      "Financial crisis attacks a relationship at two levels at once: the practical (bills, housing, debt) and the invisible (shame, identity, blame, fear from each partner's oldest money wounds). Couples usually fight about the second level while pretending it's the first. This track separates them (feelings first, spreadsheet second) because no budget survives two flooded nervous systems.",
     feelings: [
       {
         label: "If you lost the job / took the hit",
@@ -381,7 +381,7 @@ export const tracks: Track[] = [
       },
     ],
     principles: [
-      "The problem is the situation, never the spouse. Us-versus-the-problem is the whole game; every blame exchange is a day added to the crisis.",
+      "The problem is the situation, never the partner. Us-versus-the-problem is the whole game; every blame exchange is a day added to the crisis.",
       "Shame hides; teams disclose. Full visibility on the numbers: both partners, same spreadsheet, no protective secrets. Financial infidelity (hidden debt, hidden spending) wounds like the other kind.",
       "Feelings meeting ≠ numbers meeting. Hold them separately. The feelings meeting has a timer and validation rules; the numbers meeting has an agenda and ends with decisions.",
       "Both partners' money histories are in the room. The panic and the avoidance were both learned somewhere. Name the childhood, defuse the fight.",
@@ -419,7 +419,7 @@ export const tracks: Track[] = [
         ],
       },
       {
-        title: "Marriage on a budget",
+        title: "Relationship on a budget",
         focus: "Protecting the relationship itself through the lean season, because couples who only survive logistically arrive at recovery estranged.",
         prompts: [
           "What's a zero-dollar version of what we used to love doing?",
@@ -447,7 +447,7 @@ export const tracks: Track[] = [
     title: "After the baby",
     subtitle: "Finding the couple inside the new family",
     overview:
-      "The first years after a baby are, statistically and anecdotally, one of the hardest seasons any marriage faces: no sleep, no time, a resentment ledger nobody admits keeping, touch that has become logistics, and two people who love each other managing a small operation side by side like exhausted coworkers. Almost everything about this season is normal, and 'normal' still corrodes if it's never spoken. This track is the speaking.",
+      "The first years after a baby are, statistically and anecdotally, one of the hardest seasons any relationship faces: no sleep, no time, a resentment ledger nobody admits keeping, touch that has become logistics, and two people who love each other managing a small operation side by side like exhausted coworkers. Almost everything about this season is normal, and 'normal' still corrodes if it's never spoken. This track is the speaking.",
     feelings: [
       {
         label: "The default parent",
@@ -455,14 +455,14 @@ export const tracks: Track[] = [
       },
       {
         label: "The other parent",
-        body: "Common and rarely said: feeling like you lost your partner to the baby, feeling incompetent when your soothing doesn't work and she takes over, becoming the household's utility player without the bond payoff, and missing being wanted. Saying 'I miss you' isn't selfish. It's the marriage talking. Also real: partners get postpartum depression too.",
+        body: "Common and rarely said: feeling like you lost your partner to the baby, feeling incompetent when your soothing doesn't work and she takes over, becoming the household's utility player without the bond payoff, and missing being wanted. Saying 'I miss you' isn't selfish. It's the relationship talking. Also real: partners get postpartum depression too.",
       },
     ],
     principles: [
       "The resentment ledger is real in both columns. Neither of you is lazy and neither of you is a martyr; you're both maxed and counting different currencies (visible tasks vs. mental load, hours worked vs. nights up).",
       "Fairness talk beats scorekeeping: divide by capacity and renegotiate monthly, because the job keeps changing.",
       "Touch needs de-escalating: when all touch seems to bid for sex, the touched-out partner stops offering any. Deliberately rebuild non-sexual affection first.",
-      "The couple needs fifteen protected minutes a day where the baby is not the topic. It sounds trivial. It's the marriage.",
+      "The couple needs fifteen protected minutes a day where the baby is not the topic. It sounds trivial. It's the relationship.",
       "Gatekeeping cuts both ways: the default parent has to let the other parent do it 'wrong' (differently); the other parent has to take whole domains, not tasks.",
     ],
     sessions: [
@@ -517,7 +517,7 @@ export const tracks: Track[] = [
       "Postpartum depression or anxiety in either parent: hopelessness, rage, intrusive thoughts, numbness past the newborn fog. Medical, common, very treatable; tell the OB/GP now.",
       "Any intrusive thoughts of harm to self or baby: 988 or your doctor immediately. These are treatable symptoms, not verdicts on you as a parent.",
       "Resentment hardening into contempt (eye-rolling, disgust, 'I'm done' fantasies as the default). Couples counseling early beats couples counseling late.",
-      "No family/community relief at all: paid or bartered childcare even rarely is marriage infrastructure, not luxury.",
+      "No family/community relief at all: paid or bartered childcare even rarely is relationship infrastructure, not luxury.",
     ],
   },
 ];

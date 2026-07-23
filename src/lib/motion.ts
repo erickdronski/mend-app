@@ -1,6 +1,6 @@
 /**
  * Mend motion system. One vocabulary of springs and durations so motion feels
- * like one hand made it: calm, physical, never gimmicky. A marriage app in hard
+ * like one hand made it: calm, physical, never gimmicky. A relationship app in hard
  * seasons, so motion is gentle and motivated (feedback, hierarchy, continuity,
  * a little delight) and always yields to reduced-motion.
  */

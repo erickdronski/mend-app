@@ -46,7 +46,7 @@
     "language": "Language",
     "languageNote": "Guides, card decks, and session content are English-only for now. Translations are on the way.",
     "aboutTitle": "About Mend",
-    "aboutBody": "Mend is an educational tool, not therapy. It cannot replace a licensed marriage and family therapist, and it never diagnoses. If there is violence, fear, or control in your relationship, guided couple conversations are not the safe tool. Free, private, and built to be deleted.",
+    "aboutBody": "Mend is an educational tool, not therapy. It cannot replace a licensed relationship therapist, and it never diagnoses. If there is violence, fear, or control in your relationship, guided partner conversations are not the safe tool. Free, private, and built to be deleted.",
     "safety": "Crisis resources",
     "names": "Your names",
     "partnerA": "Partner A",
@@ -54,13 +54,13 @@
   },
   "journey": {
     "title": "Your journey",
-    "subtitle": "A staged path from where you are to a marriage that doesn't need this app.",
+    "subtitle": "A staged path from where you are to a relationship that doesn't need this app.",
     "stage": "Stage",
     "pulseCheck": "Pulse check",
     "nextStep": "Your next step",
     "stageComplete": "Stage complete",
     "advance": "Begin the next stage",
     "graduated": "You made it. Delete us.",
-    "designedToEnd": "Mend is designed to be deleted: the goal is a marriage that doesn't need it anymore."
+    "designedToEnd": "Mend is designed to be deleted: the goal is a relationship that doesn't need it anymore."
   }
 }

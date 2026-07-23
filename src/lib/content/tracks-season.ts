@@ -5,7 +5,7 @@
  * the quiet after the kids leave.
  *
  * Same structure and voice as tracks.ts. Written for all committed romantic
- * relationships, not only marriages. Every track signposts professional help
+ * relationships, not only relationships. Every track signposts professional help
  * and names the red flags where an app is the wrong tool.
  *
  * Grounding: docs/research/relationship-taxonomy.md sections 3.12 (military and
@@ -265,7 +265,7 @@ export const seasonTracks: Track[] = [
       "Update the map, do not consult the old one. What your partner fears, wants, and dreams about now is probably not what they told you twenty years ago, and asking as if for a stranger will surprise you.",
       "Insight does not survive contact with an empty evening. Any good conversation here needs a structure behind it: one new shared thing, started soon, or the quiet just fills itself back up with television.",
       "Separate lives are part of the answer, not a threat to it. Two people with their own friends, interests, and plans have more to bring back to a shared table than two people watching each other.",
-      "The kids stay in your life without staying at the center of it. Constant monitoring and daily crisis management of adult children is often a way of avoiding the marriage that is now in the room.",
+      "The kids stay in your life without staying at the center of it. Constant monitoring and daily crisis management of adult children is often a way of avoiding the relationship that is now in the room.",
       "Bodies changed while you were busy, in whatever way your two bodies change. Hormones, menopause, surgery, medication, pain, sleep, and years of low privacy all leave a mark. Sexual reconnection at this stage takes intention and it can feel awkward to start. Awkward is fine. Silent is what costs you.",
     ],
     sessions: [

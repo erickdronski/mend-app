@@ -53,7 +53,7 @@ export const topics: Topic[] = [
     opener: "“I don't say this enough, and I want to spend a few minutes only on what's good.”",
     prompts: [
       "What first drew you to me, and is any of it still there?",
-      "Tell me about a moment you were proud to be married to me.",
+      "Tell me about a moment you were proud to be with me.",
       "What's something I do for our life that you suspect I think goes unnoticed?",
       "What strength of mine do you lean on, even in a hard season?",
     ],
@@ -78,7 +78,7 @@ export const topics: Topic[] = [
     id: "outside-stress",
     category: "Daily Life",
     title: "The stress that isn't about us",
-    why: "This is the one conversation where you fix nothing. Work, family, health stress from outside the marriage needs a listener, not a consultant. Getting this ritual right protects the marriage from everything else.",
+    why: "This is the one conversation where you fix nothing. Work, family, health stress from outside the relationship needs a listener, not a consultant. Getting this ritual right protects the relationship from everything else.",
     opener: "“Can I unload about my day? I don't need solutions. I just need you in my corner.”",
     prompts: [
       "What was the worst moment of your week, start to finish?",
@@ -122,7 +122,7 @@ export const topics: Topic[] = [
     id: "affection",
     category: "Intimacy",
     title: "Affection and desire",
-    why: "Desire discrepancies are normal in long marriages; silence about them is what does the damage. This conversation needs the most safety of any in this library. Soft startup is not optional here.",
+    why: "Desire discrepancies are normal in long relationships; silence about them is what does the damage. This conversation needs the most safety of any in this library. Soft startup is not optional here.",
     opener: "“I want to talk about our physical connection. I'm nervous to bring it up, which probably means it matters.”",
     prompts: [
       "When do you feel most wanted by me (not just sexually, wanted)?",
@@ -136,7 +136,7 @@ export const topics: Topic[] = [
     id: "wanted-needed",
     category: "Intimacy",
     title: "Feeling wanted vs. feeling needed",
-    why: "Plenty of marriages run efficiently (kids fed, bills paid) while both partners quietly feel like staff. Being needed is logistics. Being wanted is the marriage.",
+    why: "Plenty of relationships run efficiently (kids fed, bills paid) while both partners quietly feel like staff. Being needed is logistics. Being wanted is the relationship.",
     opener: "“I know we need each other to run this life. I want to talk about whether we still *want* each other.”",
     prompts: [
       "When did you last feel chosen by me, not just relied on?",
@@ -164,7 +164,7 @@ export const topics: Topic[] = [
     id: "in-laws",
     category: "Family",
     title: "In-laws and boundaries",
-    why: "The rule that saves marriages: each partner manages their own family of origin. This conversation is for agreeing, as a couple, where the fence goes, so neither of you is defending the other's parents to each other.",
+    why: "The rule that saves relationships: each partner manages their own family of origin. This conversation is for agreeing, as a couple, where the fence goes, so neither of you is defending the other's parents to each other.",
     opener: "“I want us to decide together where our boundaries are with our families, so it's never me against yours or you against mine.”",
     prompts: [
       "Where does my family cross a line for you, even a small one?",

@@ -6,7 +6,7 @@
  * written, so nobody is reacting to their partner; they are just answering.
  * Every question here works alone: no partner in the room required, nothing
  * that only makes sense in year one or year thirty, nothing that assumes the
- * marriage is thriving or assumes it is on fire.
+ * relationship is thriving or assumes it is on fire.
  */
 import { extraDailyQuestions } from "./daily-rel";
 
@@ -52,7 +52,7 @@ export const dailyQuestions: DailyQuestion[] = [
     category: "repair",
   },
   {
-    text: "If your marriage had a theme song this week, what would it be and why?",
+    text: "If your relationship had a theme song this week, what would it be and why?",
     category: "playful",
   },
   {
@@ -144,7 +144,7 @@ export const dailyQuestions: DailyQuestion[] = [
     category: "noticing",
   },
   {
-    text: "What is one way this marriage has made you better than you were before it?",
+    text: "What is one way this relationship has made you better than you were before it?",
     category: "gratitude",
   },
   {
@@ -184,7 +184,7 @@ export const dailyQuestions: DailyQuestion[] = [
     category: "curiosity",
   },
   {
-    text: "What has this marriage carried you through that you might not have made it through alone?",
+    text: "What has this relationship carried you through that you might not have made it through alone?",
     category: "gratitude",
   },
   {
@@ -249,7 +249,7 @@ export const dailyQuestions: DailyQuestion[] = [
   },
 ];
 
-// Questions that work for every relationship type, not just marriages.
+// Questions that work for every relationship type.
 // Idempotent so a hot-reload / double module eval cannot duplicate them.
 for (const q of extraDailyQuestions) {
   if (!dailyQuestions.some((x) => x.text === q.text)) dailyQuestions.push(q);

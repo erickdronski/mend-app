@@ -122,7 +122,7 @@ export default function Challenges() {
               <H2>Seven for seven</H2>
               <P style={{ marginTop: 8 }}>
                 A week of showing up on purpose. Whatever it shifted, you built it one small day at
-                a time, which is the only way anything in a marriage gets built. The journey has
+                a time, which is the only way anything in a relationship gets built. The journey has
                 counted it.
               </P>
               <Btn

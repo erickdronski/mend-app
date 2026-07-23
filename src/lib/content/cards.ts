@@ -107,7 +107,7 @@ export const decks: Deck[] = [
     tagline: "The questions under the questions.",
     vibe: "deep",
     description:
-      "Questions about the inner life: fears, needs, old wounds, the things that get thought but not said. These cards work best when there's already some safety in the room, so if the marriage is running cold, warm up with First Steps before you come here. The listener's only job is to hear the answer without arguing with it.",
+      "Questions about the inner life: fears, needs, old wounds, the things that get thought but not said. These cards work best when there's already some safety in the room, so if the relationship is running cold, warm up with First Steps before you come here. The listener's only job is to hear the answer without arguing with it.",
     guidance:
       "Take turns drawing, and let the person who draws choose whether to answer first or hand the card over. No fixing, no debating the answer, and no using anything said here as ammunition later; that rule is the whole deck. Anyone may pass any card, no explanation owed.",
     cards: [
@@ -115,11 +115,11 @@ export const decks: Deck[] = [
         text: "What's something you worry about that you mostly keep to yourself?",
       },
       {
-        text: "When do you feel loneliest, even inside this marriage?",
+        text: "When do you feel loneliest, even inside this relationship?",
         followUp: "Is there something I do, or don't do, that makes it better or worse?",
       },
       {
-        text: "What part of yourself have you put on a shelf since we got married?",
+        text: "What part of yourself have you put on a shelf since we got serious?",
       },
       {
         text: "What did you need as a kid that you didn't reliably get?",
@@ -154,7 +154,7 @@ export const decks: Deck[] = [
         text: "What do you pretend not to care about that you actually care about a lot?",
       },
       {
-        text: "When do you feel most like an impostor: at work, as a parent, as a spouse, anywhere?",
+        text: "When do you feel most like an impostor: at work, as a parent, as a partner, anywhere?",
       },
       {
         text: "What's a loss you've never fully let yourself grieve?",
@@ -181,10 +181,10 @@ export const decks: Deck[] = [
   {
     id: "lighter",
     title: "Lighter",
-    tagline: "Because you married someone you used to laugh with.",
+    tagline: "Because you love someone you used to laugh with.",
     vibe: "playful",
     description:
-      "Nostalgia, silliness, terrible opinions held with total confidence. Laughing together is not a distraction from repairing a marriage; for a lot of couples it's the first brick. Pull this deck out on a date night, a long drive, or any evening that's been too serious for too long.",
+      "Nostalgia, silliness, terrible opinions held with total confidence. Laughing together is not a distraction from repairing a relationship; for a lot of couples it's the first brick. Pull this deck out on a date night, a long drive, or any evening that's been too serious for too long.",
     guidance:
       "No turns needed here: draw a card, both of you answer it, argue about whose answer is better. Interrupting with a better story is allowed and encouraged. Anyone may pass any card, no explanation owed.",
     cards: [
@@ -460,7 +460,7 @@ export const decks: Deck[] = [
         text: "What about the future scares you that you'd rather face as a team than alone?",
       },
       {
-        text: "If this marriage had a mission statement, what should the first line be?",
+        text: "If this relationship had a mission statement, what should the first line be?",
       },
       {
         text: "What's one thing you'd regret never trying?",

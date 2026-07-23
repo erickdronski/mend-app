@@ -728,7 +728,7 @@ export default function Talk() {
         <H1 style={{ marginTop: 8 }}>One small commitment each</H1>
         <CollapsibleP lines={1} style={{ marginTop: 10 }}>
           Small and concrete beats grand and vague: &ldquo;I&apos;ll handle bedtime Tuesday&rdquo;
-          keeps a marriage better than &ldquo;I&apos;ll be more present.&rdquo; These go on your
+          keeps a relationship better than &ldquo;I&apos;ll be more present.&rdquo; These go on your
           shared plan.
         </CollapsibleP>
         <View style={{ marginTop: 20, gap: 14 }}>

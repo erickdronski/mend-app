@@ -15,7 +15,7 @@ export const rituals: Ritual[] = [
     id: "daily-checkin",
     title: "The 10-minute check-in",
     cadence: "Daily",
-    body: "Ten minutes, phones down, about your days and your insides, not logistics, not the kids' schedule. The single highest-return ritual a strained marriage can adopt.",
+    body: "Ten minutes, phones down, about your days and your insides, not logistics, not the kids' schedule. The single highest-return ritual a strained relationship can adopt.",
   },
   {
     id: "six-second-kiss",
@@ -33,7 +33,7 @@ export const rituals: Ritual[] = [
     id: "state-of-union",
     title: "State of the Union",
     cadence: "Weekly",
-    body: "A standing 45-minute meeting for the marriage: what went well this week, what was hard (speaker-listener rules), and one thing each of you needs next week. Complaints go here instead of leaking all week.",
+    body: "A standing 45-minute meeting for the relationship: what went well this week, what was hard (speaker-listener rules), and one thing each of you needs next week. Complaints go here instead of leaking all week.",
   },
   {
     id: "date-night",
@@ -57,7 +57,7 @@ export const rituals: Ritual[] = [
     id: "gratitude-dinner",
     title: "Highs and lows at dinner",
     cadence: "Daily",
-    body: "Each person's best and hardest moment of the day, around the table. Works with kids present, and teaches them the marriage they'll one day copy.",
+    body: "Each person's best and hardest moment of the day, around the table. Works with kids present, and teaches them the relationship they'll one day copy.",
   },
 ];
 

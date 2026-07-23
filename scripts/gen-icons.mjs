@@ -27,12 +27,16 @@ const mark = (bg) => `
 
 mkdirSync("assets/images", { recursive: true });
 
-await sharp(Buffer.from(mark(true))).resize(1024, 1024).png().toFile("assets/images/icon.png");
+await sharp(Buffer.from(mark(true)))
+  .resize(1024, 1024)
+  .removeAlpha()
+  .png({ force: true })
+  .toFile("assets/images/icon.png");
 await sharp(Buffer.from(mark(false)))
   .resize(1024, 1024)
   .png()
   .toFile("assets/images/android-icon-foreground.png");
 await sharp(Buffer.from(mark(false))).resize(512, 512).png().toFile("assets/images/splash-icon.png");
-await sharp(Buffer.from(mark(true))).resize(48, 48).png().toFile("assets/images/favicon.png");
+await sharp(Buffer.from(mark(true))).resize(48, 48).removeAlpha().png({ force: true }).toFile("assets/images/favicon.png");
 
 console.log("icons written");

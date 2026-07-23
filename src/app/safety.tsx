@@ -31,7 +31,7 @@ export default function Safety() {
 
       <H2 style={{ marginTop: 24 }}>Finding real counseling without real money</H2>
       <Muted style={{ marginTop: 6 }}>
-        Mend exists because therapy is expensive. But when a marriage needs a professional, there
+        Mend exists because therapy is expensive. But when a relationship needs a professional, there
         are more affordable doors than most people know about.
       </Muted>
       <View style={{ marginTop: 10, gap: 10 }}>

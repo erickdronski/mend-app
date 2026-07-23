@@ -125,12 +125,12 @@ export const situations: SituationDef[] = [
   },
   {
     id: "blended",
-    chip: "Blended or second marriage",
+    chip: "Blended family",
     icon: "people-outline",
     hereForYou:
-      "You're building a second marriage through family shrapnel. There's a path for exactly this.",
+      "You're building a relationship through family shrapnel. There's a path for exactly this.",
     track: "blended",
-    trackTitle: "Blended family and second marriage",
+    trackTitle: "Blended family",
     stories: ["almost-divorce"],
     decks: ["go-deeper", "first-steps"],
     heavy: true,

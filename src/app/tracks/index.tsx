@@ -28,7 +28,7 @@ export default function Tracks() {
       <Hero
         hue="plum"
         eyebrow="When it's heavy"
-        title="For the marriages carrying something heavy"
+        title="For relationships carrying something heavy"
         sub="Some seasons need a map, not just better habits."
         style={{ marginTop: 4 }}
       />

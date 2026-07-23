@@ -135,7 +135,7 @@ export const partnerQuiz: QuizQuestion[] = [
     category: "Stress & comfort",
   },
   {
-    q: "Outside of your marriage, who or what is your partner most worried about right now?",
+    q: "Outside of your relationship, who or what is your partner most worried about right now?",
     category: "Stress & comfort",
   },
 

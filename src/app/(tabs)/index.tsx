@@ -334,7 +334,7 @@ export default function Today() {
       </Press>
 
       <Muted style={{ marginTop: 18, textAlign: "center", fontSize: 12 }}>
-        Mend is designed to be deleted. The goal is a marriage that doesn&apos;t need it.
+        Mend is designed to be deleted. The goal is a relationship that doesn&apos;t need it.
       </Muted>
     </Screen>
   );

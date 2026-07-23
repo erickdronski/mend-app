@@ -1,8 +1,8 @@
 /**
  * State backup: signed-in users get their whole local state mirrored to
  * mend_state (RLS: only theirs). The device remains the source of truth;
- * this is a lifeboat for lost phones and the seed of future couple sync.
- * Fire-and-forget: sync failures never block the couple's work.
+ * this is a lifeboat for lost phones and the seed of future shared sync.
+ * Fire-and-forget: sync failures never block the relationship's work.
  */
 import { supabase } from "./supabase";
 import {

@@ -323,9 +323,9 @@ export const lensResults: LensResult[] = [
     id: "secure",
     title: "You love with both feet on the floor",
     summary:
-      "Closeness doesn't spook you and distance doesn't spiral you. When something's wrong you tend to say so, and when your partner says something's wrong, you can hear it without hearing “you're failing.” This isn't a personality prize; it's a set of habits, and plenty of people build them in adulthood after starting somewhere much shakier. It also doesn't mean you're always easy to be married to.",
+      "Closeness doesn't spook you and distance doesn't spiral you. When something's wrong you tend to say so, and when your partner says something's wrong, you can hear it without hearing “you're failing.” This isn't a personality prize; it's a set of habits, and plenty of people build them in adulthood after starting somewhere much shakier. It also doesn't mean you're always easy to be close to.",
     strengths: [
-      "You can raise a problem without turning it into a referendum on the whole marriage.",
+      "You can raise a problem without turning it into a referendum on the whole relationship.",
       "You take your partner's word for things instead of scanning between the lines for the real message.",
       "You recover from arguments without keeping a ledger.",
       "You're steady enough that other people borrow calm from you.",
@@ -349,7 +349,7 @@ export const lensResults: LensResult[] = [
     id: "anxious",
     title: "You love with the porch light on",
     summary:
-      "You love the way someone keeps a porch light on: attentive, hopeful, always half listening for the car in the driveway. Connection isn't a nice-to-have for you; it's the ground you stand on, and when it wobbles, everything wobbles. That sensitivity gets called “too much,” but it's also radar: you tend to notice trouble in a marriage months before it becomes obvious. This style usually comes from somewhere real, and it softens with enough kept promises.",
+      "You love the way someone keeps a porch light on: attentive, hopeful, always half listening for the car in the driveway. Connection isn't a nice-to-have for you; it's the ground you stand on, and when it wobbles, everything wobbles. That sensitivity gets called “too much,” but it's also radar: you tend to notice trouble in a relationship months before it becomes obvious. This style usually comes from somewhere real, and it softens with enough kept promises.",
     strengths: [
       "You notice. Small shifts in tone, mood, and distance rarely get past you.",
       "You fight for the relationship instead of letting it quietly starve.",
@@ -386,7 +386,7 @@ export const lensResults: LensResult[] = [
       "Your quiet can be read as a verdict when it's actually just processing. Say which one it is.",
       "Space without a return time feels like abandonment from the other side of the door.",
       "Waiting for a problem to blow over is a decision, even when it doesn't feel like one.",
-      "Self-sufficiency can quietly become a wall that keeps out the person you married.",
+      "Self-sufficiency can quietly become a wall that keeps out the person you love.",
     ],
     forYourPartner:
       "This person shows love in acts, presence, and reliability more than in announcements, so learn to read their dialect instead of only listening for yours. Pressure closes them; patience opens them. Hard conversations often go better side by side (driving, walking, doing dishes) than face to face across a table. When they go quiet, it's usually a full buffer, not a locked door: give them room with a gentle “come find me when you're ready,” and they usually do. And when they hand you something vulnerable, receive it softly. It cost more than it looked like.",
@@ -426,7 +426,7 @@ export const conflictResults: ConflictResult[] = [
     id: "withdrawer",
     title: "You go quiet to hold the line",
     summary:
-      "When a fight heats up, something in you steps back from the flame: fewer words, flatter voice, a strong pull toward another room. It isn't indifference. Usually it's overload, or the conviction that anything you say right now will make things worse. Retreat is your way of protecting the marriage from the fight. The trouble is that from the outside, it can look exactly like leaving.",
+      "When a fight heats up, something in you steps back from the flame: fewer words, flatter voice, a strong pull toward another room. It isn't indifference. Usually it's overload, or the conviction that anything you say right now will make things worse. Retreat is your way of protecting the relationship from the fight. The trouble is that from the outside, it can look exactly like leaving.",
     inFights:
       "You get quiet, short, reasonable-sounding, and far away. You might physically leave, or just go somewhere behind your own eyes. Your partner often hears that silence as “you don't matter,” which is usually the precise opposite of what's happening inside you. And the loop feeds itself: the less you say, the louder they get, and the louder they get, the less you can say.",
     softening: [

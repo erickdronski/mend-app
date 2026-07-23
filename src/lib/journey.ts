@@ -1,6 +1,6 @@
 /**
  * The Journey: Mend's spine. A staged, progressive program that takes a
- * struggling couple from "we can barely talk" to "we don't need this app,"
+ * struggling relationship from "we can barely talk" to "we don't need this app,"
  * on the Hinge principle: designed to be deleted.
  *
  * Stages gate on real, detectable work (sessions held, challenges finished,
@@ -64,7 +64,7 @@ export const stages: Stage[] = [
     title: "Steady the ground",
     arc: "Stop the bleeding. Prove that ten calm minutes together is possible.",
     weeksHint: "Usually 1 to 2 weeks",
-    why: "Nothing can be rebuilt on a battlefield. Stage one asks almost nothing: no verdicts on the marriage, no hard topics, no promises. Just evidence, collected together, that the two of you can still share ten safe minutes. That evidence is the foundation everything else stands on.",
+    why: "Nothing can be rebuilt on a battlefield. Stage one asks almost nothing: no verdicts on the relationship, no hard topics, no promises. Just evidence, collected together, that the two of you can still share ten safe minutes. That evidence is the foundation everything else stands on.",
     steps: [
       {
         id: "s1-pulse",
@@ -84,7 +84,7 @@ export const stages: Stage[] = [
       {
         id: "s1-session",
         title: "Hold your first session: the stress that isn't about us",
-        body: "Your first timed floor, on the one topic where you fix nothing and defend nothing, because it isn't about the marriage. Each of you gets protected minutes to unload about the outside world while the other only listens.",
+        body: "Your first timed floor, on the one topic where you fix nothing and defend nothing, because it isn't about the relationship. Each of you gets protected minutes to unload about the outside world while the other only listens.",
         href: "/talk?topic=outside-stress",
         hrefLabel: "Sit down together",
         auto: (ctx) => sessionHeld(ctx, "stress that isn't"),
@@ -194,7 +194,7 @@ export const stages: Stage[] = [
       {
         id: "s3-ritual",
         title: "Adopt the State of the Union ritual",
-        body: "A standing weekly meeting for the marriage: what went well, what was hard (speaker-listener rules), what each of you needs next week. Complaints go here, instead of leaking all week.",
+        body: "A standing weekly meeting for the relationship: what went well, what was hard (speaker-listener rules), what each of you needs next week. Complaints go here, instead of leaking all week.",
         href: "/plan",
         hrefLabel: "Adopt it in your plan",
         auto: (ctx) => ctx.plan.rituals.includes("state-of-union"),
@@ -214,19 +214,19 @@ export const stages: Stage[] = [
     title: "Rebuild what was lost",
     arc: "Warmth, desire, trust: the things the hard years spent down.",
     weeksHint: "Usually 4 to 8 weeks",
-    why: "Stopping the damage isn't the same as refilling what drained. Stage four goes at the tender things directly: affection and desire, the money wounds, the specific heavy thing your marriage has been carrying. This stage asks the most courage; it's also where couples start reporting that things feel different, not just better-managed.",
+    why: "Stopping the damage isn't the same as refilling what drained. Stage four goes at the tender things directly: affection and desire, the money wounds, the specific heavy thing your relationship has been carrying. This stage asks the most courage; it's also where partners start reporting that things feel different, not just better-managed.",
     steps: [
       {
         id: "s4-heavy",
         title: "Face the heavy thing, if you're carrying one",
-        body: "If your marriage holds a big wound (an affair, a loss, an illness, a money collapse), open its healing track and hold the first two conversations. If you're not carrying one, run a round of the Go Deeper deck instead.",
+        body: "If your relationship holds a big wound (an affair, a loss, an illness, a money collapse), open its healing track and hold the first two conversations. If you're not carrying one, run a round of the Go Deeper deck instead.",
         href: "/tracks",
         hrefLabel: "Find your track",
       },
       {
         id: "s4-session-affection",
         title: "Hold the session: affection and desire",
-        body: "The conversation most couples avoid the longest. Soft startup is mandatory; the prompts carry you. Being wanted is the marriage; this is where you talk about it out loud.",
+        body: "The conversation many partners avoid the longest. Soft startup is mandatory; the prompts carry you. Being wanted matters; this is where you talk about it out loud.",
         href: "/talk?topic=affection",
         hrefLabel: "Sit down together",
         auto: (ctx) => sessionHeld(ctx, "affection"),
@@ -242,7 +242,7 @@ export const stages: Stage[] = [
       {
         id: "s4-challenge",
         title: "Complete The Appreciation Week",
-        body: "Seven days of retraining attention from flaws back to strengths. Struggling couples audit each other's failures on autopilot; this interrupts the audit.",
+        body: "Seven days of retraining attention from flaws back to strengths. Struggling partners audit each other's failures on autopilot; this interrupts the audit.",
         href: "/challenges",
         hrefLabel: "Start the week",
         auto: (ctx) => ctx.challengesDone.includes("appreciation"),
@@ -266,10 +266,10 @@ export const stages: Stage[] = [
   },
   {
     n: 5,
-    title: "Build the marriage you meant",
+    title: "Build the relationship you meant",
     arc: "From repaired to chosen. Then you graduate, and delete us.",
     weeksHint: "Usually 4 weeks, then done",
-    why: "A repaired marriage isn't the goal; it's the floor. Stage five points forward: the dreams under your old gridlock, the future you're actually building, and the rituals that will hold it all up after the app is gone. Because that's the deal: Mend is designed to be deleted.",
+    why: "A repaired relationship isn't the goal; it's the floor. Stage five points forward: the dreams under your old gridlock, the future you're actually building, and the rituals that will hold it all up after the app is gone. Because that's the deal: Mend is designed to be deleted.",
     steps: [
       {
         id: "s5-session-gridlock",
@@ -282,14 +282,14 @@ export const stages: Stage[] = [
       {
         id: "s5-deck",
         title: "One round of the Dreams deck",
-        body: "The future, asked about out loud: ambitions, adventures, what you're building this for. Couples who talk about the future have one.",
+        body: "The future, asked about out loud: ambitions, adventures, what you're building this for. Partners who talk about the future have one.",
         href: "/cards",
         hrefLabel: "Open the deck",
       },
       {
         id: "s5-stories",
         title: "Read two stories that could have been yours",
-        body: "Pick the two composite stories closest to your own worst season and read them together. Not for comfort; for the reminder that the practices you now own are the same ones that carried those couples through.",
+        body: "Pick the two composite stories closest to your own worst season and read them together. Not for comfort; for the reminder that the practices you now own are the same ones that carried other relationships through.",
         href: "/stories",
         hrefLabel: "Read the stories",
       },
