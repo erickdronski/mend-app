@@ -103,7 +103,7 @@ export default function Settings() {
               {tier === "plus"
                 ? "Founding member. Everything is unlocked for you."
                 : previewOnly
-                  ? "Unlocked free during the beta."
+                  ? "Full access is unlocked in this build."
                   : "See what Plus includes."}
             </Muted>
           </View>
@@ -239,7 +239,8 @@ export default function Settings() {
         <Muted style={{ marginTop: 6, fontSize: 13 }}>
           In a shared space, your partner sees your daily answers (after you both send them) and
           your notes. They never see your pulse-check numbers or your quiz answers: those are
-          yours alone. Everything else stays on this phone unless you both act on it.
+          yours alone. When you are signed in, your journey progress, sessions, plan, and pulse
+          entries are backed up privately to your account so they can be restored on a new phone.
         </Muted>
       </Card>
 

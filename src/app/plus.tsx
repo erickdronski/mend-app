@@ -6,9 +6,8 @@
  * docs/PRICING.md). We compare cost to counseling, and we NEVER claim to
  * be as effective as therapy or make any clinical outcome claim.
  *
- * Payment opens Stripe Checkout in the browser. On the US storefront Apple
- * permits linking out with no entitlement and no commission (Guideline
- * 3.1.1(a), post Epic v. Apple).
+ * Purchase CTAs stay hidden until the App Store payment rail is settled.
+ * This build presents Plus as included access, not as an external checkout.
  */
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
@@ -38,7 +37,7 @@ export default function Plus() {
   const p = usePalette();
   const router = useRouter();
   const { session } = useAuth();
-  const { tier, previewOnly, startCheckout, busy } = usePremium();
+  const { tier, previewOnly, purchasesEnabled, startCheckout, busy } = usePremium();
   const [plan, setPlan] = useState<Plan>("annual");
   const [error, setError] = useState<string | null>(null);
 
@@ -53,15 +52,19 @@ export default function Plus() {
       <Hero
         hue="ember"
         eyebrow="Mend Plus"
-        title="A year of Plus costs less than one counseling session"
-        sub="The heart of Mend is free forever. Plus opens the full breadth."
+        title={purchasesEnabled ? "A year of Plus costs less than one counseling session" : "The full library is unlocked"}
+        sub={
+          purchasesEnabled
+            ? "The heart of Mend is free forever. Plus opens the full breadth."
+            : "Every deck, game, challenge, and healing track is included in this build."
+        }
         style={{ marginTop: 12 }}
       >
         <View style={{ marginTop: 14, flexDirection: "row", gap: 8 }}>
           {tier === "plus" ? (
             <Chip label="Founding member, Plus is yours" hue="honey" icon="ribbon-outline" />
           ) : previewOnly ? (
-            <Chip label="Free during the beta" hue="honey" icon="flask-outline" />
+            <Chip label="Full access included" hue="honey" icon="ribbon-outline" />
           ) : null}
         </View>
       </Hero>
@@ -119,46 +122,54 @@ export default function Plus() {
         </Card>
       </Reveal>
 
-      {/* Plan picker */}
-      <Reveal index={3} style={{ marginTop: 22 }}>
-        <Eyebrow hue="ember">Choose your plan</Eyebrow>
-        <View style={{ flexDirection: "row", gap: 10, marginTop: 8 }}>
-          {(["annual", "monthly"] as const).map((k) => {
-            const selected = plan === k;
-            const best = k === "annual";
-            return (
-              <Press key={k} onPress={() => setPlan(k)} style={{ flex: 1 }} haptic>
-                <Card
-                  style={{
-                    borderColor: selected ? p.hues.ember.accent : p.line,
-                    borderWidth: selected ? 2 : 1,
-                    backgroundColor: selected ? p.hues.ember.bg : undefined,
-                    paddingVertical: 16,
-                  }}
-                >
-                  {best ? <Chip label="Best value" hue="honey" style={{ marginBottom: 8 }} /> : null}
-                  <Text style={{ fontSize: 26, fontWeight: "800", color: p.ink }}>
-                    {PRICING[k].amount}
-                  </Text>
-                  <Muted style={{ marginTop: 2 }}>{PRICING[k].cadence}</Muted>
-                  {k === "annual" ? (
-                    <Muted style={{ marginTop: 6, fontSize: 12 }}>{PRICING.annual.perMonth}</Muted>
-                  ) : null}
-                </Card>
-              </Press>
-            );
-          })}
-        </View>
-        <Muted style={{ marginTop: 10, fontSize: 12.5 }}>
-          A year of Mend Plus costs less than one typical counseling session. Cancel anytime.
-        </Muted>
-      </Reveal>
+      {purchasesEnabled && (
+        <Reveal index={3} style={{ marginTop: 22 }}>
+          <Eyebrow hue="ember">Choose your plan</Eyebrow>
+          <View style={{ flexDirection: "row", gap: 10, marginTop: 8 }}>
+            {(["annual", "monthly"] as const).map((k) => {
+              const selected = plan === k;
+              const best = k === "annual";
+              return (
+                <Press key={k} onPress={() => setPlan(k)} style={{ flex: 1 }} haptic>
+                  <Card
+                    style={{
+                      borderColor: selected ? p.hues.ember.accent : p.line,
+                      borderWidth: selected ? 2 : 1,
+                      backgroundColor: selected ? p.hues.ember.bg : undefined,
+                      paddingVertical: 16,
+                    }}
+                  >
+                    {best ? <Chip label="Best value" hue="honey" style={{ marginBottom: 8 }} /> : null}
+                    <Text style={{ fontSize: 26, fontWeight: "800", color: p.ink }}>
+                      {PRICING[k].amount}
+                    </Text>
+                    <Muted style={{ marginTop: 2 }}>{PRICING[k].cadence}</Muted>
+                    {k === "annual" ? (
+                      <Muted style={{ marginTop: 6, fontSize: 12 }}>{PRICING.annual.perMonth}</Muted>
+                    ) : null}
+                  </Card>
+                </Press>
+              );
+            })}
+          </View>
+          <Muted style={{ marginTop: 10, fontSize: 12.5 }}>
+            A year of Mend Plus costs less than one typical counseling session. Cancel anytime.
+          </Muted>
+        </Reveal>
+      )}
 
       <Reveal index={4} style={{ marginTop: 20 }}>
         {tier === "plus" ? (
           <Card tone="fern">
             <P style={{ fontSize: 14 }}>
               You hold a founding entitlement on this account. Everything above is unlocked for you, permanently.
+            </P>
+          </Card>
+        ) : previewOnly && !purchasesEnabled ? (
+          <Card tone="fern">
+            <P style={{ fontSize: 14 }}>
+              Everything above is open in this build. The journey, safety resources, daily question,
+              guided sessions, and shared space remain free either way.
             </P>
           </Card>
         ) : (
@@ -178,8 +189,7 @@ export default function Plus() {
             {previewOnly ? (
               <Card tone="panel" style={{ marginTop: 14 }}>
                 <P style={{ fontSize: 13.5 }}>
-                  While Mend is in beta, everything above is already unlocked for you at no cost.
-                  Subscribing now is only for testing the checkout.
+                  Everything above is already unlocked for you at no cost.
                 </P>
               </Card>
             ) : null}

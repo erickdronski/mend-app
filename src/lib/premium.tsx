@@ -10,13 +10,12 @@
  * mend_my_tier() definer RPC, and cached locally so the tier survives offline
  * starts. Two grant paths: founder grants (email-keyed, never expire) and
  * Stripe subscriptions (user-id-keyed, written ONLY by the Stripe webhook,
- * never by the client). During the TestFlight beta PLUS_PREVIEW unlocks
- * everything for every tester.
+ * never by the client). While purchases are disabled, PLUS_PREVIEW unlocks
+ * everything so the app can launch as a fully usable free build.
  *
- * Payment runs through Stripe Checkout in the browser, not in-app purchase.
- * On the US storefront Apple permits linking out to an external checkout with
- * no entitlement and no commission (Guideline 3.1.1(a), post Epic v. Apple).
- * See docs/PRICING.md.
+ * Purchase UI is intentionally disabled until the App Store payment rail is
+ * settled. The checkout function remains wired for a future Stripe/web path,
+ * but this build does not present an external purchase CTA.
  */
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -27,6 +26,9 @@ import { useAuth } from "./auth";
 /** Beta switch: every TestFlight tester sees the full app. Flip to false when
  *  the public launch turns on real purchases (see docs/MONETIZATION.md). */
 export const PLUS_PREVIEW = true;
+
+/** Public purchase UI is off until the App Store payment rail is chosen. */
+export const PURCHASES_ENABLED = false;
 
 const TIER_KEY = "mend.tier";
 
@@ -51,8 +53,10 @@ type PremiumState = {
   /** True when access comes only from the beta preview, not a real entitlement. */
   previewOnly: boolean;
   refresh: () => Promise<void>;
-  /** Opens Stripe Checkout in the browser. Resolves to an error string, or null on success. */
+  /** Opens checkout when purchases are enabled. Resolves to an error string, or null on success. */
   startCheckout: (plan: Plan) => Promise<string | null>;
+  /** Whether this build should present a purchase CTA. */
+  purchasesEnabled: boolean;
   busy: boolean;
 };
 
@@ -62,6 +66,7 @@ const PremiumContext = createContext<PremiumState>({
   previewOnly: PLUS_PREVIEW,
   refresh: async () => {},
   startCheckout: async () => "Not ready yet.",
+  purchasesEnabled: PURCHASES_ENABLED,
   busy: false,
 });
 
@@ -94,13 +99,14 @@ export function PremiumProvider({ children }: { children: ReactNode }) {
   }, [refresh]);
 
   /**
-   * Ask the server for a Stripe Checkout URL and open it in the browser.
-   * The entitlement is granted by the Stripe webhook, never here, so a user
-   * cannot self-grant Plus by faking a client response. On return from the
-   * browser we re-check the tier.
+   * Ask the server for a checkout URL and open it in the browser.
+   * The entitlement is granted by the webhook, never here, so a user cannot
+   * self-grant Plus by faking a client response. On return from the browser
+   * we re-check the tier.
    */
   const startCheckout = useCallback(
     async (plan: Plan): Promise<string | null> => {
+      if (!PURCHASES_ENABLED) return "Purchases are not available in this build.";
       if (!session) return "Something went wrong setting up your account. Try again in a moment.";
       setBusy(true);
       try {
@@ -134,6 +140,7 @@ export function PremiumProvider({ children }: { children: ReactNode }) {
         previewOnly: PLUS_PREVIEW && tier !== "plus",
         refresh,
         startCheckout,
+        purchasesEnabled: PURCHASES_ENABLED,
         busy,
       }}
     >

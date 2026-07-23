@@ -41,7 +41,10 @@
       ],
       "expo-localization",
       "expo-local-authentication",
-      "expo-apple-authentication"
+      "expo-apple-authentication",
+      "expo-image",
+      "expo-status-bar",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,

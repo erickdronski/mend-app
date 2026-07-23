@@ -8,7 +8,7 @@ import { Press, Reveal } from "@/components/motion";
 export default function TrackDetail() {
   const p = usePalette();
   const router = useRouter();
-  const { plus } = usePremium();
+  const { plus, purchasesEnabled } = usePremium();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const track = getTrack(String(slug));
 
@@ -49,8 +49,10 @@ export default function TrackDetail() {
 
       <Eyebrow hue="plum" style={{ marginTop: 24 }}>The conversations, in order</Eyebrow>
       <Muted style={{ marginTop: 6 }}>
-        One at a time, days or weeks apart. Each opens as a guided session. The first is free;
-        Plus opens the full program.
+        One at a time, days or weeks apart. Each opens as a guided session.
+        {plus || !purchasesEnabled
+          ? " All conversations are included in this build."
+          : " The first is free; Plus opens the full program."}
       </Muted>
       <View style={{ marginTop: 10, gap: 12 }}>
         {track.sessions.map((s, i) => {
