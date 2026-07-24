@@ -45,3 +45,6 @@ example
 
 # Apple ASC API keys — never commit
 credentials/
+
+# Regenerable social publishing output
+social/generated/

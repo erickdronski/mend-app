@@ -162,6 +162,7 @@ function Shell() {
           <Stack.Screen name="quiz" options={{ title: "How you love & fight" }} />
           <Stack.Screen name="stories" options={{ title: "Stories" }} />
           <Stack.Screen name="library" options={{ title: "Library" }} />
+          <Stack.Screen name="insights" options={{ title: "Mend Notes" }} />
           <Stack.Screen name="topics" options={{ title: "Topics" }} />
           <Stack.Screen name="toolkit" options={{ title: "Toolkit" }} />
           <Stack.Screen name="safety" options={{ title: "Get help now" }} />

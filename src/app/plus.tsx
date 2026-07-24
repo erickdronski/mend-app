@@ -30,6 +30,7 @@ const PLUS_ADDS: { icon: keyof typeof Ionicons.glyphMap; label: string }[] = [
   { icon: "albums-outline", label: "Every card deck. First Steps and Repair stay free" },
   { icon: "dice-outline", label: "The full game shelf and every 7-day challenge" },
   { icon: "map-outline", label: "Complete focused-support programs. First sessions and red flags stay free" },
+  { icon: "newspaper-outline", label: "The complete Mend Notes research and practice archive" },
   { icon: "leaf-outline", label: "Everything new we build, first" },
 ];
 

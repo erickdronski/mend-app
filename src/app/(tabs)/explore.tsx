@@ -47,6 +47,7 @@ const sections: Section[] = [
     hue: "sky",
     rows: [
       { href: "/toolkit", icon: "construct-outline", title: "Communication toolkit", sub: "Nine real skills" },
+      { href: "/insights" as Href, icon: "newspaper-outline", title: "Mend Notes", sub: "Research translated into practice" },
       { href: "/quiz", icon: "help-circle-outline", title: "How you love & fight", sub: "Your lens and role" },
       { href: "/stories", icon: "people-outline", title: "Stories", sub: "Real dynamics, useful turns" },
       { href: "/library", icon: "library-outline", title: "Library", sub: "Books, programs, podcasts" },

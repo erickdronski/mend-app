@@ -1,0 +1,210 @@
+{
+  "version": 1,
+  "updatedAt": "2026-07-24",
+  "items": [
+    {
+      "id": "seven-minutes-of-novelty",
+      "status": "published",
+      "category": "research",
+      "eyebrow": "Research note",
+      "headline": "Novelty is not frivolous. It can change how being together feels.",
+      "summary": "Across surveys and three experiments, couples who shared a novel, mildly arousing activity reported a greater immediate lift in experienced relationship quality than couples doing a mundane task.",
+      "studyDetail": "In the experiments, the shared task lasted seven minutes. This does not mean seven minutes permanently transforms a relationship; it shows that doing something new together can create a measurable in-the-moment shift.",
+      "tryThis": "Change one ordinary plan this week. Take a different route, cook something neither of you has tried, or play a game with one harmless rule you invent together.",
+      "readTime": "2 min",
+      "relatedHref": "/games",
+      "relatedLabel": "Try something playful",
+      "publishedAt": "2026-07-24",
+      "source": {
+        "authors": "Aron, Norman, Aron, McKenna, and Heyman",
+        "title": "Couples' shared participation in novel and arousing activities and experienced relationship quality",
+        "journal": "Journal of Personality and Social Psychology",
+        "year": 2000,
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10707334/",
+        "sample": "Two surveys and three laboratory experiments with romantic couples.",
+        "caveat": "The experiments measured an immediate change after a brief task, not a guaranteed long-term outcome."
+      },
+      "social": {
+        "coverTitle": "7 minutes of something new",
+        "coverBody": "In three experiments, a brief novel activity produced a greater immediate lift in relationship quality than a mundane task.",
+        "explainTitle": "Why novelty can help",
+        "explainBody": "New experiences interrupt autopilot. The point is not expensive dates. It is giving your attention a new place to meet.",
+        "practiceTitle": "Try this together",
+        "practiceBody": "Change one ordinary plan this week: a new route, recipe, game, question, or tiny adventure.",
+        "caption": "Novelty does not have to mean a plane ticket. In three experiments, couples doing a seven-minute novel activity reported a greater immediate lift in experienced relationship quality than couples doing a mundane task. The study measured an in-the-moment shift, not a permanent fix. This week, change one ordinary plan together and notice what happens.",
+        "altText": "Mend-branded educational carousel explaining research on couples sharing novel activities.",
+        "hashtags": ["MendTogether", "RelationshipGrowth", "CouplesConnection"]
+      }
+    },
+    {
+      "id": "respond-to-good-news",
+      "status": "published",
+      "category": "practice",
+      "eyebrow": "A better response",
+      "headline": "How you meet good news can matter as much as how you meet stress.",
+      "summary": "Across four studies, sharing positive events was associated with greater daily positive affect, and enthusiastic, constructive partner responses were associated with greater intimacy and relationship well-being.",
+      "studyDetail": "Researchers call this capitalization: letting a good event grow by sharing it. The useful behavior is active and constructive: show interest, ask a real follow-up, and let the moment stay with your partner before moving on.",
+      "tryThis": "The next time your partner shares something good, pause the logistics. Ask: What part of that felt best? Then stay with their answer for one more question.",
+      "readTime": "2 min",
+      "relatedHref": "/talk?topic=appreciation",
+      "relatedLabel": "Practice positive attention",
+      "publishedAt": "2026-07-24",
+      "source": {
+        "authors": "Gable, Reis, Impett, and Asher",
+        "title": "What do you do when things go right? The intrapersonal and interpersonal benefits of sharing positive events",
+        "journal": "Journal of Personality and Social Psychology",
+        "year": 2004,
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15301629/",
+        "sample": "Four studies using daily reports and relationship measures.",
+        "caveat": "The findings combine daily-report associations with multiple study designs; they do not make every enthusiastic response equally meaningful."
+      },
+      "social": {
+        "coverTitle": "Do not step over their good news",
+        "coverBody": "Enthusiastic, constructive responses to a partner's positive news were associated with greater intimacy and daily relationship satisfaction.",
+        "explainTitle": "Let the good thing grow",
+        "explainBody": "Show interest. Ask one real follow-up. Resist turning immediately to logistics, caution, or your own story.",
+        "practiceTitle": "One question to borrow",
+        "practiceBody": "What part of that felt best? Then listen long enough to ask one more question.",
+        "caption": "Support is not only for bad days. Research across four studies found that sharing positive events was associated with greater daily positive affect, and active, constructive partner responses were associated with greater intimacy and relationship well-being. The next time your partner brings you good news, help the moment get bigger before the day moves on.",
+        "altText": "Mend-branded carousel about responding actively and constructively to a partner's good news.",
+        "hashtags": ["MendTogether", "RelationshipSkills", "EmotionalConnection"]
+      }
+    },
+    {
+      "id": "feeling-understood-over-time",
+      "status": "published",
+      "category": "research",
+      "eyebrow": "10-year study",
+      "headline": "Feeling understood, cared for, and appreciated is not a small relationship detail.",
+      "summary": "In a longitudinal study of more than 2,000 married adults, perceived partner responsiveness predicted a small but meaningful increase in purpose-and-growth well-being a decade later after researchers adjusted for several personal and social factors.",
+      "studyDetail": "Responsiveness means the sense that a partner understands, validates, and cares for important parts of who you are. The association was specific and modest; the study does not show that responsiveness alone causes long-term well-being.",
+      "tryThis": "Before offering advice today, reflect one sentence back: It sounds like the part that matters most to you is ____. Let your partner correct the blank.",
+      "readTime": "3 min",
+      "relatedHref": "/toolkit",
+      "relatedLabel": "Build responsive listening",
+      "publishedAt": "2026-07-24",
+      "source": {
+        "authors": "Selcuk, Gunaydin, Ong, and Almeida",
+        "title": "Does Partner Responsiveness Predict Hedonic and Eudaimonic Well-Being? A 10-Year Longitudinal Study",
+        "journal": "Journal of Marriage and Family",
+        "year": 2016,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5458635/",
+        "sample": "2,348 married adults in the longitudinal analytic sample.",
+        "caveat": "The adjusted longitudinal association was small and observational, so it cannot establish causation."
+      },
+      "social": {
+        "coverTitle": "2,348 adults. 10 years.",
+        "coverBody": "Feeling that a partner was responsive predicted a small increase in purpose-and-growth well-being a decade later.",
+        "explainTitle": "What responsive means",
+        "explainBody": "Not perfect agreement. The felt experience that your partner understands, validates, and cares about what matters to you.",
+        "practiceTitle": "Listen before you solve",
+        "practiceBody": "It sounds like the part that matters most to you is ____. Let your partner correct the blank.",
+        "caption": "A 10-year longitudinal study of 2,348 married adults found that perceived partner responsiveness predicted a small increase in purpose-and-growth well-being, even after several adjustments. This was an observational association, not proof that one behavior causes long-term well-being. Still, the core idea is useful: before solving, help your partner feel accurately understood.",
+        "altText": "Mend-branded research carousel about a 10-year study of perceived partner responsiveness and well-being.",
+        "hashtags": ["MendTogether", "RelationshipResearch", "BetterListening"]
+      }
+    },
+    {
+      "id": "gratitude-needs-responsiveness",
+      "status": "published",
+      "category": "education",
+      "eyebrow": "Nuance matters",
+      "headline": "Gratitude is not a magic sentence. It works better when it feels responsive.",
+      "summary": "In a month-long experiment, assigned gratitude conversations showed modest benefits. The stronger pattern was that people did better when their partner's gratitude felt attentive and responsive, rather than generic or performative.",
+      "studyDetail": "This is a useful correction to simplistic gratitude advice. Appreciation is not a quota. It lands when it names something specific and shows that the speaker understands what the effort cost or meant.",
+      "tryThis": "Replace Thanks for everything with: I saw you handle ____. I know it took ____. It helped me by ____.",
+      "readTime": "3 min",
+      "relatedHref": "/talk?topic=appreciation",
+      "relatedLabel": "Have an appreciation talk",
+      "publishedAt": "2026-07-24",
+      "source": {
+        "authors": "Algoe and Zhaoyang",
+        "title": "Positive Psychology in Context: Effects of Expressing Gratitude in Ongoing Relationships Depend on Perceptions of Enactor Responsiveness",
+        "journal": "The Journal of Positive Psychology",
+        "year": 2016,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5085264/",
+        "sample": "Romantic couples randomly assigned to gratitude conversations or an active control over one month.",
+        "caveat": "Average condition effects were modest, and benefits depended substantially on how responsive the expression felt."
+      },
+      "social": {
+        "coverTitle": "Generic gratitude can miss",
+        "coverBody": "A month-long couples experiment found modest average benefits. What mattered more was whether the appreciation felt responsive.",
+        "explainTitle": "Specific beats automatic",
+        "explainBody": "Name what you saw, what it cost them, and what it changed for you. Appreciation is attention, not a quota.",
+        "practiceTitle": "Use this three-part thank-you",
+        "practiceBody": "I saw you handle ____. I know it took ____. It helped me by ____.",
+        "caption": "Gratitude advice often gets flattened into say thank you more. A month-long couples experiment found only modest average benefits from assigned gratitude conversations. The stronger pattern was responsiveness: appreciation landed better when it felt attentive to the partner. Specific beats automatic.",
+        "altText": "Mend-branded educational carousel explaining why specific, responsive gratitude matters more than a generic thank-you.",
+        "hashtags": ["MendTogether", "HealthyRelationships", "GratitudePractice"]
+      }
+    },
+    {
+      "id": "workload-crosses-the-door",
+      "status": "published",
+      "category": "research",
+      "eyebrow": "Stress spillover",
+      "headline": "Sometimes the relationship is carrying a workload problem, not a love problem.",
+      "summary": "Across eight waves over four years, partners of people reporting higher workloads showed greater later declines in marital satisfaction than partners of people with lower workloads.",
+      "studyDetail": "The study followed 172 heterosexual newlywed couples, so the finding should not be generalized to every relationship. It does support a practical distinction: pressure outside the relationship can cross the door and alter how the relationship feels.",
+      "tryThis": "Ask one clarifying question before a hard evening: Is this about us, or are we overloaded and standing nearest to each other?",
+      "readTime": "2 min",
+      "relatedHref": "/talk?topic=outside-stress",
+      "relatedLabel": "Unload outside stress",
+      "publishedAt": "2026-07-24",
+      "source": {
+        "authors": "Lavner and Clark",
+        "title": "Workload and Marital Satisfaction over Time: Testing Lagged Spillover and Crossover Effects during the Newlywed Years",
+        "journal": "Journal of Vocational Behavior",
+        "year": 2017,
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29081533/",
+        "sample": "172 heterosexual newlywed couples assessed eight times over four years.",
+        "caveat": "The sample was limited to heterosexual newlyweds, and workload was one influence among many."
+      },
+      "social": {
+        "coverTitle": "Work stress can become relationship weather",
+        "coverBody": "A four-year study found that higher workload in one partner predicted later declines in the other partner's marital satisfaction.",
+        "explainTitle": "Name the third thing",
+        "explainBody": "Pressure can cross the door and make the nearest person feel like the problem. Naming the outside load changes the conversation.",
+        "practiceTitle": "Ask before you argue",
+        "practiceBody": "Is this about us, or are we overloaded and standing nearest to each other?",
+        "caption": "Sometimes the relationship is carrying a workload problem, not a love problem. In a study of 172 heterosexual newlywed couples assessed eight times over four years, higher workload in one partner predicted later declines in the other partner's marital satisfaction. The sample was specific, but the question travels: is this about us, or are we overloaded and standing nearest to each other?",
+        "altText": "Mend-branded research carousel about work stress spilling into relationship satisfaction.",
+        "hashtags": ["MendTogether", "StressSpillover", "RelationshipSupport"]
+      }
+    },
+    {
+      "id": "support-during-pregnancy-stress",
+      "status": "published",
+      "category": "research",
+      "eyebrow": "Daily diary study",
+      "headline": "On high-stress days, support and connection can soften the spillover.",
+      "summary": "In a 14-day daily diary study of 154 couples during pregnancy, higher-than-usual daily stress was linked with lower same-day relationship satisfaction. Partner support and connection weakened that link.",
+      "studyDetail": "Pregnancy is a specific season, not a model for every couple. The study is still a useful reminder that stress varies day to day, and the goal on a hard day may be support rather than solving the relationship.",
+      "tryThis": "Ask: What would make me feel like I am on your side tonight: listening, taking one task, affection, or giving you quiet?",
+      "readTime": "2 min",
+      "relatedHref": "/tracks/new-baby",
+      "relatedLabel": "Open new-baby support",
+      "publishedAt": "2026-07-24",
+      "source": {
+        "authors": "Ross, Franks, Chen, Negrón, and others",
+        "title": "Partner Support and Connection Protect Couples During Pregnancy: A Daily Diary Investigation",
+        "journal": "Journal of Marriage and Family",
+        "year": 2021,
+        "url": "https://pubmed.ncbi.nlm.nih.gov/35585869/",
+        "sample": "154 couples during pregnancy completing daily measures for 14 days.",
+        "caveat": "The sample was pregnancy-specific and the daily associations do not prove that support causes satisfaction."
+      },
+      "social": {
+        "coverTitle": "A hard day does not always mean a relationship problem",
+        "coverBody": "Among 154 couples during pregnancy, higher daily stress tracked with lower same-day satisfaction. Support and connection softened the link.",
+        "explainTitle": "Support before solutions",
+        "explainBody": "On overloaded days, the useful goal may be helping each other carry the day, not evaluating the whole relationship.",
+        "practiceTitle": "Offer four choices",
+        "practiceBody": "Listening, taking one task, affection, or quiet: which would help you feel I am on your side tonight?",
+        "caption": "In a 14-day diary study of 154 couples during pregnancy, higher-than-usual daily stress was linked with lower same-day relationship satisfaction, while partner support and connection weakened that link. Pregnancy is a specific season and this is not causal proof. The practical question is still worth borrowing: what kind of support would help tonight?",
+        "altText": "Mend-branded research carousel about partner support and daily stress during pregnancy.",
+        "hashtags": ["MendTogether", "NewParents", "RelationshipSupport"]
+      }
+    }
+  ]
+}

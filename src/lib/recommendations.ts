@@ -193,6 +193,18 @@ const candidates: Candidate[] = [
     icon: "people-outline",
     stages: [2, 3, 4, 5],
   },
+  {
+    id: "learn-mend-notes",
+    title: "Turn one research finding into practice",
+    body: "Read a careful two-minute note, then try the concrete move attached to it.",
+    href: "/insights",
+    label: "Open Mend Notes",
+    meta: "2 min · evidence",
+    kind: "learn",
+    hue: "sky",
+    icon: "newspaper-outline",
+    stages: [1, 2, 3, 4, 5],
+  },
 ];
 
 function dayNumber(date: Date): number {
