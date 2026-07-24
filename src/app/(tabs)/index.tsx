@@ -12,6 +12,7 @@ import {
   getPlan,
   getProfile,
   getPulses,
+  getRecommendationHistory,
   getSessions,
   saveLocalDaily,
   countDailyAnswer,
@@ -32,6 +33,8 @@ import { onHero } from "@/lib/theme";
 import { Btn, Card, Chip, Eyebrow, Hero, IconChip, Input, Muted, Rise, Screen, usePalette, Wordmark } from "@/components/ui";
 import { Bounce, Press } from "@/components/motion";
 import { ProgressRing } from "@/components/rings";
+import { getRecommendations, type Recommendation } from "@/lib/recommendations";
+import { RecommendationCard } from "@/components/recommendation-card";
 
 /** Warm, time-aware hello. */
 function greetingForNow(): string {
@@ -69,6 +72,7 @@ export default function Home() {
   const [journeyDone, setJourneyDone] = useState(false);
   const [journeyProgress, setJourneyProgress] = useState<JourneyProgress | null>(null);
   const [evidence, setEvidence] = useState<Evidence>({ conversations: 0, rituals: 0, commitments: 0 });
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
 
   const question = questionForDate(new Date());
   const nudge = nudgeForDate(new Date());
@@ -95,7 +99,7 @@ export default function Home() {
     (async () => {
       setMyId(session?.user.id ?? null);
       // Local reads first, then paint. The screen never waits on the network.
-      const [profile, sessions, plan, challengesDone, pulses, journey, local] = await Promise.all([
+      const [profile, sessions, plan, challengesDone, pulses, journey, local, recommendationHistory] = await Promise.all([
         getProfile(),
         getSessions(),
         getPlan(),
@@ -103,6 +107,7 @@ export default function Home() {
         getPulses(),
         getJourney(),
         getLocalDaily(todayKey()),
+        getRecommendationHistory(),
       ]);
       setName(profile?.a?.trim() || "");
       setHereForYou(getSituation(profile?.situation)?.hereForYou ?? "");
@@ -111,7 +116,9 @@ export default function Home() {
         rituals: plan.rituals.length,
         commitments: plan.commitments.filter((commitment) => commitment.done).length,
       });
-      computeNextStep({ profile, sessions, plan, challengesDone, pulses }, journey);
+      const context = { profile, sessions, plan, challengesDone, pulses };
+      computeNextStep(context, journey);
+      setRecommendations(getRecommendations(context, journey, recommendationHistory, new Date(), 2));
       setLocalAnswer(local);
       setLoaded(true);
 
@@ -327,8 +334,24 @@ export default function Home() {
         </View>
       ) : null}
 
+      {recommendations[0] ? (
+        <Rise delay={150} style={{ marginTop: 18 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+            <Text style={{ color: p.ink, fontSize: 18, fontWeight: "800" }}>Picked for you</Text>
+            <Press onPress={() => router.push("/explore")}>
+              <Text style={{ color: p.ember, fontSize: 12.5, fontWeight: "700" }}>More ideas →</Text>
+            </Press>
+          </View>
+          <RecommendationCard
+            recommendation={recommendations[0]}
+            featured
+            onOpen={(id) => setRecommendations((items) => items.filter((item) => item.id !== id))}
+          />
+        </Rise>
+      ) : null}
+
       {/* 3. One gentle extra */}
-      <Rise delay={160}>
+      <Rise delay={200}>
         <Card tone="panel" style={{ marginTop: 12 }}>
           <View style={{ flexDirection: "row", gap: 12, alignItems: "flex-start" }}>
             <IconChip name="sparkles-outline" hue="honey" size={40} />

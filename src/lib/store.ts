@@ -49,6 +49,8 @@ export type PulseEntry = { stage: number; who: 0 | 1; scores: number[]; date: st
 
 export type JourneyState = { stage: number; doneSteps: string[]; graduatedAt?: string };
 
+export type RecommendationOpen = { id: string; openedAt: string };
+
 const KEYS = {
   profile: "mend.profile",
   sessions: "mend.sessions",
@@ -60,6 +62,7 @@ const KEYS = {
   language: "mend.language",
   localDaily: "mend.localDaily",
   dailyDays: "mend.dailyDays",
+  recommendations: "mend.recommendations",
 } as const;
 
 async function read<T>(key: string, fallback: T): Promise<T> {
@@ -101,6 +104,7 @@ export type BackupState = {
   pulses?: PulseEntry[];
   journey?: JourneyState;
   language?: string | null;
+  recommendations?: RecommendationOpen[];
 };
 
 /** Write a backup snapshot into local storage (restore on sign-in / reinstall). */
@@ -116,6 +120,7 @@ export async function restoreLocal(state: BackupState) {
   if (state.pulses) pairs.push([KEYS.pulses, JSON.stringify(state.pulses)]);
   if (state.journey) pairs.push([KEYS.journey, JSON.stringify(state.journey)]);
   if (state.language) pairs.push([KEYS.language, JSON.stringify(state.language)]);
+  if (state.recommendations) pairs.push([KEYS.recommendations, JSON.stringify(state.recommendations)]);
   if (pairs.length) await AsyncStorage.multiSet(pairs);
 }
 
@@ -146,6 +151,17 @@ export async function countDailyAnswer(dateKey: string): Promise<number> {
   return next.length;
 }
 export const getDailyAnswerCount = async () => (await getDailyDays()).length;
+
+// ——— recommendation history ———
+export const getRecommendationHistory = () => read<RecommendationOpen[]>(KEYS.recommendations, []);
+export async function recordRecommendationOpened(id: string) {
+  const history = await getRecommendationHistory();
+  const next = [
+    { id, openedAt: new Date().toISOString() },
+    ...history.filter((item) => item.id !== id),
+  ].slice(0, 40);
+  await write(KEYS.recommendations, next);
+}
 
 // ——— sessions ———
 export const getSessions = () => read<SessionRecord[]>(KEYS.sessions, []);

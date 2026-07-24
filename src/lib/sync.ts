@@ -15,6 +15,7 @@ import {
   getPlan,
   getProfile,
   getPulses,
+  getRecommendationHistory,
   getSessions,
   restoreLocal,
   type BackupState,
@@ -66,6 +67,7 @@ export async function backupIfSignedIn() {
       pulses,
       journey,
       language,
+      recommendations,
     ] = await Promise.all([
       getProfile(),
       getSessions(),
@@ -77,6 +79,7 @@ export async function backupIfSignedIn() {
       getPulses(),
       getJourney(),
       getLanguage(),
+      getRecommendationHistory(),
     ]);
     await supabase.from("mend_state").upsert({
       user_id: user.id,
@@ -91,7 +94,8 @@ export async function backupIfSignedIn() {
         pulses,
         journey,
         language,
-        v: 2,
+        recommendations,
+        v: 3,
       },
       updated_at: new Date().toISOString(),
     });

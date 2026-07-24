@@ -2,11 +2,21 @@ import { useCallback, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { useFocusEffect, useRouter, type Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { getProfile } from "@/lib/store";
+import {
+  getChallengesDone,
+  getJourney,
+  getPlan,
+  getProfile,
+  getPulses,
+  getRecommendationHistory,
+  getSessions,
+} from "@/lib/store";
+import { getRecommendations, type Recommendation } from "@/lib/recommendations";
 import { getSituation, type SituationDef } from "@/lib/situation";
 import type { Hue } from "@/lib/theme";
 import { Card, Chip, Eyebrow, Hero, IconChip, Muted, Screen, usePalette } from "@/components/ui";
-import { Press, Reveal } from "@/components/motion";
+import { Reveal } from "@/components/motion";
+import { RecommendationCard } from "@/components/recommendation-card";
 
 type Row = { href: Href; icon: keyof typeof Ionicons.glyphMap; title: string; sub: string };
 type Section = { key: string; title: string; hue: Hue; heavy?: boolean; rows: Row[] };
@@ -67,10 +77,24 @@ export default function Explore() {
   const p = usePalette();
   const router = useRouter();
   const [sit, setSit] = useState<SituationDef | undefined>(undefined);
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
 
   useFocusEffect(
     useCallback(() => {
-      getProfile().then((prof) => setSit(getSituation(prof?.situation)));
+      Promise.all([
+        getProfile(),
+        getSessions(),
+        getPlan(),
+        getChallengesDone(),
+        getPulses(),
+        getJourney(),
+        getRecommendationHistory(),
+      ]).then(([profile, sessions, plan, challengesDone, pulses, journey, history]) => {
+        setSit(getSituation(profile?.situation));
+        setRecommendations(
+          getRecommendations({ profile, sessions, plan, challengesDone, pulses }, journey, history, new Date(), 3),
+        );
+      });
     }, [])
   );
 
@@ -86,27 +110,30 @@ export default function Explore() {
     <Screen safeTop>
       <Hero hue="moss" title="Explore" sub="Talk, play, learn, and build more connection together." style={{ marginTop: 4 }} />
 
-      {/* Personalized track shortcut */}
-      {sit?.track ? (
-        <Reveal index={0}>
-          <Press onPress={() => router.push(`/tracks/${sit.track}` as Href)}>
-            <Card tone="fern" style={{ marginTop: 16 }}>
-              <View style={{ flexDirection: "row", gap: 12, alignItems: "center" }}>
-                <IconChip name={sit.icon} hue="plum" size={44} />
-                <View style={{ flex: 1 }}>
-                  <Eyebrow hue="plum" style={{ fontSize: 11 }}>Focused for you</Eyebrow>
-                  <Text style={{ marginTop: 3, fontSize: 16, fontWeight: "700", color: p.ink }}>{sit.trackTitle}</Text>
-                </View>
-                <Ionicons name="chevron-forward" size={18} color={p.muted} />
-              </View>
-              <Chip label="For what would help right now" hue="plum" icon="heart-outline" style={{ marginTop: 10 }} />
-            </Card>
-          </Press>
-        </Reveal>
+      {recommendations.length ? (
+        <View style={{ marginTop: 22 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+            <View style={{ flex: 1 }}>
+              <Text style={{ color: p.ink, fontSize: 20, fontWeight: "800", letterSpacing: -0.3 }}>For you now</Text>
+              <Muted style={{ marginTop: 3, fontSize: 12.5 }}>Based on your path, with recently opened ideas moved aside.</Muted>
+            </View>
+            <Chip label="Fresh picks" hue="ember" icon="sparkles-outline" />
+          </View>
+          <View style={{ marginTop: 10, gap: 10 }}>
+            {recommendations.map((recommendation, index) => (
+              <Reveal key={recommendation.id} index={index}>
+                <RecommendationCard
+                  recommendation={recommendation}
+                  onOpen={(id) => setRecommendations((items) => items.filter((item) => item.id !== id))}
+                />
+              </Reveal>
+            ))}
+          </View>
+        </View>
       ) : null}
 
       {ordered.map((section, si) => (
-        <Reveal key={section.key} index={si + 1} style={{ marginTop: 22 }}>
+        <Reveal key={section.key} index={si + recommendations.length} style={{ marginTop: 22 }}>
           <Eyebrow hue={section.hue}>{section.title}</Eyebrow>
           <Card style={{ marginTop: 8, paddingVertical: 4, paddingHorizontal: 4 }}>
             {section.rows.map((row, i) => (

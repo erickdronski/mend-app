@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Text, View } from "react-native";
-import { useRouter, type Href } from "expo-router";
+import { useLocalSearchParams, useRouter, type Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { decks, type Deck } from "@/lib/content/cards";
 import { usePremium } from "@/lib/premium";
@@ -53,6 +53,7 @@ const FREE_DECKS = new Set(["first-steps", "repair", "back-from-the-brink"]);
 export default function Cards() {
   const p = usePalette();
   const router = useRouter();
+  const { deck: deckParam } = useLocalSearchParams<{ deck?: string | string[] }>();
   const { plus } = usePremium();
   const [deck, setDeck] = useState<Deck | null>(null);
   const [order, setOrder] = useState<number[]>([]);
@@ -64,6 +65,24 @@ export default function Cards() {
   // so opening a deck lands here first. Never skip or gate this step.
   const [intro, setIntro] = useState(false);
   const swiper = useRef<DeckSwiperHandle>(null);
+  const openedDeepLink = useRef(false);
+
+  useEffect(() => {
+    if (openedDeepLink.current || !deckParam) return;
+    openedDeepLink.current = true;
+    const id = Array.isArray(deckParam) ? deckParam[0] : deckParam;
+    const selected = decks.find((item) => item.id === id);
+    if (!selected) return;
+    if (!plus && !FREE_DECKS.has(selected.id)) {
+      router.push("/plus" as Href);
+      return;
+    }
+    setDeck(selected);
+    setOrder(shuffle(selected.cards.map((_, i) => i)));
+    setIndex(0);
+    setShowFollowUp(false);
+    setIntro(true);
+  }, [deckParam, plus, router]);
 
   function openDeck(d: Deck) {
     setDeck(d);
