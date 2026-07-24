@@ -4,10 +4,14 @@
  * this is a lifeboat for lost phones and the seed of future shared sync.
  * Fire-and-forget: sync failures never block the relationship's work.
  */
-import { supabase } from "./supabase";
+import { supabase, withBackendTimeout } from "./supabase";
 import {
   getChallengesDone,
+  getChallengeState,
+  getDailyDays,
   getJourney,
+  getLanguage,
+  getLocalDailyState,
   getPlan,
   getProfile,
   getPulses,
@@ -29,11 +33,11 @@ export async function restoreFromBackup(): Promise<boolean> {
     const { data: auth } = await supabase.auth.getSession();
     const user = auth.session?.user;
     if (!user) return false;
-    const { data } = await supabase
-      .from("mend_state")
-      .select("state")
-      .eq("user_id", user.id)
-      .maybeSingle();
+    const { data } = await withBackendTimeout(
+      supabase.from("mend_state").select("state").eq("user_id", user.id).maybeSingle(),
+      "Mend could not restore your backup in time.",
+      8000
+    );
     const state = data?.state as BackupState | undefined;
     if (!state || !state.profile) return false;
     await restoreLocal(state);
@@ -51,17 +55,44 @@ export async function backupIfSignedIn() {
     const user = data.session?.user;
     if (!user) return;
     lastBackup = now;
-    const [profile, sessions, plan, challengesDone, pulses, journey] = await Promise.all([
+    const [
+      profile,
+      sessions,
+      plan,
+      challenge,
+      challengesDone,
+      localDaily,
+      dailyDays,
+      pulses,
+      journey,
+      language,
+    ] = await Promise.all([
       getProfile(),
       getSessions(),
       getPlan(),
+      getChallengeState(),
       getChallengesDone(),
+      getLocalDailyState(),
+      getDailyDays(),
       getPulses(),
       getJourney(),
+      getLanguage(),
     ]);
     await supabase.from("mend_state").upsert({
       user_id: user.id,
-      state: { profile, sessions, plan, challengesDone, pulses, journey, v: 1 },
+      state: {
+        profile,
+        sessions,
+        plan,
+        challenge,
+        challengesDone,
+        localDaily,
+        dailyDays,
+        pulses,
+        journey,
+        language,
+        v: 2,
+      },
       updated_at: new Date().toISOString(),
     });
     if (profile) {

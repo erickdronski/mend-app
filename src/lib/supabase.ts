@@ -29,3 +29,17 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
         detectSessionInUrl: false,
       },
 });
+
+export function withBackendTimeout<T>(
+  promise: PromiseLike<T>,
+  message = "Mend's sync service is taking too long. Check your connection and try again.",
+  ms = 10_000
+): Promise<T> {
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+  const timer = new Promise<never>((_, reject) => {
+    timeout = setTimeout(() => reject(new Error(message)), ms);
+  });
+  return Promise.race([Promise.resolve(promise), timer]).finally(() => {
+    if (timeout) clearTimeout(timeout);
+  });
+}

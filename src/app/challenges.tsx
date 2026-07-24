@@ -198,8 +198,8 @@ export default function Challenges() {
     <Screen>
       <H1 style={{ marginTop: 8 }}>One small act a day, for seven days</H1>
       <P style={{ marginTop: 10 }}>
-        Marriages turn on accumulations, not breakthroughs. Most days take under ten minutes, and
-        none require your partner to have signed up for anything. Do it quietly and let them
+        Relationships turn on accumulations, not breakthroughs. Most days take under ten minutes,
+        and none require your partner to have signed up for anything. Do it quietly and let them
         notice.
       </P>
 

@@ -94,9 +94,13 @@ export type BackupState = {
   profile?: Profile | null;
   sessions?: SessionRecord[];
   plan?: Plan;
+  challenge?: ChallengeState | null;
   challengesDone?: string[];
+  localDaily?: { date: string; answer: string } | null;
+  dailyDays?: string[];
   pulses?: PulseEntry[];
   journey?: JourneyState;
+  language?: string | null;
 };
 
 /** Write a backup snapshot into local storage (restore on sign-in / reinstall). */
@@ -105,16 +109,22 @@ export async function restoreLocal(state: BackupState) {
   if (state.profile) pairs.push([KEYS.profile, JSON.stringify(state.profile)]);
   if (state.sessions) pairs.push([KEYS.sessions, JSON.stringify(state.sessions)]);
   if (state.plan) pairs.push([KEYS.plan, JSON.stringify(state.plan)]);
+  if (state.challenge) pairs.push([KEYS.challenge, JSON.stringify(state.challenge)]);
   if (state.challengesDone) pairs.push([KEYS.challengesDone, JSON.stringify(state.challengesDone)]);
+  if (state.localDaily) pairs.push([KEYS.localDaily, JSON.stringify(state.localDaily)]);
+  if (state.dailyDays) pairs.push([KEYS.dailyDays, JSON.stringify(state.dailyDays)]);
   if (state.pulses) pairs.push([KEYS.pulses, JSON.stringify(state.pulses)]);
   if (state.journey) pairs.push([KEYS.journey, JSON.stringify(state.journey)]);
+  if (state.language) pairs.push([KEYS.language, JSON.stringify(state.language)]);
   if (pairs.length) await AsyncStorage.multiSet(pairs);
 }
 
 // ——— local daily answer (guests / solo, before a shared space exists) ———
 type LocalDaily = { date: string; answer: string };
+export const getLocalDailyState = () => read<LocalDaily | null>(KEYS.localDaily, null);
+export const getDailyDays = () => read<string[]>(KEYS.dailyDays, []);
 export async function getLocalDaily(dateKey: string): Promise<string | null> {
-  const d = await read<LocalDaily | null>(KEYS.localDaily, null);
+  const d = await getLocalDailyState();
   return d && d.date === dateKey ? d.answer : null;
 }
 export async function saveLocalDaily(dateKey: string, answer: string) {
@@ -135,7 +145,7 @@ export async function countDailyAnswer(dateKey: string): Promise<number> {
   await write(KEYS.dailyDays, next);
   return next.length;
 }
-export const getDailyAnswerCount = async () => (await read<string[]>(KEYS.dailyDays, [])).length;
+export const getDailyAnswerCount = async () => (await getDailyDays()).length;
 
 // ——— sessions ———
 export const getSessions = () => read<SessionRecord[]>(KEYS.sessions, []);

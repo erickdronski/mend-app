@@ -24,7 +24,7 @@ Five stages, each with 4-6 steps that deep-link into real features:
 4. **Rebuild what was lost** (4-8 wks): healing track (or Go Deeper deck),
    affection & desire session, money-history session, Appreciation week,
    five love notes.
-5. **Build the marriage you meant** (4 wks): gridlock-dream session, Dreams
+5. **Build the one you're choosing now** (4 wks): gridlock-dream session, Dreams
    deck, stories, rituals held four straight weeks, final pulse.
 
 Mechanics: step completion is **auto-detected from stored evidence** where
@@ -56,7 +56,7 @@ crisis lines; per-track red flags; "not therapy" everywhere. Non-negotiable.
   distribution cert validated and stored on EAS
 - ASC API key **Mend CI / 3Q7BV86NXY** in `credentials/` (gitignored),
   issuer c798b8c2-6181-42a4-ae66-34e30d3c1c5e, team J9DMDH4S58
-- ASC app record: **"Mend: Marriage Repair"**, appId **6789373997**, SKU mend-ios
+- ASC app record: **"Mend: Relationship Repair"**, appId **6789373997**, SKU mend-ios
 - **Local pipeline (2026-07-16, the ship path):** Xcode 26.6 + Homebrew
   CocoaPods/fastlane are installed, so `eas build --local` runs on this Mac
   at $0. Recipe: rsync the repo (exclude node_modules/ios/android) to a
