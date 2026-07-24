@@ -25,7 +25,8 @@ import {
   Screen,
   usePalette,
 } from "@/components/ui";
-import { Bloom, Bounce, Press, Reveal } from "@/components/motion";
+import { acknowledgeSuccess, Bloom, Bounce, Press, Reveal } from "@/components/motion";
+import { SuccessMoment } from "@/components/momentum";
 
 const challengeIcons: Record<string, keyof typeof Ionicons.glyphMap> = {
   "turning-toward": "people",
@@ -111,6 +112,17 @@ export default function Challenges() {
           })}
         </View>
 
+        {justDone !== null && !finished ? (
+          <View style={{ marginTop: 14 }}>
+            <SuccessMoment
+              title="Today’s move is in"
+              body="This week will wait for you here. Returning matters more than doing it perfectly."
+              hue="honey"
+              icon="sunny"
+            />
+          </View>
+        ) : null}
+
         {finished ? (
           <>
             <View style={{ alignItems: "center", marginTop: 26 }}>
@@ -156,6 +168,7 @@ export default function Challenges() {
                 const s = await completeChallengeDay(day);
                 setState(s);
                 setJustDone(day);
+                acknowledgeSuccess();
               }}
               style={{ marginTop: 16 }}
             />

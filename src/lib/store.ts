@@ -89,7 +89,8 @@ export const saveProfile = (p: Profile) => write(KEYS.profile, p);
 /** Wipe every Mend key from this device. Used on account deletion and on a
  *  guest "erase everything" so no relationship data survives locally. */
 export async function clearAllLocal() {
-  await AsyncStorage.multiRemove(Object.values(KEYS));
+  const keys = await AsyncStorage.getAllKeys();
+  await AsyncStorage.multiRemove(keys.filter((key) => key.startsWith("mend.")));
 }
 
 /** The full snapshot backed up to Supabase and restored on a new device. */
@@ -105,6 +106,8 @@ export type BackupState = {
   journey?: JourneyState;
   language?: string | null;
   recommendations?: RecommendationOpen[];
+  achievements?: Record<string, string>;
+  claimedAchievements?: string[];
 };
 
 /** Write a backup snapshot into local storage (restore on sign-in / reinstall). */

@@ -1,7 +1,8 @@
 import { useCallback, useState } from "react";
 import { Text, View } from "react-native";
 import { useFocusEffect } from "expo-router";
-import { Bounce, Press, Reveal } from "@/components/motion";
+import { acknowledgeSuccess, Bounce, Press, Reveal } from "@/components/motion";
+import { SuccessMoment } from "@/components/momentum";
 import { nudgeForDate, rituals } from "@/lib/content/nudges";
 import {
   getPlan,
@@ -29,6 +30,8 @@ export default function PlanScreen() {
   const [plan, setPlan] = useState<Plan | null>(null);
   const [sessions, setSessions] = useState<SessionRecord[]>([]);
   const [nudge, setNudge] = useState("");
+  const [keptCommitment, setKeptCommitment] = useState<string | null>(null);
+  const [adoptedRitual, setAdoptedRitual] = useState<string | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -67,6 +70,16 @@ export default function PlanScreen() {
           <Chip hue="rose" icon="checkmark" label={`${kept} of ${plan.commitments.length} kept`} />
         ) : null}
       </View>
+      {keptCommitment ? (
+        <View style={{ marginTop: 10 }}>
+          <SuccessMoment
+            title="Promise kept"
+            body="Follow-through turns a good intention into something your relationship can feel."
+            hue="rose"
+            icon="checkmark-done"
+          />
+        </View>
+      ) : null}
       {plan.commitments.length === 0 ? (
         <Muted style={{ marginTop: 8 }}>
           Nothing here yet. Every guided session ends with one small commitment from each of you,
@@ -76,7 +89,18 @@ export default function PlanScreen() {
         <View style={{ marginTop: 10, gap: 8 }}>
           {plan.commitments.map((c, i) => (
             <Reveal key={`${c.date}-${i}`} index={i}>
-              <Press onPress={async () => setPlan({ ...(await toggleCommitment(i)) })}>
+              <Press
+                onPress={async () => {
+                  const wasDone = c.done;
+                  setPlan({ ...(await toggleCommitment(i)) });
+                  if (!wasDone) {
+                    setKeptCommitment(c.text);
+                    acknowledgeSuccess();
+                  } else {
+                    setKeptCommitment(null);
+                  }
+                }}
+              >
                 <Card style={{ paddingVertical: 12, opacity: c.done ? 0.6 : 1 }}>
                   <View style={{ flexDirection: "row", gap: 12, alignItems: "center" }}>
                     <Bounce trigger={c.done}>
@@ -105,12 +129,32 @@ export default function PlanScreen() {
       <Muted style={{ marginTop: 6 }}>
         Pick two or three: the ones you&apos;ll keep on a bad week. Tap to adopt.
       </Muted>
+      {adoptedRitual ? (
+        <View style={{ marginTop: 10 }}>
+          <SuccessMoment
+            title="A ritual chosen"
+            body={`${adoptedRitual} now has a place in your shared plan.`}
+            hue="rose"
+            icon="heart"
+          />
+        </View>
+      ) : null}
       <View style={{ marginTop: 10, gap: 8 }}>
         {rituals.map((r, i) => {
           const active = plan.rituals.includes(r.id);
           return (
             <Reveal key={r.id} index={i}>
-              <Press onPress={async () => setPlan({ ...(await toggleRitual(r.id)) })}>
+              <Press
+                onPress={async () => {
+                  setPlan({ ...(await toggleRitual(r.id)) });
+                  if (!active) {
+                    setAdoptedRitual(r.title);
+                    acknowledgeSuccess();
+                  } else {
+                    setAdoptedRitual(null);
+                  }
+                }}
+              >
                 <Card style={{ borderColor: active ? rose.accent : p.line }}>
                   <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
                     <Bounce trigger={active}>

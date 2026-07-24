@@ -7,6 +7,7 @@ import { questionForDate } from "@/lib/content/daily";
 import { nudgeForDate } from "@/lib/content/nudges";
 import {
   getChallengesDone,
+  getDailyDays,
   getJourney,
   getLocalDaily,
   getPlan,
@@ -22,6 +23,7 @@ import { getJourneyProgress, getStage, stepDone, type JourneyProgress, type Step
 import { getSituation } from "@/lib/situation";
 import {
   getMySpace,
+  getSpaceProgress,
   getTodayAnswers,
   submitAnswer,
   todayKey,
@@ -31,10 +33,13 @@ import {
 import Animated, { FadeIn } from "react-native-reanimated";
 import { onHero } from "@/lib/theme";
 import { Btn, Card, Chip, Eyebrow, Hero, IconChip, Input, Muted, Rise, Screen, usePalette, Wordmark } from "@/components/ui";
-import { Bounce, Press } from "@/components/motion";
+import { acknowledgeSuccess, Bounce, Press } from "@/components/motion";
 import { ProgressRing } from "@/components/rings";
 import { getRecommendations, type Recommendation } from "@/lib/recommendations";
 import { RecommendationCard } from "@/components/recommendation-card";
+import { MomentumCard, SuccessMoment } from "@/components/momentum";
+import { getConnectionMomentum, type ConnectionMomentum } from "@/lib/momentum";
+import { getClaimed, syncEarned, type Achievement } from "@/lib/achievements";
 
 /** Warm, time-aware hello. */
 function greetingForNow(): string {
@@ -51,8 +56,6 @@ const EXPLORE_DOTS = [
   { hue: "sky", icon: "book-outline" },
   { hue: "plum", icon: "map-outline" },
 ] as const;
-
-type Evidence = { conversations: number; rituals: number; commitments: number };
 
 export default function Home() {
   const p = usePalette();
@@ -71,7 +74,8 @@ export default function Home() {
   const [nextStep, setNextStep] = useState<{ title: string; body: string; href: string; label: string } | null>(null);
   const [journeyDone, setJourneyDone] = useState(false);
   const [journeyProgress, setJourneyProgress] = useState<JourneyProgress | null>(null);
-  const [evidence, setEvidence] = useState<Evidence>({ conversations: 0, rituals: 0, commitments: 0 });
+  const [momentum, setMomentum] = useState<ConnectionMomentum | null>(null);
+  const [freshMilestone, setFreshMilestone] = useState<Achievement | null>(null);
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
 
   const question = questionForDate(new Date());
@@ -99,7 +103,7 @@ export default function Home() {
     (async () => {
       setMyId(session?.user.id ?? null);
       // Local reads first, then paint. The screen never waits on the network.
-      const [profile, sessions, plan, challengesDone, pulses, journey, local, recommendationHistory] = await Promise.all([
+      const [profile, sessions, plan, challengesDone, pulses, journey, local, recommendationHistory, dailyDays, claimed] = await Promise.all([
         getProfile(),
         getSessions(),
         getPlan(),
@@ -108,17 +112,35 @@ export default function Home() {
         getJourney(),
         getLocalDaily(todayKey()),
         getRecommendationHistory(),
+        getDailyDays(),
+        getClaimed(),
       ]);
       setName(profile?.a?.trim() || "");
       setHereForYou(getSituation(profile?.situation)?.hereForYou ?? "");
-      setEvidence({
-        conversations: sessions.length,
+      setMomentum(getConnectionMomentum({
+        dailyDays,
+        sessionDates: sessions.map((item) => item.date),
+        pulseDates: pulses.map((item) => item.date),
+        completedCommitmentDates: plan.commitments.filter((item) => item.done).map((item) => item.date),
+        journeySteps: journey.doneSteps.length,
+        completedChallenges: challengesDone.length,
         rituals: plan.rituals.length,
-        commitments: plan.commitments.filter((commitment) => commitment.done).length,
-      });
+      }));
       const context = { profile, sessions, plan, challengesDone, pulses };
       computeNextStep(context, journey);
       setRecommendations(getRecommendations(context, journey, recommendationHistory, new Date(), 2));
+      const achievementContext = {
+        ...context,
+        journey,
+        dailyAnswers: dailyDays.length,
+        bothInSpace: false,
+        daysBoth: 0,
+        claimed,
+      };
+      const localMilestones = await syncEarned(achievementContext);
+      if (localMilestones.fresh.length) {
+        setFreshMilestone(localMilestones.fresh.at(-1) ?? null);
+      }
       setLocalAnswer(local);
       setLoaded(true);
 
@@ -126,7 +148,18 @@ export default function Home() {
       if (session) {
         const s = await getMySpace();
         setSpace(s);
-        if (s) setAnswers(await getTodayAnswers(s));
+        if (s) {
+          setAnswers(await getTodayAnswers(s));
+          const sharedProgress = await getSpaceProgress(s);
+          const sharedMilestones = await syncEarned({
+            ...achievementContext,
+            bothInSpace: s.members.length >= 2,
+            daysBoth: sharedProgress?.days_both ?? 0,
+          });
+          if (sharedMilestones.fresh.length) {
+            setFreshMilestone(sharedMilestones.fresh.at(-1) ?? null);
+          }
+        }
         const { backupIfSignedIn } = await import("@/lib/sync");
         backupIfSignedIn();
       } else {
@@ -164,6 +197,8 @@ export default function Home() {
       }
       setDraft("");
       setJustSent(true);
+      acknowledgeSuccess();
+      reload();
     } finally {
       setBusy(false);
     }
@@ -233,31 +268,28 @@ export default function Home() {
         </Hero>
       </Rise>
 
-      <Rise delay={70}>
-        <Card style={{ marginTop: 12, paddingVertical: 14, paddingHorizontal: 8 }}>
-          <View style={{ flexDirection: "row" }}>
-            {[
-              { value: evidence.conversations, label: "Conversations" },
-              { value: evidence.rituals, label: "Rituals" },
-              { value: evidence.commitments, label: "Promises kept" },
-            ].map((item, index) => (
-              <View
-                key={item.label}
-                style={{ flex: 1, alignItems: "center", paddingHorizontal: 4, borderLeftWidth: index ? 1 : 0, borderLeftColor: p.line }}
-              >
-                <Text style={{ color: p.ink, fontSize: 22, fontWeight: "800", letterSpacing: -0.5 }}>{item.value}</Text>
-                <Text style={{ color: p.muted, fontSize: 10.5, fontWeight: "600", marginTop: 2, textAlign: "center" }}>{item.label}</Text>
-              </View>
-            ))}
-          </View>
-          <Press onPress={() => router.push("/achievements" as Href)} style={{ marginTop: 12 }}>
-            <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 4 }}>
-              <Text style={{ color: p.ember, fontSize: 12.5, fontWeight: "700" }}>See what you’ve built together</Text>
-              <Ionicons name="chevron-forward" size={13} color={p.ember} />
-            </View>
-          </Press>
-        </Card>
-      </Rise>
+      {momentum ? (
+        <Rise delay={70} style={{ marginTop: 12 }}>
+          <MomentumCard momentum={momentum} onOpen={() => router.push("/achievements" as Href)} />
+        </Rise>
+      ) : null}
+
+      {freshMilestone ? (
+        <Press
+          onPress={() => {
+            setFreshMilestone(null);
+            router.push("/achievements" as Href);
+          }}
+          style={{ marginTop: 10 }}
+        >
+          <SuccessMoment
+            title={`Milestone earned: ${freshMilestone.title}`}
+            body={freshMilestone.earned}
+            hue={freshMilestone.hue}
+            icon={freshMilestone.icon as keyof typeof Ionicons.glyphMap}
+          />
+        </Press>
+      ) : null}
 
       {/* Daily connection stays close at hand without crowding out the larger journey. */}
       <Rise delay={110}>
@@ -290,6 +322,14 @@ export default function Home() {
             </View>
           ) : (
             <View style={{ marginTop: 12, gap: 9 }}>
+              {justSent ? (
+                <SuccessMoment
+                  title="You made room for honesty"
+                  body="This answer is now one of the moments you chose connection."
+                  hue="moss"
+                  icon="checkmark"
+                />
+              ) : null}
               <Bounce trigger={justSent}>
                 <View style={{ backgroundColor: p.raised, borderRadius: 13, padding: 12, borderWidth: 1, borderColor: p.line }}>
                   <Text style={{ color: p.mossDeep, fontWeight: "700", fontSize: 12 }}>You</Text>

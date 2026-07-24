@@ -20,6 +20,11 @@ import {
   restoreLocal,
   type BackupState,
 } from "./store";
+import {
+  getClaimed,
+  getEarnedMap,
+  restoreAchievementState,
+} from "./achievements";
 
 let lastBackup = 0;
 
@@ -42,6 +47,7 @@ export async function restoreFromBackup(): Promise<boolean> {
     const state = data?.state as BackupState | undefined;
     if (!state || !state.profile) return false;
     await restoreLocal(state);
+    await restoreAchievementState(state.achievements, state.claimedAchievements);
     return true;
   } catch {
     return false;
@@ -68,6 +74,8 @@ export async function backupIfSignedIn() {
       journey,
       language,
       recommendations,
+      achievements,
+      claimedAchievements,
     ] = await Promise.all([
       getProfile(),
       getSessions(),
@@ -80,6 +88,8 @@ export async function backupIfSignedIn() {
       getJourney(),
       getLanguage(),
       getRecommendationHistory(),
+      getEarnedMap(),
+      getClaimed(),
     ]);
     await supabase.from("mend_state").upsert({
       user_id: user.id,
@@ -95,7 +105,9 @@ export async function backupIfSignedIn() {
         journey,
         language,
         recommendations,
-        v: 3,
+        achievements,
+        claimedAchievements,
+        v: 4,
       },
       updated_at: new Date().toISOString(),
     });

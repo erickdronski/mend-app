@@ -26,7 +26,8 @@ import {
 import { onHero } from "@/lib/theme";
 import { Btn, Card, Chip, CollapsibleP, Eyebrow, H1, H2, Hero, Muted, P, Rise, Screen, usePalette, Wordmark } from "@/components/ui";
 import { ProgressRing } from "@/components/rings";
-import { Bloom, Bounce, GlideBar, Press, Reveal } from "@/components/motion";
+import { acknowledgeSuccess, Bloom, Bounce, GlideBar, Press, Reveal } from "@/components/motion";
+import { SuccessMoment } from "@/components/momentum";
 
 /**
  * The Journey tab: the app's home. One current stage, its steps, the next
@@ -38,6 +39,7 @@ export default function JourneyScreen() {
   const { t } = useTranslation();
   const [ctx, setCtx] = useState<StepContext | null>(null);
   const [journey, setJourney] = useState<JourneyState | null>(null);
+  const [completedStep, setCompletedStep] = useState<{ id: string; title: string } | null>(null);
 
   const reload = useCallback(() => {
     (async () => {
@@ -266,6 +268,17 @@ export default function JourneyScreen() {
         </Card>
       )}
 
+      {completedStep ? (
+        <View style={{ marginTop: 14 }}>
+          <SuccessMoment
+            title="That practice is part of your path now"
+            body={`${completedStep.title} is complete. The next step can wait until it is useful.`}
+            hue="ember"
+            icon="checkmark"
+          />
+        </View>
+      ) : null}
+
       {/* all steps */}
       <View style={{ marginTop: 18, gap: 10 }}>
         {stage.steps.map((step, si) => {
@@ -276,7 +289,7 @@ export default function JourneyScreen() {
             <Card style={{ opacity: done ? 0.65 : 1 }}>
               <View style={{ flexDirection: "row", gap: 12 }}>
                 <View style={{ marginTop: 1 }}>
-                  <Bloom trigger={journey.doneSteps.includes(step.id)} color={p.hues.ember.accent} size={40}>
+                  <Bloom trigger={completedStep?.id === step.id} color={p.hues.ember.accent} size={40}>
                     <Ionicons
                       name={done ? "checkmark-circle" : "ellipse-outline"}
                       size={22}
@@ -295,7 +308,13 @@ export default function JourneyScreen() {
                         {step.hrefLabel} →
                       </Link>
                       {manual && (
-                        <Pressable onPress={async () => setJourney(await markStep(step.id, true))}>
+                        <Pressable
+                          onPress={async () => {
+                            setJourney(await markStep(step.id, true));
+                            setCompletedStep({ id: step.id, title: step.title });
+                            acknowledgeSuccess();
+                          }}
+                        >
                           <Text style={{ color: p.muted, fontSize: 14, textDecorationLine: "underline" }}>
                             {t("common.markComplete")}
                           </Text>
@@ -328,7 +347,11 @@ export default function JourneyScreen() {
             </P>
             <Btn
               label={t("journey.advance")}
-              onPress={async () => setJourney(await advanceStage())}
+              onPress={async () => {
+                setJourney(await advanceStage());
+                setCompletedStep(null);
+                acknowledgeSuccess();
+              }}
               style={{ marginTop: 14, backgroundColor: p.surface, borderColor: p.surface }}
             />
           </Card>
@@ -358,6 +381,7 @@ export default function JourneyScreen() {
                 const { saveJourney } = await import("@/lib/store");
                 await saveJourney(j);
                 setJourney({ ...j });
+                acknowledgeSuccess();
               }}
               style={{ marginTop: 14, backgroundColor: p.surface, borderColor: p.surface }}
             />

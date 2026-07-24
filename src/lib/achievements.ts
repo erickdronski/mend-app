@@ -139,6 +139,17 @@ export async function getClaimed(): Promise<string[]> {
   }
 }
 
+/** Restore milestone history alongside the rest of a signed-in user's progress. */
+export async function restoreAchievementState(
+  earned?: EarnedMap,
+  claimed?: string[]
+): Promise<void> {
+  const pairs: [string, string][] = [];
+  if (earned) pairs.push([EARNED_KEY, JSON.stringify(earned)]);
+  if (claimed) pairs.push([CLAIMED_KEY, JSON.stringify(claimed)]);
+  if (pairs.length) await AsyncStorage.multiSet(pairs);
+}
+
 /** Honor-system claim. Permanent, like every other achievement. */
 export async function claim(id: string): Promise<void> {
   const claimed = await getClaimed();

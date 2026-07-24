@@ -15,6 +15,11 @@ import Animated, {
 import * as Haptics from "expo-haptics";
 import { springs, stagger, timings } from "@/lib/motion";
 
+/** A warm acknowledgement for completed effort, never used for scores. */
+export function acknowledgeSuccess() {
+  Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
+}
+
 /** A progress bar whose fill glides to `progress` (0..1) instead of jumping. */
 export function GlideBar({
   progress,
