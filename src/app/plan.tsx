@@ -49,7 +49,7 @@ export default function PlanScreen() {
         hue="rose"
         eyebrow="Between sessions"
         title="The game plan"
-        sub="Marriages aren't repaired in sessions. They're repaired between them."
+        sub="Relationships aren't repaired in one conversation. They're repaired in the moments between them."
         style={{ marginTop: 12 }}
       />
 

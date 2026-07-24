@@ -81,6 +81,7 @@ export default function Notes() {
         onChangeText={setDraft}
         placeholder="Write them something small"
         multiline
+        maxLength={2000}
         style={{ marginTop: 14, minHeight: 60 }}
       />
       <Btn label="Pin it to our board" kind="moss" onPress={send} disabled={busy || !draft.trim()} style={{ marginTop: 10 }} />

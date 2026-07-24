@@ -176,7 +176,7 @@ export const techniques: Technique[] = [
   {
     id: "bids",
     title: "Bids for connection",
-    tagline: "Marriages are built in six-second moments, not grand gestures.",
+    tagline: "Relationships are built in small moments, not grand gestures.",
     whenToUse:
       "Daily. A bid is any small reach: “look at this”, a sigh, a hand on the shoulder, showing you a meme. Couples who last habitually turn *toward* these; couples who don't, turn away.",
     steps: [

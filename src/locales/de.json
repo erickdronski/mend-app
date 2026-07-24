@@ -54,13 +54,13 @@
   },
   "journey": {
     "title": "Euer Weg",
-    "subtitle": "Ein Weg in Etappen: von heute zu einer Ehe, die diese App nicht mehr braucht.",
+    "subtitle": "Ein Weg in Etappen: von heute zu einer Beziehung, die diese App nicht mehr braucht.",
     "stage": "Etappe",
     "pulseCheck": "Puls-Check",
     "nextStep": "Euer nächster Schritt",
     "stageComplete": "Etappe abgeschlossen",
     "advance": "Nächste Etappe beginnen",
     "graduated": "Ihr habt es geschafft. Löscht uns.",
-    "designedToEnd": "Mend ist dafür gebaut, gelöscht zu werden: Das Ziel ist eine Ehe, die es nicht mehr braucht."
+    "designedToEnd": "Mend ist dafür gebaut, gelöscht zu werden: Das Ziel ist eine Beziehung, die es nicht mehr braucht."
   }
 }

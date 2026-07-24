@@ -313,7 +313,7 @@ export const extraTracks: Track[] = [
         ],
       },
       {
-        title: "Spouse and patient, caregiver and person",
+        title: "Partner and patient, caregiver and person",
         focus: "Naming how far the roles have taken over, and deliberately protecting the two people underneath them.",
         prompts: [
           "When do I still feel like your partner, and when do I feel only like your patient or your nurse?",

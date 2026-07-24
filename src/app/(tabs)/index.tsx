@@ -201,6 +201,7 @@ export default function Today() {
                 placeholder="A sentence or three, honestly"
                 placeholderTextColor="rgba(244,244,238,0.5)"
                 multiline
+                maxLength={2000}
                 style={{ minHeight: 64, backgroundColor: "rgba(244,244,238,0.1)", borderColor: "rgba(244,244,238,0.25)", color: onHero.text }}
               />
               <Pressable onPress={send} disabled={busy || !draft.trim()} style={({ pressed }) => ({ marginTop: 10, backgroundColor: onHero.text, borderRadius: 12, paddingVertical: 12, alignItems: "center", opacity: !draft.trim() ? 0.5 : pressed ? 0.85 : 1 })}>

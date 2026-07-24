@@ -185,6 +185,7 @@ export default function Settings() {
             value={names[0]}
             onChangeText={(v) => setNames([v, names[1]])}
             onBlur={saveNames}
+            maxLength={80}
           />
         </View>
         <View>
@@ -193,6 +194,7 @@ export default function Settings() {
             value={names[1]}
             onChangeText={(v) => setNames([names[0], v])}
             onBlur={saveNames}
+            maxLength={80}
           />
         </View>
       </View>

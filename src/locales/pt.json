@@ -54,13 +54,13 @@
   },
   "journey": {
     "title": "Sua jornada",
-    "subtitle": "Um caminho em etapas, de onde vocês estão hoje até um casamento que não precise deste app.",
+    "subtitle": "Um caminho em etapas, de onde vocês estão hoje até um relacionamento que não precise deste app.",
     "stage": "Etapa",
     "pulseCheck": "Checagem de pulso",
     "nextStep": "Seu próximo passo",
     "stageComplete": "Etapa concluída",
     "advance": "Começar a próxima etapa",
     "graduated": "Vocês conseguiram. Podem nos apagar.",
-    "designedToEnd": "O Mend foi feito para ser apagado: a meta é um casamento que não precise mais dele."
+    "designedToEnd": "O Mend foi feito para ser apagado: a meta é um relacionamento que não precise mais dele."
   }
 }

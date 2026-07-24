@@ -46,7 +46,7 @@
     "language": "Idioma",
     "languageNote": "Las guías, los mazos de cartas y el contenido de las sesiones están solo en inglés por ahora. Las traducciones están en camino.",
     "aboutTitle": "Acerca de Mend",
-    "aboutBody": "Mend es una herramienta educativa, no terapia. No puede reemplazar a un terapeuta matrimonial y familiar licenciado, y nunca diagnostica. Si hay violencia, miedo o control en tu relación, las conversaciones guiadas de pareja no son la herramienta segura. Gratuito, privado y hecho para ser eliminado.",
+    "aboutBody": "Mend es una herramienta educativa, no terapia. No puede reemplazar a un terapeuta de relaciones con licencia, y nunca diagnostica. Si hay violencia, miedo o control en tu relación, las conversaciones guiadas de pareja no son la herramienta segura. Gratuito, privado y hecho para ser eliminado.",
     "safety": "Recursos de crisis",
     "names": "Sus nombres",
     "partnerA": "Pareja A",
@@ -54,13 +54,13 @@
   },
   "journey": {
     "title": "Su camino",
-    "subtitle": "Una ruta por etapas desde donde están hoy hasta un matrimonio que no necesite esta app.",
+    "subtitle": "Una ruta por etapas desde donde están hoy hasta una relación que no necesite esta app.",
     "stage": "Etapa",
     "pulseCheck": "Chequeo de pulso",
     "nextStep": "Su próximo paso",
     "stageComplete": "Etapa completada",
     "advance": "Comenzar la siguiente etapa",
     "graduated": "Lo lograron. Bórrennos.",
-    "designedToEnd": "Mend está diseñada para ser eliminada: la meta es un matrimonio que ya no la necesite."
+    "designedToEnd": "Mend está diseñada para ser eliminada: la meta es una relación que ya no la necesite."
   }
 }

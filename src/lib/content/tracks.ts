@@ -36,7 +36,7 @@ export const tracks: Track[] = [
     title: "After an affair",
     subtitle: "Rebuilding trust after infidelity",
     overview:
-      "An affair is a trauma to the betrayed partner and, usually, a moral earthquake for the one who strayed. Marriages do survive this, but only through a specific order of operations: first full honesty and remorse, then understanding, and only then rebuilding. Skipping to 'let's move on' guarantees the wound reopens. This track follows the atone → attune → attach arc used in affair-recovery therapy.",
+      "An affair is a trauma to the betrayed partner and, usually, a moral earthquake for the one who strayed. Relationships can survive this, but only through a specific order of operations: first full honesty and remorse, then understanding, and only then rebuilding. Skipping to 'let's move on' guarantees the wound reopens. This track follows the atone → attune → attach arc used in affair-recovery therapy.",
     feelings: [
       {
         label: "If you were betrayed",

@@ -95,7 +95,7 @@ export default function SpaceScreen() {
     } catch (e) {
       const msg = e instanceof Error ? e.message : "";
       setError(
-        msg.includes("invalid code")
+        msg.includes("invalid code") || msg.includes("did not match")
           ? "That code doesn't match a space. Check it with your partner."
           : msg.includes("full")
             ? "That space already has two people in it."
@@ -263,7 +263,7 @@ export default function SpaceScreen() {
         hue="rose"
         eyebrow="Together"
         title="One space, two phones"
-        sub="A shared space holds your daily question, your notes to each other, and everything you do here as a couple."
+        sub="A shared space holds your daily question, your notes to each other, and the work you choose to share."
         style={{ marginTop: 8 }}
       />
       <Muted style={{ marginTop: 10 }}>
@@ -272,7 +272,7 @@ export default function SpaceScreen() {
 
       <View style={{ marginTop: 16 }}>
         <Label>Your first name (what your partner sees)</Label>
-        <Input value={name} onChangeText={setName} placeholder="First name" />
+        <Input value={name} onChangeText={setName} placeholder="First name" maxLength={80} />
       </View>
 
       {error && <Muted style={{ color: p.ember, marginTop: 10 }}>{error}</Muted>}
@@ -292,6 +292,8 @@ export default function SpaceScreen() {
           onChangeText={(v) => setCode(v.toUpperCase())}
           placeholder="6-letter code"
           autoCapitalize="characters"
+          autoCorrect={false}
+          maxLength={6}
           style={{ marginTop: 10, letterSpacing: 4, fontWeight: "700" }}
         />
         <Btn label="Join our space" onPress={doJoin} disabled={busy || !name.trim() || code.trim().length < 6} style={{ marginTop: 10 }} />

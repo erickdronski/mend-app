@@ -78,7 +78,7 @@ export default function Onboarding() {
           </Rise>
           <Rise delay={150}>
             <Text style={{ fontSize: 26, fontWeight: "700", color: "#f4f4ee", marginTop: 18, lineHeight: 34 }}>
-              Marriages rarely die of one big thing.
+              Relationships rarely break over one big thing.
             </Text>
             <Text style={{ fontSize: 26, fontWeight: "700", color: "#d9a057", marginTop: 4, lineHeight: 34 }}>
               They starve on unheard sentences.
@@ -86,7 +86,7 @@ export default function Onboarding() {
           </Rise>
           <Rise delay={300}>
             <Text style={{ fontSize: 16, color: "#f4f4ee", opacity: 0.75, marginTop: 18, lineHeight: 24 }}>
-              A private mediator for the two of you. The heart of it free forever, no ads, your
+              A private guide for the two of you. The heart of it free forever, no ads, your
               data never sold. Just the way back.
             </Text>
           </Rise>
@@ -203,8 +203,8 @@ export default function Onboarding() {
                 <View style={{ flex: 1 }}>
                   <H2>What it gives</H2>
                   <Muted style={{ marginTop: 6 }}>
-                    The structure and language of real counseling frameworks, the kind partners pay
-                    hundreds a session for. Staged, guided, free.
+                    Guided exercises for listening, repairing, and rebuilding trust. Staged,
+                    practical, and free.
                   </Muted>
                 </View>
               </View>
@@ -285,11 +285,11 @@ export default function Onboarding() {
         <View style={{ marginTop: 22, gap: 14 }}>
           <View>
             <Label>Your name</Label>
-            <Input value={a} onChangeText={setA} placeholder="First name" autoComplete="off" />
+            <Input value={a} onChangeText={setA} placeholder="First name" autoComplete="off" maxLength={80} />
           </View>
           <View>
             <Label>Your partner&apos;s name</Label>
-            <Input value={b} onChangeText={setB} placeholder="First name" autoComplete="off" />
+            <Input value={b} onChangeText={setB} placeholder="First name" autoComplete="off" maxLength={80} />
           </View>
           <Muted>
             Starting alone? Put your partner&apos;s name in anyway. You can begin the first steps
