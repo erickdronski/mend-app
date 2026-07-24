@@ -1,9 +1,19 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Dimensions, Pressable, ScrollView, View } from "react-native";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
+import Svg, { Path } from "react-native-svg";
+import Animated, {
+  Easing,
+  cancelAnimation,
+  useAnimatedStyle,
+  useReducedMotion,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "@/lib/auth";
 import { saveProfile } from "@/lib/store";
@@ -36,6 +46,155 @@ const tour: { icon: keyof typeof Ionicons.glyphMap; title: string; body: string 
     body: "A daily question you both answer, sealed until you've each sent yours. Little notes back and forth. One shared place.",
   },
 ];
+
+function ConnectionVignette() {
+  const reduce = useReducedMotion();
+  const pulse = useSharedValue(0);
+
+  useEffect(() => {
+    if (reduce) return;
+    pulse.value = withRepeat(
+      withTiming(1, { duration: 2400, easing: Easing.inOut(Easing.sin) }),
+      -1,
+      true
+    );
+    return () => cancelAnimation(pulse);
+  }, [pulse, reduce]);
+
+  const haloStyle = useAnimatedStyle(() => ({
+    opacity: 0.12 + pulse.value * 0.12,
+    transform: [{ scale: 0.9 + pulse.value * 0.22 }],
+  }));
+  const peopleStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: -2 - pulse.value * 4 }],
+  }));
+
+  const node = (icon: keyof typeof Ionicons.glyphMap) => (
+    <View
+      style={{
+        width: 52,
+        height: 52,
+        borderRadius: 26,
+        backgroundColor: "rgba(244,244,238,0.13)",
+        borderWidth: 1,
+        borderColor: "rgba(244,244,238,0.24)",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Ionicons name={icon} size={24} color="#f4f4ee" />
+    </View>
+  );
+
+  return (
+    <View
+      pointerEvents="none"
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+      style={{ width: "100%", maxWidth: 320, height: 160, alignSelf: "center", justifyContent: "center" }}
+    >
+      <View
+        style={{
+          position: "absolute",
+          inset: 0,
+          borderRadius: 28,
+          backgroundColor: "rgba(244,244,238,0.055)",
+          borderWidth: 1,
+          borderColor: "rgba(244,244,238,0.10)",
+        }}
+      />
+      <Text
+        style={{
+          position: "absolute",
+          top: 16,
+          alignSelf: "center",
+          color: "rgba(244,244,238,0.58)",
+          fontSize: 10.5,
+          fontWeight: "700",
+          letterSpacing: 1.5,
+          textTransform: "uppercase",
+        }}
+      >
+        A little closer, often
+      </Text>
+
+      <Svg width="100%" height={72} viewBox="0 0 320 72" style={{ position: "absolute", top: 41 }}>
+        <Path
+          d="M 57 39 C 98 39, 104 26, 139 35 C 150 38, 151 22, 160 22 C 169 22, 170 38, 181 35 C 216 26, 222 39, 263 39"
+          fill="none"
+          stroke="#d9a057"
+          strokeWidth={3}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeDasharray="7 7"
+        />
+      </Svg>
+
+      <Animated.View
+        style={[
+          {
+            position: "absolute",
+            width: 58,
+            height: 58,
+            borderRadius: 29,
+            backgroundColor: "#d9a057",
+            alignSelf: "center",
+            top: 48,
+          },
+          haloStyle,
+        ]}
+      />
+      <Animated.View
+        style={[
+          {
+            position: "absolute",
+            top: 56,
+            left: 28,
+            right: 28,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          },
+          peopleStyle,
+        ]}
+      >
+        {node("person-outline")}
+        <View
+          style={{
+            width: 42,
+            height: 42,
+            borderRadius: 21,
+            backgroundColor: "#d9a057",
+            borderWidth: 4,
+            borderColor: "#38553f",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Ionicons name="heart" size={18} color="#24402c" />
+        </View>
+        {node("person-outline")}
+      </Animated.View>
+
+      <View
+        style={{
+          position: "absolute",
+          left: 22,
+          right: 22,
+          bottom: 14,
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        {["Notice", "Understand", "Reconnect"].map((label) => (
+          <Text key={label} style={{ color: "rgba(244,244,238,0.68)", fontSize: 11, fontWeight: "600" }}>
+            {label}
+          </Text>
+        ))}
+      </View>
+    </View>
+  );
+}
 
 export default function Onboarding() {
   const router = useRouter();
@@ -91,8 +250,10 @@ export default function Onboarding() {
               free at its core, and never supported by ads or selling your data.
             </Text>
           </Rise>
-          <View style={{ flex: 1 }} />
-          <Rise delay={450}>
+          <Rise delay={420} style={{ flex: 1, minHeight: 172, justifyContent: "center" }}>
+            <ConnectionVignette />
+          </Rise>
+          <Rise delay={560}>
             <Pressable
               onPress={() => setStep("tour")}
               style={({ pressed }) => ({
