@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { stories, storiesNote } from "@/lib/content/stories";
 import { Card, Chip, Hero, IconChip, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Text } from "@/components/text";
 import { Press, Reveal } from "@/components/motion";
 
 export default function Stories() {

@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Linking, Share, Text, View } from "react-native";
+import { Linking, Share, View } from "react-native";
 import { useRouter, type Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { insightCategories, insights, type Insight, type InsightCategory } from "@/lib/insights";
 import { Btn, Card, Chip, Hero, IconChip, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Text } from "@/components/text";
 import { Press, Reveal } from "@/components/motion";
 import { usePremium } from "@/lib/premium";
 

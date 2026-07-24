@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Dimensions, Pressable, ScrollView, Text, View } from "react-native";
+import { Dimensions, Pressable, ScrollView, View } from "react-native";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
@@ -10,6 +10,7 @@ import { saveProfile } from "@/lib/store";
 import { situations, type Situation } from "@/lib/situation";
 import { whyGateMatters } from "@/lib/content/safety";
 import { Btn, Card, H1, H2, IconChip, Input, Label, Muted, P, pressFx, Rise, Screen, usePalette, Wordmark } from "@/components/ui";
+import { Text } from "@/components/text";
 
 type Step = "welcome" | "tour" | "deal" | "gate" | "names" | "situation";
 

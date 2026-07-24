@@ -1,9 +1,10 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { useRouter, type Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { recordRecommendationOpened } from "@/lib/store";
 import type { Recommendation } from "@/lib/recommendations";
 import { Card, Chip, IconChip, Muted, usePalette } from "@/components/ui";
+import { Text } from "@/components/text";
 import { Press } from "@/components/motion";
 
 export function RecommendationCard({

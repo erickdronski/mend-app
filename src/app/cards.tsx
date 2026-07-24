@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { useLocalSearchParams, useRouter, type Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { decks, type Deck } from "@/lib/content/cards";
@@ -18,6 +18,7 @@ import {
   Screen,
   usePalette,
 } from "@/components/ui";
+import { Text } from "@/components/text";
 import { Bloom, Press, Reveal } from "@/components/motion";
 import { DeckSwiper, type DeckSwiperHandle } from "@/components/deck";
 

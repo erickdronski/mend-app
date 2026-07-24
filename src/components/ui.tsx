@@ -28,8 +28,13 @@ import Svg, { Polyline } from "react-native-svg";
 import { LinearGradient } from "expo-linear-gradient";
 import { heroGradients, onHero, palettes, type Hue, type Palette } from "@/lib/theme";
 import { springs, timings } from "@/lib/motion";
+import { widowSafe } from "@/lib/typography";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+const balancedText = {
+  lineBreakStrategyIOS: "push-out" as const,
+  textBreakStrategy: "balanced" as const,
+};
 
 export function usePalette(): Palette {
   const scheme = useColorScheme();
@@ -184,10 +189,11 @@ export function Wordmark({
   return (
     <View style={[{ alignSelf: "flex-start" }, style]}>
       <Text
+        {...balancedText}
         onLayout={(e) => setW(Math.max(1, e.nativeEvent.layout.width))}
         style={{ fontSize: size, fontWeight: "800", letterSpacing: size * -0.02, color: color ?? p.ink }}
       >
-        Mend
+        {widowSafe("Mend")}
       </Text>
       <Svg width={w} height={h} style={{ marginTop: size * 0.12 }}>
         <Polyline
@@ -234,7 +240,7 @@ export function Chip({
       ]}
     >
       {icon ? <Ionicons name={icon} size={12} color={h.fg} /> : null}
-      <Text style={{ fontSize: 11.5, fontWeight: "700", color: h.fg }}>{label}</Text>
+      <Text {...balancedText} style={{ fontSize: 11.5, fontWeight: "700", color: h.fg }}>{widowSafe(label)}</Text>
     </View>
   );
 }
@@ -253,12 +259,13 @@ export function Eyebrow({
   const color = hue ? p.hues[hue].fg : p.mossDeep;
   return (
     <Text
+      {...balancedText}
       style={[
         { textTransform: "uppercase", letterSpacing: 1.4, fontWeight: "700", fontSize: 11.5, color },
         style,
       ]}
     >
-      {children}
+      {widowSafe(children)}
     </Text>
   );
 }
@@ -304,17 +311,17 @@ export function Hero({
       <View style={{ flexDirection: "row", alignItems: "center", gap: 16 }}>
         <View style={{ flex: 1 }}>
           {eyebrow ? (
-            <Text style={{ color: onHero.accent, fontWeight: "700", fontSize: 12, textTransform: "uppercase", letterSpacing: 1.5 }}>
-              {eyebrow}
+            <Text {...balancedText} style={{ color: onHero.accent, fontWeight: "700", fontSize: 12, textTransform: "uppercase", letterSpacing: 1.5 }}>
+              {widowSafe(eyebrow)}
             </Text>
           ) : null}
           {title ? (
-            <Text style={{ color: onHero.text, fontSize: 24, fontWeight: "800", letterSpacing: -0.4, marginTop: eyebrow ? 6 : 0, lineHeight: 29 }}>
-              {title}
+            <Text {...balancedText} style={{ color: onHero.text, fontSize: 24, fontWeight: "800", letterSpacing: -0.4, marginTop: eyebrow ? 6 : 0, lineHeight: 29 }}>
+              {widowSafe(title)}
             </Text>
           ) : null}
           {sub ? (
-            <Text style={{ color: onHero.dim, fontSize: 13.5, marginTop: 6, lineHeight: 19 }}>{sub}</Text>
+            <Text {...balancedText} style={{ color: onHero.dim, fontSize: 13.5, marginTop: 6, lineHeight: 19 }}>{widowSafe(sub)}</Text>
           ) : null}
         </View>
         {right ?? null}
@@ -344,7 +351,7 @@ export function CollapsibleP({
       <P numberOfLines={open ? undefined : lines} style={style}>
         {children}
       </P>
-      <Text style={{ color: p.ember, fontWeight: "600", fontSize: 13, marginTop: 4 }}>
+      <Text {...balancedText} style={{ color: p.ember, fontWeight: "600", fontSize: 13, marginTop: 4 }}>
         {open ? "Less" : "More"}
       </Text>
     </Pressable>
@@ -374,7 +381,7 @@ export function EmptyState({
       <View style={{ width: 72, height: 72, borderRadius: 36, backgroundColor: h.bg, alignItems: "center", justifyContent: "center" }}>
         <Ionicons name={icon} size={32} color={h.fg} />
       </View>
-      <Text style={{ fontSize: 16.5, fontWeight: "700", color: p.ink, textAlign: "center" }}>{title}</Text>
+      <Text {...balancedText} style={{ fontSize: 16.5, fontWeight: "700", color: p.ink, textAlign: "center" }}>{widowSafe(title)}</Text>
       {body ? <Muted style={{ textAlign: "center", maxWidth: 280 }}>{body}</Muted> : null}
       {cta && onPress ? <Btn label={cta} onPress={onPress} style={{ marginTop: 6, alignSelf: "stretch" }} /> : null}
     </View>
@@ -383,12 +390,12 @@ export function EmptyState({
 
 export function H1({ children, style }: { children: ReactNode; style?: StyleProp<TextStyle> }) {
   const p = usePalette();
-  return <Text style={[s.h1, { color: p.ink }, style]}>{children}</Text>;
+  return <Text {...balancedText} style={[s.h1, { color: p.ink }, style]}>{widowSafe(children)}</Text>;
 }
 
 export function H2({ children, style }: { children: ReactNode; style?: StyleProp<TextStyle> }) {
   const p = usePalette();
-  return <Text style={[s.h2, { color: p.ink }, style]}>{children}</Text>;
+  return <Text {...balancedText} style={[s.h2, { color: p.ink }, style]}>{widowSafe(children)}</Text>;
 }
 
 export function P({
@@ -402,8 +409,8 @@ export function P({
 }) {
   const p = usePalette();
   return (
-    <Text numberOfLines={numberOfLines} style={[s.p, { color: p.ink, opacity: 0.87 }, style]}>
-      {children}
+    <Text {...balancedText} numberOfLines={numberOfLines} style={[s.p, { color: p.ink, opacity: 0.87 }, style]}>
+      {widowSafe(children)}
     </Text>
   );
 }
@@ -419,8 +426,8 @@ export function Muted({
 }) {
   const p = usePalette();
   return (
-    <Text numberOfLines={numberOfLines} style={[s.muted, { color: p.muted }, style]}>
-      {children}
+    <Text {...balancedText} numberOfLines={numberOfLines} style={[s.muted, { color: p.muted }, style]}>
+      {widowSafe(children)}
     </Text>
   );
 }
@@ -485,14 +492,14 @@ export function Btn({
         style,
       ]}
     >
-      <Text style={[s.btnLabel, { color: fg }]}>{label}</Text>
+      <Text {...balancedText} style={[s.btnLabel, { color: fg }]}>{widowSafe(label)}</Text>
     </AnimatedPressable>
   );
 }
 
 export function Label({ children }: { children: ReactNode }) {
   const p = usePalette();
-  return <Text style={[s.label, { color: p.muted }]}>{children}</Text>;
+  return <Text {...balancedText} style={[s.label, { color: p.muted }]}>{widowSafe(children)}</Text>;
 }
 
 export function Input(props: React.ComponentProps<typeof TextInput>) {

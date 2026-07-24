@@ -1,8 +1,9 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { tracks } from "@/lib/content/tracks";
 import { Card, Chip, Hero, IconChip, Muted, Screen, usePalette } from "@/components/ui";
+import { Text } from "@/components/text";
 import { Press, Reveal } from "@/components/motion";
 
 /** One icon per wound, echoing the situation icons from onboarding. */

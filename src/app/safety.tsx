@@ -1,6 +1,7 @@
-import { Linking, Pressable, Text, View } from "react-native";
+import { Linking, Pressable, View } from "react-native";
 import { crisisResources, therapyResources, whyGateMatters } from "@/lib/content/safety";
 import { Card, H1, H2, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Text } from "@/components/text";
 
 export default function Safety() {
   const p = usePalette();

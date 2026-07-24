@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { useFocusEffect, useRouter, type Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -15,6 +15,7 @@ import { getRecommendations, type Recommendation } from "@/lib/recommendations";
 import { getSituation, type SituationDef } from "@/lib/situation";
 import type { Hue } from "@/lib/theme";
 import { Card, Chip, Eyebrow, Hero, IconChip, Muted, Screen, usePalette } from "@/components/ui";
+import { Text } from "@/components/text";
 import { Reveal } from "@/components/motion";
 import { RecommendationCard } from "@/components/recommendation-card";
 

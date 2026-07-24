@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { useRouter, type Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/lib/auth";
@@ -33,6 +33,7 @@ import {
 import Animated, { FadeIn } from "react-native-reanimated";
 import { onHero } from "@/lib/theme";
 import { Btn, Card, Chip, Eyebrow, Hero, IconChip, Input, Muted, Rise, Screen, usePalette, Wordmark } from "@/components/ui";
+import { Text } from "@/components/text";
 import { acknowledgeSuccess, Bounce, Press } from "@/components/motion";
 import { ProgressRing } from "@/components/rings";
 import { getRecommendations, type Recommendation } from "@/lib/recommendations";

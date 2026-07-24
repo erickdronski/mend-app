@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Share, Text, View } from "react-native";
+import { Share, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { getChallengesDone, getJourney, getProfile, getSessions } from "@/lib/store";
@@ -28,6 +28,7 @@ import {
   Screen,
   usePalette,
 } from "@/components/ui";
+import { Text } from "@/components/text";
 
 const MEMBER_HUES = ["rose", "moss"] as const;
 

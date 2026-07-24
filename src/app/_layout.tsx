@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { AppState, Pressable, Text, View, useColorScheme, type AppStateStatus } from "react-native";
+import { AppState, Pressable, View, useColorScheme, type AppStateStatus } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import { AuthProvider, useAuth } from "@/lib/auth";
@@ -9,6 +9,7 @@ import { PremiumProvider } from "@/lib/premium";
 import { getLanguage, getProfile } from "@/lib/store";
 import { authenticate, isLockEnabled } from "@/lib/lock";
 import { usePalette, Wordmark } from "@/components/ui";
+import { Text } from "@/components/text";
 import i18n from "@/lib/i18n";
 
 /**

@@ -1,10 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { Bloom, Press, Reveal } from "@/components/motion";
 import { onHero, type Hue } from "@/lib/theme";
 import type { ConnectionMomentum } from "@/lib/momentum";
 import { usePalette } from "@/components/ui";
+import { Text } from "@/components/text";
 
 const THREAD_ICONS = {
   talk: "chatbubbles-outline",

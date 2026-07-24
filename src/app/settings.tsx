@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Linking, Pressable, Text, View } from "react-native";
+import { Linking, Pressable, View } from "react-native";
 import { useRouter, type Href } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
@@ -11,6 +11,7 @@ import { isLockEnabled, lockAvailable, setLockEnabled } from "@/lib/lock";
 import { situations } from "@/lib/situation";
 import { usePremium } from "@/lib/premium";
 import { Btn, Card, Chip, Divider, H2, IconChip, Input, Label, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Text } from "@/components/text";
 
 const SITE = "https://mend-drab-pi.vercel.app";
 

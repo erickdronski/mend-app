@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { useRouter, type Href } from "expo-router";
 import { memoryLane, partnerQuiz, wouldYouRather } from "@/lib/content/games";
 import { getProfile } from "@/lib/store";
@@ -19,6 +19,7 @@ import {
   Screen,
   usePalette,
 } from "@/components/ui";
+import { Text } from "@/components/text";
 import { Bloom, Bounce, GlideBar, Press, Reveal } from "@/components/motion";
 
 type Mode = "menu" | "quiz-setup" | "quiz-play" | "quiz-done" | "wyr" | "memory";

@@ -5,7 +5,7 @@
  * breathes to guide co-regulation. All reduced-motion aware.
  */
 import { useEffect } from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 import Animated, {
   Easing,
@@ -19,6 +19,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { springs } from "@/lib/motion";
+import { Text } from "@/components/text";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 

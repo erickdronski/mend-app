@@ -10,12 +10,13 @@
  * This build presents Plus as included access, not as an external checkout.
  */
 import { useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { PRICING, usePremium, type Plan } from "@/lib/premium";
 import { useAuth } from "@/lib/auth";
 import { useRouter } from "expo-router";
 import { Btn, Card, Chip, Eyebrow, Hero, IconChip, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Text } from "@/components/text";
 import { Press, Reveal } from "@/components/motion";
 
 const FREE_FOREVER: { icon: keyof typeof Ionicons.glyphMap; label: string }[] = [

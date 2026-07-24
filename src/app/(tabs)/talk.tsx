@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ComponentProps } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import { BreathingCircle, ProgressRing } from "@/components/rings";
@@ -29,6 +29,7 @@ import {
   Screen,
   usePalette,
 } from "@/components/ui";
+import { Text } from "@/components/text";
 
 type Phase =
   | "setup"

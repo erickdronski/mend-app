@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { useFocusEffect } from "expo-router";
 import { acknowledgeSuccess, Bounce, Press, Reveal } from "@/components/motion";
 import { SuccessMoment } from "@/components/momentum";
@@ -24,6 +24,7 @@ import {
   Screen,
   usePalette,
 } from "@/components/ui";
+import { Text } from "@/components/text";
 
 export default function PlanScreen() {
   const p = usePalette();

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { Bloom, Bounce, GlideBar, Press } from "@/components/motion";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import { addPulse, getJourney, getProfile, getPulses } from "@/lib/store";
 import { PULSE_QUESTIONS, pulseAvg } from "@/lib/journey";
 import { Btn, Card, Eyebrow, H1, H2, Hero, IconChip, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Text } from "@/components/text";
 
 type Step = "who" | "rate" | "handoff" | "done" | "support";
 

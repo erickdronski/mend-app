@@ -1,8 +1,9 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { Stack, useLocalSearchParams, useRouter, type Href } from "expo-router";
 import { getTrack } from "@/lib/content/tracks";
 import { usePremium } from "@/lib/premium";
 import { Btn, Card, Chip, CollapsibleP, Eyebrow, H2, Hero, IconChip, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Text } from "@/components/text";
 import { Reveal } from "@/components/motion";
 
 export default function TrackDetail() {

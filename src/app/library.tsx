@@ -1,6 +1,7 @@
-import { Linking, Text, View } from "react-native";
+import { Linking, View } from "react-native";
 import { books, freeResources, podcasts } from "@/lib/content/library";
 import { Card, Chip, Eyebrow, Hero, IconChip, Muted, Screen, usePalette } from "@/components/ui";
+import { Text } from "@/components/text";
 import { Press, Reveal } from "@/components/motion";
 
 export default function Library() {

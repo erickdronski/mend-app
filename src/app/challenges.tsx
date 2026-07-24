@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { useFocusEffect, useRouter, type Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { challenges, getChallenge, microMoves } from "@/lib/content/challenges";
@@ -25,6 +25,7 @@ import {
   Screen,
   usePalette,
 } from "@/components/ui";
+import { Text } from "@/components/text";
 import { acknowledgeSuccess, Bloom, Bounce, Press, Reveal } from "@/components/motion";
 import { SuccessMoment } from "@/components/momentum";
 

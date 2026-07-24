@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { Link, useFocusEffect, useRouter, type Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
@@ -25,6 +25,7 @@ import {
 } from "@/lib/journey";
 import { onHero } from "@/lib/theme";
 import { Btn, Card, Chip, CollapsibleP, Eyebrow, H1, H2, Hero, Muted, P, Rise, Screen, usePalette, Wordmark } from "@/components/ui";
+import { Text } from "@/components/text";
 import { ProgressRing } from "@/components/rings";
 import { acknowledgeSuccess, Bloom, Bounce, GlideBar, Press, Reveal } from "@/components/motion";
 import { SuccessMoment } from "@/components/momentum";
