@@ -16,7 +16,7 @@ import {
 } from "@/lib/store";
 import {
   getStage,
-  pulseAvg,
+  getJourneyProgress,
   readyToComplete,
   stageComplete,
   stages,
@@ -26,7 +26,7 @@ import {
 import { onHero } from "@/lib/theme";
 import { Btn, Card, Chip, CollapsibleP, Eyebrow, H1, H2, Hero, Muted, P, Rise, Screen, usePalette, Wordmark } from "@/components/ui";
 import { ProgressRing } from "@/components/rings";
-import { Bloom, Bounce, Reveal } from "@/components/motion";
+import { Bloom, Bounce, GlideBar, Press, Reveal } from "@/components/motion";
 
 /**
  * The Journey tab: the app's home. One current stage, its steps, the next
@@ -60,10 +60,10 @@ export default function JourneyScreen() {
 
   if (!ctx || !journey) return <Screen scroll={false} safeTop>{null}</Screen>;
 
+  const progress = getJourneyProgress(ctx, journey);
+
   // Keep the persisted field name for backward compatibility with existing journeys.
   if (journey.graduatedAt) {
-    const base = pulseAvg(ctx.pulses, 1, 0);
-    const final = pulseAvg(ctx.pulses, 5, 0);
     return (
       <Screen safeTop>
         <H1 style={{ marginTop: 24 }}>{t("journey.graduated")}</H1>
@@ -72,12 +72,30 @@ export default function JourneyScreen() {
           weekly meeting, keep the small moments of affection, and return whenever you want a
           fresh conversation, shared activity, or a little extra support.
         </P>
-        {base !== null && final !== null && (
+        <Card tone="panel" style={{ marginTop: 20 }}>
+          <Eyebrow hue="ember">Your journey in practice</Eyebrow>
+          <View style={{ flexDirection: "row", gap: 10, marginTop: 12 }}>
+            <View style={{ flex: 1 }}>
+              <Text style={{ color: p.ink, fontSize: 22, fontWeight: "800" }}>{progress.totalSteps}</Text>
+              <Muted style={{ fontSize: 12 }}>shared steps</Muted>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={{ color: p.ink, fontSize: 22, fontWeight: "800" }}>{progress.completedStages}</Text>
+              <Muted style={{ fontSize: 12 }}>chapters</Muted>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={{ color: p.ink, fontSize: 22, fontWeight: "800" }}>100%</Text>
+              <Muted style={{ fontSize: 12 }}>complete</Muted>
+            </View>
+          </View>
+        </Card>
+        {progress.baselinePulse !== null && progress.latestPulse !== null && (
           <Card tone="fern" style={{ marginTop: 20 }}>
-            <H2>The distance you covered</H2>
+            <H2>Your shared pulse</H2>
             <P style={{ marginTop: 8 }}>
-              Baseline pulse {base.toFixed(1)} → final pulse {final.toFixed(1)}. That movement is
-              yours, and nobody can take it back.
+              Together, you moved from {progress.baselinePulse.toFixed(1)} at your baseline to{" "}
+              {progress.latestPulse.toFixed(1)} in chapter {progress.latestPulseStage}. That is
+              shared movement, not a score for either person.
             </P>
           </Card>
         )}
@@ -107,20 +125,23 @@ export default function JourneyScreen() {
       <Rise>
         <Hero
           hue="moss"
-          eyebrow={`${t("journey.stage")} ${stage.n} ${t("common.of")} ${stages.length}`}
+          eyebrow={`Chapter ${stage.n} ${t("common.of")} ${stages.length}`}
           title={stage.title}
           sub={stage.arc}
           right={
             <ProgressRing
-              progress={doneCount / stage.steps.length}
+              progress={progress.fraction}
               size={84}
               stroke={7}
               trackColor="rgba(244,244,238,0.18)"
               color="#d9a057"
             >
-              <Text style={{ color: "#f4f4ee", fontWeight: "800", fontSize: 18 }}>
-                {doneCount}/{stage.steps.length}
-              </Text>
+              <View style={{ alignItems: "center" }}>
+                <Text style={{ color: "#f4f4ee", fontWeight: "800", fontSize: 18 }}>
+                  {progress.percent}%
+                </Text>
+                <Text style={{ color: onHero.dim, fontSize: 9.5 }}>overall</Text>
+              </View>
             </ProgressRing>
           }
           style={{ marginTop: 16 }}
@@ -134,8 +155,91 @@ export default function JourneyScreen() {
         </Hero>
       </Rise>
 
+      <Rise delay={80}>
+        <Card style={{ marginTop: 12 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+            <View style={{ flex: 1 }}>
+              <Eyebrow hue="ember">Your five-chapter path</Eyebrow>
+              <Text style={{ color: p.ink, fontWeight: "700", fontSize: 16, marginTop: 4 }}>
+                {progress.completedSteps} of {progress.totalSteps} shared steps practiced
+              </Text>
+            </View>
+            <Chip
+              label={`${progress.completedStages} ${progress.completedStages === 1 ? "chapter" : "chapters"} complete`}
+              hue="moss"
+            />
+          </View>
+
+          <View style={{ marginTop: 14 }}>
+            <GlideBar progress={progress.fraction} color={p.ember} track={p.panel} height={7} />
+          </View>
+
+          <View style={{ flexDirection: "row", alignItems: "center", marginTop: 18 }}>
+            {progress.stages.map((item, index) => {
+              const completeStage = item.status === "complete";
+              const currentStage = item.status === "current";
+              return (
+                <View
+                  key={item.n}
+                  style={{ flex: index < progress.stages.length - 1 ? 1 : 0, flexDirection: "row", alignItems: "center" }}
+                >
+                  <View
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: 16,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: completeStage ? p.moss : currentStage ? p.ember : p.panel,
+                      borderWidth: currentStage ? 3 : 1,
+                      borderColor: currentStage ? p.hues.ember.bg : completeStage ? p.moss : p.line,
+                    }}
+                  >
+                    {completeStage ? (
+                      <Ionicons name="checkmark" size={17} color={p.surface} />
+                    ) : (
+                      <Text style={{ color: currentStage ? p.surface : p.muted, fontWeight: "800", fontSize: 12 }}>
+                        {item.n}
+                      </Text>
+                    )}
+                  </View>
+                  {index < progress.stages.length - 1 ? (
+                    <View style={{ flex: 1, height: 2, backgroundColor: completeStage ? p.moss : p.line }} />
+                  ) : null}
+                </View>
+              );
+            })}
+          </View>
+
+          <View style={{ flexDirection: "row", gap: 8, marginTop: 18 }}>
+            <View style={{ flex: 1, backgroundColor: p.panel, borderRadius: 14, padding: 12 }}>
+              <Text style={{ color: p.ink, fontSize: 19, fontWeight: "800" }}>{doneCount}/{stage.steps.length}</Text>
+              <Muted style={{ fontSize: 11.5, marginTop: 2 }}>this chapter</Muted>
+            </View>
+            <View style={{ flex: 1, backgroundColor: p.panel, borderRadius: 14, padding: 12 }}>
+              <Text style={{ color: p.ink, fontSize: 19, fontWeight: "800" }}>
+                {progress.pulseDelta === null
+                  ? progress.baselinePulse === null ? "Not yet" : "Baseline"
+                  : `${progress.pulseDelta >= 0 ? "+" : ""}${progress.pulseDelta.toFixed(1)}`}
+              </Text>
+              <Muted style={{ fontSize: 11.5, marginTop: 2 }}>pulse since baseline</Muted>
+            </View>
+          </View>
+
+          <Press onPress={() => router.push("/achievements" as Href)}>
+            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 14, paddingTop: 14, borderTopWidth: 1, borderTopColor: p.line }}>
+              <Ionicons name="ribbon-outline" size={18} color={p.hues.honey.fg} />
+              <Text style={{ color: p.ink, fontWeight: "600", fontSize: 13.5, marginLeft: 8, flex: 1 }}>
+                See the milestones you have earned together
+              </Text>
+              <Ionicons name="chevron-forward" size={16} color={p.muted} />
+            </View>
+          </Press>
+        </Card>
+      </Rise>
+
       {/* the why, folded to two lines so the screen stays light */}
-      <Rise delay={120}>
+      <Rise delay={140}>
         <Card tone="panel" style={{ marginTop: 12 }}>
           <CollapsibleP style={{ fontSize: 14 }}>{stage.why}</CollapsibleP>
         </Card>
@@ -216,11 +320,11 @@ export default function JourneyScreen() {
       {complete && !finishing && (
         <Bounce trigger={complete}>
           <Card tone="moss" style={{ marginTop: 18 }}>
-            <Chip label={`Stage ${stage.n} complete`} hue="ember" />
-            <H2 style={{ color: p.surface, marginTop: 10 }}>{t("journey.stageComplete")}</H2>
+            <Chip label={`Chapter ${stage.n} complete`} hue="ember" />
+            <H2 style={{ color: p.surface, marginTop: 10 }}>Chapter complete</H2>
             <P style={{ marginTop: 8, color: p.surface, opacity: 0.9 }}>
-              Every step of stage {stage.n} is done. Move when you&apos;re both ready; the stages ahead
-              assume the ground this one built.
+              Every step of chapter {stage.n} is done. Move when you&apos;re both ready; the chapters ahead
+              build on the ground this one created.
             </P>
             <Btn
               label={t("journey.advance")}
@@ -233,7 +337,7 @@ export default function JourneyScreen() {
 
       {finishing && (
         <Card tone="moss" style={{ marginTop: 18 }}>
-          <Chip label="Stage 5 complete" hue="ember" />
+          <Chip label="Chapter 5 complete" hue="ember" />
           <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 10, marginTop: 10 }}>
             <Ionicons name="ribbon-outline" size={22} color={p.surface} style={{ marginTop: 2 }} />
             <H2 style={{ color: p.surface, flex: 1 }}>

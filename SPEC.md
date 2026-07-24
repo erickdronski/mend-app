@@ -39,6 +39,12 @@ them choose what to keep doing. Lower final pulse scores lead to honest guidance
 to repeat what helped or involve a qualified professional, without presenting
 the app as a substitute for care.
 
+Progress is visible as one coherent story: overall completion, reached chapters,
+current-chapter steps, a five-chapter roadmap, and earned milestones. Future
+chapter activity never inflates the percentage. Pulse movement is shown on
+shared surfaces only after both partners answer, using a combined average that
+never reveals either person's private score.
+
 ## Stack
 
 Expo SDK 57 / Expo Router (src/app), TypeScript, StyleSheet UI kit

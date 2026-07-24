@@ -19,7 +19,7 @@ Mend guides two people through a staged journey of attention, curiosity, communi
 
 ## Product
 
-- **The Journey:** a practical path for building connection, understanding, and alignment together
+- **The Journey:** a five-chapter path with shared steps, visible progress, pulse movement, and earned milestones
 - **Shared Space:** a private place for answers, notes, plans, appreciation, and progress
 - **Connection tools:** guided conversations, games, card decks, pulse checks, and challenges
 - **Focused support:** optional tracks for conflict, trust, intimacy, major changes, and other specific seasons

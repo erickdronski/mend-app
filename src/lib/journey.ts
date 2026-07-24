@@ -38,6 +38,28 @@ export type Stage = {
   steps: JourneyStep[];
 };
 
+export type JourneyStageProgress = {
+  n: number;
+  title: string;
+  done: number;
+  total: number;
+  status: "complete" | "current" | "upcoming";
+};
+
+export type JourneyProgress = {
+  completedSteps: number;
+  totalSteps: number;
+  completedStages: number;
+  currentStage: number;
+  fraction: number;
+  percent: number;
+  stages: JourneyStageProgress[];
+  baselinePulse: number | null;
+  latestPulse: number | null;
+  latestPulseStage: number | null;
+  pulseDelta: number | null;
+};
+
 const sessionHeld = (ctx: StepContext, titlePart: string) =>
   ctx.sessions.some((s) => s.topicTitle.toLowerCase().includes(titlePart.toLowerCase()));
 
@@ -323,6 +345,62 @@ export function stepDone(step: JourneyStep, ctx: StepContext, journey: JourneySt
 
 export function stageComplete(stage: Stage, ctx: StepContext, journey: JourneyState): boolean {
   return stage.steps.every((s) => stepDone(s, ctx, journey));
+}
+
+/** A shared pulse is visible only after both partners have answered. */
+export function sharedPulseAvg(pulses: PulseEntry[], stage: number): number | null {
+  const a = pulseAvg(pulses, stage, 0);
+  const b = pulseAvg(pulses, stage, 1);
+  return a === null || b === null ? null : (a + b) / 2;
+}
+
+/**
+ * A single, privacy-safe view of the journey. Future-stage activity never
+ * counts early, and individual pulse scores never appear in shared progress.
+ */
+export function getJourneyProgress(ctx: StepContext, journey: JourneyState): JourneyProgress {
+  const currentStage = journey.graduatedAt ? stages.length : Math.min(Math.max(journey.stage, 1), stages.length);
+  const stageProgress = stages.map((stage): JourneyStageProgress => {
+    const reached = stage.n <= currentStage;
+    const done = journey.graduatedAt || stage.n < currentStage
+      ? stage.steps.length
+      : reached
+        ? stage.steps.filter((step) => stepDone(step, ctx, journey)).length
+        : 0;
+    const complete = done === stage.steps.length;
+    return {
+      n: stage.n,
+      title: stage.title,
+      done,
+      total: stage.steps.length,
+      status: complete ? "complete" : stage.n === currentStage ? "current" : "upcoming",
+    };
+  });
+  const totalSteps = stageProgress.reduce((sum, stage) => sum + stage.total, 0);
+  const completedSteps = stageProgress.reduce((sum, stage) => sum + stage.done, 0);
+  const sharedPulses = stages
+    .map((stage) => ({ stage: stage.n, average: sharedPulseAvg(ctx.pulses, stage.n) }))
+    .filter((entry): entry is { stage: number; average: number } => entry.average !== null);
+  const baseline = sharedPulses.find((entry) => entry.stage === 1) ?? null;
+  const latest = sharedPulses.at(-1) ?? null;
+  const pulseDelta = baseline && latest && latest.stage > baseline.stage
+    ? latest.average - baseline.average
+    : null;
+  const fraction = totalSteps === 0 ? 0 : completedSteps / totalSteps;
+
+  return {
+    completedSteps,
+    totalSteps,
+    completedStages: stageProgress.filter((stage) => stage.status === "complete").length,
+    currentStage,
+    fraction,
+    percent: Math.round(fraction * 100),
+    stages: stageProgress,
+    baselinePulse: baseline?.average ?? null,
+    latestPulse: latest?.average ?? null,
+    latestPulseStage: latest?.stage ?? null,
+    pulseDelta,
+  };
 }
 
 /** Average pulse for a stage, per partner. Null if that partner hasn't pulsed. */

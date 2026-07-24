@@ -8,6 +8,11 @@ All notable changes to Mend are documented in this file. The project follows
 ### Added
 
 - A positioning regression test for universal product surfaces.
+- A five-chapter progress map with overall completion, current-chapter work,
+  shared pulse movement, and direct access to earned milestones.
+- Compact chapter and overall-progress context on the Today screen's next step.
+- Journey progress tests that prevent future chapters or one partner's private
+  pulse from inflating shared progress.
 
 ### Changed
 
@@ -17,6 +22,12 @@ All notable changes to Mend are documented in this file. The project follows
   everyday growth as well as difficult seasons.
 - Updated maintained translations and product documentation to match the broader
   relationship-improvement promise.
+
+### Fixed
+
+- Restored Expo SDK 57-compatible native dependency versions after unsupported
+  automated upgrades caused the app to crash at launch in Expo Go.
+- Restored the AsyncStorage API used by the SDK-compatible native module.
 
 ## [1.0.0-beta.1] - 2026-07-23
 

@@ -86,7 +86,7 @@ export const saveProfile = (p: Profile) => write(KEYS.profile, p);
 /** Wipe every Mend key from this device. Used on account deletion and on a
  *  guest "erase everything" so no relationship data survives locally. */
 export async function clearAllLocal() {
-  await AsyncStorage.removeMany(Object.values(KEYS));
+  await AsyncStorage.multiRemove(Object.values(KEYS));
 }
 
 /** The full snapshot backed up to Supabase and restored on a new device. */
@@ -116,7 +116,7 @@ export async function restoreLocal(state: BackupState) {
   if (state.pulses) pairs.push([KEYS.pulses, JSON.stringify(state.pulses)]);
   if (state.journey) pairs.push([KEYS.journey, JSON.stringify(state.journey)]);
   if (state.language) pairs.push([KEYS.language, JSON.stringify(state.language)]);
-  if (pairs.length) await AsyncStorage.setMany(Object.fromEntries(pairs));
+  if (pairs.length) await AsyncStorage.multiSet(pairs);
 }
 
 // ——— local daily answer (guests / solo, before a shared space exists) ———

@@ -17,7 +17,7 @@ import {
   countDailyAnswer,
   type JourneyState,
 } from "@/lib/store";
-import { getStage, stepDone, type StepContext } from "@/lib/journey";
+import { getJourneyProgress, getStage, stepDone, type JourneyProgress, type StepContext } from "@/lib/journey";
 import { getSituation } from "@/lib/situation";
 import {
   getMySpace,
@@ -29,8 +29,8 @@ import {
 } from "@/lib/space";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { onHero } from "@/lib/theme";
-import { Card, Eyebrow, Hero, IconChip, Input, Muted, Rise, Screen, usePalette, Wordmark } from "@/components/ui";
-import { Bounce, Press } from "@/components/motion";
+import { Card, Chip, Eyebrow, Hero, IconChip, Input, Muted, Rise, Screen, usePalette, Wordmark } from "@/components/ui";
+import { Bounce, GlideBar, Press } from "@/components/motion";
 
 /** Warm, time-aware hello. No stats, no streaks, just a greeting. */
 function greetingForNow(): string {
@@ -69,11 +69,13 @@ export default function Today() {
   const [hereForYou, setHereForYou] = useState<string>("");
   const [nextStep, setNextStep] = useState<{ title: string; body: string; href: string; label: string } | null>(null);
   const [journeyDone, setJourneyDone] = useState(false);
+  const [journeyProgress, setJourneyProgress] = useState<JourneyProgress | null>(null);
 
   const question = questionForDate(new Date());
   const nudge = nudgeForDate(new Date());
 
   const computeNextStep = useCallback((ctx: StepContext, journey: JourneyState) => {
+    setJourneyProgress(getJourneyProgress(ctx, journey));
     if (journey.graduatedAt) {
       setJourneyDone(true);
       setNextStep(null);
@@ -86,7 +88,7 @@ export default function Today() {
       setNextStep({ title: step.title, body: step.body, href: step.href, label: step.hrefLabel });
     } else {
       setJourneyDone(false);
-      setNextStep({ title: "Stage complete", body: "You've finished this stage. Open your path to move on when you're both ready.", href: "/journey", label: "Open your path" });
+      setNextStep({ title: "Chapter complete", body: "You've finished this chapter. Open your path to move on when you're both ready.", href: "/journey", label: "Open your path" });
     }
   }, []);
 
@@ -265,7 +267,10 @@ export default function Today() {
       {journeyDone ? (
         <Rise delay={80}>
           <Card tone="fern" style={{ marginTop: 12 }}>
-            <Text style={{ fontWeight: "700", color: p.ink, fontSize: 16 }}>Journey complete</Text>
+            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+              <Text style={{ fontWeight: "700", color: p.ink, fontSize: 16 }}>Journey complete</Text>
+              <Chip label="5 chapters · 100%" hue="moss" />
+            </View>
             <Muted style={{ marginTop: 6 }}>The skills and rituals are yours now. Keep using what helps you feel connected and aligned.</Muted>
           </Card>
         </Rise>
@@ -276,9 +281,21 @@ export default function Today() {
               <View style={{ flexDirection: "row", gap: 12, alignItems: "flex-start" }}>
                 <IconChip name="footsteps-outline" hue="ember" size={40} />
                 <View style={{ flex: 1 }}>
-                  <Eyebrow hue="ember">Your next step</Eyebrow>
+                  <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+                    <Eyebrow hue="ember">Your next step</Eyebrow>
+                    {journeyProgress ? (
+                      <Text style={{ color: p.muted, fontWeight: "600", fontSize: 11.5 }}>
+                        Chapter {journeyProgress.currentStage} · {journeyProgress.percent}%
+                      </Text>
+                    ) : null}
+                  </View>
                   <Text style={{ marginTop: 5, fontSize: 16.5, fontWeight: "700", color: p.ink }}>{nextStep.title}</Text>
                   <Muted style={{ marginTop: 5 }}>{nextStep.body}</Muted>
+                  {journeyProgress ? (
+                    <View style={{ marginTop: 10 }}>
+                      <GlideBar progress={journeyProgress.fraction} color={p.ember} track={p.panel} height={5} />
+                    </View>
+                  ) : null}
                   <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}>
                     <Text style={{ color: p.ember, fontWeight: "600", fontSize: 14 }}>{nextStep.label}</Text>
                     <Ionicons name="arrow-forward" size={15} color={p.ember} style={{ marginLeft: 4 }} />
