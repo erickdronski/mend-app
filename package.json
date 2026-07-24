@@ -41,11 +41,11 @@
   },
   "devDependencies": {
     "@types/react": "~19.2.2",
-    "eslint": "^9.0.0",
+    "eslint": "^10.7.0",
     "eslint-config-expo": "~57.0.0",
     "sharp": "^0.35.3",
-    "typescript": "~6.0.3",
-    "vitest": "^3.2.4"
+    "typescript": "~7.0.2",
+    "vitest": "^4.1.10"
   },
   "scripts": {
     "start": "expo start",
