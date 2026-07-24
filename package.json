@@ -40,11 +40,13 @@
     "react-native-worklets": "0.10.0"
   },
   "devDependencies": {
+    "@typescript-eslint/parser": "^8.65.0",
     "@types/react": "~19.2.2",
-    "eslint": "^10.7.0",
+    "eslint": "^9.0.0",
     "eslint-config-expo": "~57.0.0",
+    "eslint-import-resolver-typescript": "^3.10.1",
     "sharp": "^0.35.3",
-    "typescript": "~7.0.2",
+    "typescript": "~6.0.3",
     "vitest": "^4.1.10"
   },
   "scripts": {
