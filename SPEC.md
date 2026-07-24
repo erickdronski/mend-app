@@ -60,7 +60,8 @@ crisis lines; per-track red flags; "not therapy" everywhere. Non-negotiable.
   distribution cert validated and stored on EAS
 - ASC API key **Mend CI / 3Q7BV86NXY** in `credentials/` (gitignored),
   issuer c798b8c2-6181-42a4-ae66-34e30d3c1c5e, team J9DMDH4S58
-- ASC app record: **"Mend: Relationship Repair"**, appId **6789373997**, SKU mend-ios
+- ASC app record: **"Mend: Relationship Growth"**, subtitle
+  **"Connect, grow, stay in sync"**, appId **6789373997**, SKU mend-ios
 - **Local pipeline (2026-07-16, the ship path):** Xcode 26.6 + Homebrew
   CocoaPods/fastlane are installed, so `eas build --local` runs on this Mac
   at $0. Recipe: rsync the repo (exclude node_modules/ios/android) to a
