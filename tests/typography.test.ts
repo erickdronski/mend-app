@@ -3,8 +3,8 @@ import { widowSafe } from "../src/lib/typography";
 
 describe("widowSafe", () => {
   it("keeps three short final words together", () => {
-    expect(widowSafe("never supported by ads or selling your data.")).toBe(
-      "never supported by ads or selling\u00a0your\u00a0data."
+    expect(widowSafe("keep making meaningful progress together.")).toBe(
+      "keep making meaningful progress\u00a0together."
     );
   });
 

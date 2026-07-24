@@ -254,7 +254,7 @@ export default function Onboarding() {
           <Rise delay={300}>
             <Text style={{ fontSize: 16, color: "#f4f4ee", opacity: 0.75, marginTop: 18, lineHeight: 24 }}>
               Understand each other better, grow closer, and stay more in sync. Private, practical,
-              free at its core, and never supported by ads or selling your data.
+              and designed to help you keep making meaningful progress together.
             </Text>
           </Rise>
           <Rise delay={420} style={{ flex: 1, minHeight: 172, justifyContent: "center" }}>
@@ -373,7 +373,7 @@ export default function Onboarding() {
                   <H2>What it gives</H2>
                   <Muted style={{ marginTop: 6 }}>
                     Guided exercises for listening, understanding, reconnecting, and building trust.
-                    Staged, practical, and free.
+                    Staged, practical, and built to grow with your relationship.
                   </Muted>
                 </View>
               </View>

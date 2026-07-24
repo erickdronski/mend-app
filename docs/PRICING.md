@@ -266,7 +266,7 @@ floor.
 
 **P2. Hero subtitle.**
 
-> The heart of Mend is free forever. Plus opens the full breadth.
+> Start with Mend's essential tools. Plus opens the complete journey for both partners.
 
 Backed by: the free tier in `docs/MONETIZATION.md`, shipped in `src/app/plus.tsx`.
 Product fact, not a research claim.
@@ -340,8 +340,8 @@ Backed by: 12 x $9.99 = $119.88, minus $99 = $20.88. Arithmetic on our own price
 
 **A1. Opening.**
 
-> Mend is a guided repair tool for couples. The five-stage journey, the guided
-> sessions, the daily question, and the entire safety net are free forever.
+> Mend is a guided relationship tool for couples. Start with the first journey
+> chapter and selected activities, then use Plus to open the complete experience.
 
 Backed by: `docs/MONETIZATION.md`. Product fact.
 
@@ -606,25 +606,22 @@ It risks changing whether a real person goes to see a professional.
 A restatement of `docs/MONETIZATION.md`. If the two ever disagree,
 `docs/MONETIZATION.md` wins and this section gets corrected.
 
-### Free forever, no exceptions
+### Included starting access
 
-- The five-stage journey, start to graduation
-- Guided sessions, including the flooding break and the timed floor
+- The complete first chapter of the journey
+- Selected starter activities and guided conversations
 - **The entire safety net: crisis lines, red flags, get-help-now, and the domestic
   violence gate**
 - The daily question
-- The shared space
-- Love notes
-- The plan
+- The private two-person room and invite code
+- Shared notes
 - Pulse checks
-- The quiz, in full, always. The journey requires both partners to take it, and
-  the journey is the free spine
 - Every healing track's first session
 - **Every healing track's red flags and its "when to see a professional" content,
   in every track, always**
-- The First Steps deck and the Repair deck, which is the crisis deck
-- The "Do you still know me?" game
-- The starter week challenge, and the crisis week challenge, "The last line"
+- The First Steps, Repair, and Back from the Brink decks
+- One starter couple game
+- The starter and crisis-week challenges
 
 ### Mend Plus adds
 
@@ -647,12 +644,13 @@ A restatement of `docs/MONETIZATION.md`. If the two ever disagree,
    first session exist for.
 4. **Plus is breadth and depth, never rescue.** If a Plus feature ever becomes
    load-bearing for someone's safety, it moves to free. No discussion.
-5. **No ads, ever.** A couple in crisis is not inventory.
+5. **Monetization language must describe the current product without promising that
+   pricing or advertising policy can never change.**
 6. **No selling or sharing relationship data, in any form.**
 7. **Nothing here assumes marriage, legal status, cohabitation, children, or any
    particular genders.** Copy that does is a bug.
 
-### Open decision, unchanged: does one subscription cover both partners
+### One subscription covers both partners
 
 The verified category norm is couple-linked single-payer. Paired's own support
 documentation states that "if one partner purchases a Paired Premium subscription,
@@ -660,9 +658,9 @@ premium access will automatically be granted to the other's Paired account"
 (https://support.paired.com/en/articles/164624-does-my-partner-have-to-pay-to-use-paired-premium-as-well,
 accessed 2026-07-19), and Relish, Lasting, Evergreen, Coral, and Love Nudge follow
 the same model. Mend's core loop already requires two people, and charging twice
-for one shared journey contradicts the brand. This is an owner decision with an
-engineering consequence, since `mend_entitlements` is keyed per account. It is not
-decided here, and it does not change the prices.
+for one shared journey contradicts the brand. Mend entitlements are therefore
+attached to the couple's room: either partner can pay, both receive access, and
+only the payer manages billing.
 
 ---
 

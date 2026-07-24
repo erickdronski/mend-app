@@ -94,9 +94,9 @@ Unchanged layout. One headline word changes, and a language control is added.
 Love rarely dies of one big thing.
 It starves on unheard sentences.
 
-A private mediator for the two of you. The heart of it
-free forever, no ads, your data never sold. Just the
-way back.
+A private guide for the two of you. Start with practical
+tools, then unlock the complete journey with Mend Plus.
+Keep finding the way forward together.
 
                                        [ Begin ]
                           I already have an account

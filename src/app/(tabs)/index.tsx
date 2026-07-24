@@ -349,7 +349,7 @@ export default function Home() {
               ) : (
                 <Pressable onPress={() => router.push(session ? "/space" : "/sign-in")}>
                   <Text style={{ color: p.ember, fontWeight: "700", fontSize: 13 }}>
-                    {session ? "Set up your shared space" : "Make a free account to answer together"} →
+                    {session ? "Set up your shared space" : "Create an account to answer together"} →
                   </Text>
                 </Pressable>
               )}

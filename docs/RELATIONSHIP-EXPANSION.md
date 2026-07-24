@@ -76,9 +76,9 @@ frequency claim in an app that is otherwise careful about citation.
 
 **Fix:** "Most of the damage isn't one big thing." / "It's the sentences that never landed."
 This drops the marriage noun and the unsourced claim in one edit and keeps the cadence and the
-amber second line. Do not touch the third paragraph ("A private mediator for the two of you.
-The heart of it free forever, no ads, your data never sold."). Five personas called that
-paragraph the reason they kept reading.
+amber second line. Preserve the third paragraph's sense of privacy and partnership without
+promising permanent pricing or advertising policy. Five personas called that paragraph the
+reason they kept reading.
 
 ### 3. The situation chips do not contain the reason the couple is here (8 of 8)
 
@@ -1116,7 +1116,8 @@ are load-bearing. Treat any change to them as a regression until proven otherwis
     depends on, muting only reorders. Relationship type inherits this rule exactly.
 22. **No account wall.** The invisible anonymous account minted at the gate. Do not trade it for
     signup metrics.
-23. **The financial promise**: "The heart of it free forever, no ads, your data never sold."
+23. **The accessible starting point**: clearly explain what people can explore before Plus,
+    without making permanent pricing or advertising promises.
 24. **`pulseConcern`** pointing at real humans at an average of 2 or below rather than at more app
     content. This is the model for every judgment the app is tempted to make.
 25. **The pricing screen's discipline**: "Money never gates safety," verified figures in

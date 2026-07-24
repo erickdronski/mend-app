@@ -19,7 +19,7 @@ import { Btn, Card, Chip, Eyebrow, H2, Hero, IconChip, Muted, P, Screen, usePale
 import { Text } from "@/components/text";
 import { Press, Reveal } from "@/components/motion";
 
-const FREE_FOREVER: { icon: keyof typeof Ionicons.glyphMap; label: string }[] = [
+const INCLUDED_START: { icon: keyof typeof Ionicons.glyphMap; label: string }[] = [
   { icon: "trail-sign-outline", label: "The complete first chapter of your relationship journey" },
   { icon: "dice-outline", label: "Starter card decks, a couple game, and starter activities" },
   { icon: "medkit-outline", label: "The safety net: crisis lines, red flags, get-help-now" },
@@ -95,9 +95,9 @@ export default function Plus() {
       </Hero>
 
       <Reveal index={0} style={{ marginTop: 20 }}>
-        <Eyebrow hue="moss">A useful free start</Eyebrow>
+        <Eyebrow hue="moss">Start exploring before Plus</Eyebrow>
         <Card style={{ marginTop: 8, gap: 12 }}>
-          {FREE_FOREVER.map((f) => (
+          {INCLUDED_START.map((f) => (
             <View key={f.label} style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
               <IconChip name={f.icon} hue="moss" size={32} />
               <P style={{ flex: 1, fontSize: 14 }}>{f.label}</P>
@@ -199,7 +199,7 @@ export default function Plus() {
           <Card tone="fern">
             <P style={{ fontSize: 14 }}>
               Everything above is open in this build. The journey, safety resources, daily question,
-              guided sessions, and shared space remain free either way.
+              guided sessions, and shared space remain available in this preview.
             </P>
           </Card>
         ) : purchasesEnabled ? (
@@ -241,7 +241,7 @@ export default function Plus() {
           <Card tone="panel">
             <H2>One shared plan, never two bills</H2>
             <P style={{ marginTop: 8, fontSize: 14 }}>
-              Mend Plus purchasing is being enabled through the App Store. Your free chapter and private room are ready now.
+              Mend Plus purchasing is being enabled through the App Store. Your starting chapter and private room are ready now.
             </P>
             {!spaceId ? (
               <Btn label="Create our room" kind="ghost" onPress={() => router.push("/space")} style={{ marginTop: 12 }} />
