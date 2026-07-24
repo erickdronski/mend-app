@@ -1,25 +1,97 @@
 # Mend
 
-**A free app for relationship repair.**
+<p align="center">
+  <img src="assets/images/icon.png" alt="Mend app icon" width="120" />
+</p>
 
-Mend walks two people through a staged Journey: an easy start, deeper work over months, real change, and then graduation off the app. The knowledge inside is counseling-grade and always attributed (Gottman, EFT, PREP, NVC). It never invents advice, and it is free.
+<p align="center"><strong>A free, private app for two people doing relationship repair together.</strong></p>
 
-## How it works
+<p align="center">
+  <a href="#product">Product</a> |
+  <a href="#architecture">Architecture</a> |
+  <a href="#development">Development</a> |
+  <a href="SECURITY.md">Security</a>
+</p>
 
-- **The Journey** · a staged path of exercises, tests, games, and experiences designed for two people, not one. Partners move from easy openers to advanced work as they actually do it.
-- **Spaces** · a private shared place for each relationship, where answers, notes, and progress live together.
-- **Graduation** · the goal is to stop needing the app. Mend measures forward motion, not engagement.
+Mend guides two people through a staged journey: an easy start, deeper work over time, practiced repair, and eventually graduation from the app. Its exercises draw from attributed relationship frameworks including Gottman, EFT, PREP, and NVC. Mend does not diagnose, replace professional care, or invent clinical guidance.
 
-## Stack
+**Stack:** Expo 57, React Native, TypeScript, Expo Router, Supabase, AsyncStorage, i18next, EAS local builds, and GitHub Actions.
 
-- Expo / React Native with expo-router and TypeScript
-- Supabase for auth and data
-- Shipped to TestFlight with local Xcode archives
+## Product
+
+- **The Journey:** exercises, tests, games, and experiences designed for two people
+- **Spaces:** a private shared place for answers, notes, plans, and progress
+- **Repair tools:** guided conversations, tracks, card decks, pulse checks, and challenges
+- **Safety routing:** crisis and professional-help resources remain reachable without a paywall
+- **Privacy:** optional device lock, private local records, explicit account controls, and no advertising
+- **Graduation:** the product measures practiced effort and forward motion, not endless engagement
+
+The complete product contract is in [SPEC.md](SPEC.md). Research, safety, honesty, inclusivity, and content-review artifacts live under [`docs/`](docs/).
+
+## Architecture
+
+```mermaid
+flowchart LR
+    Router["Expo Router screens"] --> Domain["Journey, space, content, and safety domains"]
+    Domain --> Local["Private local state and device lock"]
+    Domain --> Auth["Supabase Auth"]
+    Domain --> Sync["Explicit shared-space sync"]
+    Sync --> DB["Supabase data boundary"]
+    Content["Attributed content library"] --> Domain
+    Safety["Safety gate and crisis resources"] --> Domain
+    Actions["GitHub Actions"] --> Verify["Lint, TypeScript, tests, and Expo checks"]
+    Verify --> Release["Manual local EAS build and TestFlight submission"]
+```
+
+Safety content and routing are product-critical code. Changes to crisis resources, coercion boundaries, professional-help language, or content attribution require focused review and tests.
+
+## Repository map
+
+| Path | Purpose |
+| --- | --- |
+| `src/app` | Expo Router screens and navigation |
+| `src/lib` | Auth, privacy, sync, progression, safety, and content domains |
+| `src/components` | Shared product UI |
+| `src/locales` | Maintained translations |
+| `docs/research` | Source material and decision records |
+| `docs/review` | Safety, inclusivity, honesty, and contract audits |
+| `.github/workflows` | Continuous verification and manual TestFlight delivery |
+
+## Development
+
+Requirements: Node.js 22 and npm.
+
+```sh
+npm ci
+npm run start
+```
+
+Verification:
+
+```sh
+npm run lint
+npm run typecheck
+npm test
+```
+
+Useful platform commands:
+
+```sh
+npm run ios
+npm run android
+npm run web
+```
+
+Do not commit private credentials. Supabase's publishable client key is not a server secret; privileged operations must remain behind protected server boundaries.
+
+## Delivery
+
+Pull requests run lint, TypeScript, tests, and Expo configuration validation. `.github/workflows/testflight.yml` is manual-only and performs a local EAS iOS build before submitting the resulting artifact to TestFlight.
 
 ## Status
 
-On TestFlight. The full product spec is in [SPEC.md](SPEC.md).
+Mend is in TestFlight release development. Public claims should stay aligned with the tested build and the evidence in this repository.
 
-## License
+## Contributing, security, and license
 
-See [LICENSE](LICENSE).
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before proposing a change. Report vulnerabilities privately using [SECURITY.md](SECURITY.md). Mend is available under the MIT License; see [LICENSE](LICENSE).
