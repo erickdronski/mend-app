@@ -26,7 +26,7 @@
   },
   "auth": {
     "welcomeTitle": "Welcome to Mend",
-    "welcomeBody": "A free, private mediator for the two of you: protected time to speak, tools for hard seasons, and a path back to each other.",
+    "welcomeBody": "A private guide for understanding each other better, growing closer, and staying more in sync.",
     "email": "Email",
     "password": "Password",
     "signIn": "Sign in",
@@ -46,7 +46,7 @@
     "language": "Language",
     "languageNote": "Guides, card decks, and session content are English-only for now. Translations are on the way.",
     "aboutTitle": "About Mend",
-    "aboutBody": "Mend is an educational tool, not therapy. It cannot replace a licensed relationship therapist, and it never diagnoses. If there is violence, fear, or control in your relationship, guided partner conversations are not the safe tool. Free, private, and built to be deleted.",
+    "aboutBody": "Mend helps two people communicate, understand each other, and build more connection. It is an educational tool, not therapy; it never diagnoses or replaces a licensed relationship therapist. If there is violence, fear, or control, guided conversations are not the safe tool. Free, private, and built to support your relationship without creating dependence.",
     "safety": "Crisis resources",
     "names": "Your names",
     "partnerA": "Partner A",
@@ -54,13 +54,13 @@
   },
   "journey": {
     "title": "Your journey",
-    "subtitle": "A staged path from where you are to a relationship that doesn't need this app.",
+    "subtitle": "A staged path toward more connection, understanding, and alignment.",
     "stage": "Stage",
     "pulseCheck": "Pulse check",
     "nextStep": "Your next step",
     "stageComplete": "Stage complete",
     "advance": "Begin the next stage",
-    "graduated": "You made it. Delete us.",
-    "designedToEnd": "Mend is designed to be deleted: the goal is a relationship that doesn't need it anymore."
+    "graduated": "You built something real. Keep going.",
+    "designedToEnd": "Use Mend for the conversations and habits that help you stay connected."
   }
 }

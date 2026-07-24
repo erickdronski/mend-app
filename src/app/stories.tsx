@@ -14,8 +14,8 @@ export default function Stories() {
       <Hero
         hue="sky"
         eyebrow="Stories"
-        title="What finding a way through looks like"
-        sub="Not fairy tales. Read the ones that feel familiar."
+        title="Relationships in real life"
+        sub="Composite stories about patterns, turning points, and what helped."
         style={{ marginTop: 4 }}
       />
       {/* Honesty disclosure: these are composite teaching stories. Stays visible. */}

@@ -26,7 +26,7 @@
   },
   "auth": {
     "welcomeTitle": "Bem-vindos ao Mend",
-    "welcomeBody": "Um mediador gratuito e privado para vocês dois: tempo protegido para falar, ferramentas para as fases difíceis e um caminho de volta um para o outro.",
+    "welcomeBody": "Um guia privado para vocês se entenderem melhor, se aproximarem e ficarem mais em sintonia.",
     "email": "E-mail",
     "password": "Senha",
     "signIn": "Entrar",
@@ -46,7 +46,7 @@
     "language": "Idioma",
     "languageNote": "Guias, baralhos de cartas e conteúdo das sessões estão apenas em inglês por enquanto. As traduções estão a caminho.",
     "aboutTitle": "Sobre o Mend",
-    "aboutBody": "O Mend é uma ferramenta educativa, não terapia. Não substitui um terapeuta de casal e família licenciado e nunca faz diagnósticos. Se há violência, medo ou controle no seu relacionamento, conversas guiadas de casal não são a ferramenta segura. Gratuito, privado e feito para ser apagado.",
+    "aboutBody": "O Mend ajuda duas pessoas a se comunicarem, se entenderem e criarem mais conexão. É uma ferramenta educativa, não terapia; nunca faz diagnósticos nem substitui um terapeuta de relacionamentos licenciado. Se há violência, medo ou controle, conversas guiadas não são a ferramenta segura. Gratuito, privado e feito para apoiar o relacionamento sem criar dependência.",
     "safety": "Recursos de crise",
     "names": "Seus nomes",
     "partnerA": "Parceiro A",
@@ -54,13 +54,13 @@
   },
   "journey": {
     "title": "Sua jornada",
-    "subtitle": "Um caminho em etapas, de onde vocês estão hoje até um relacionamento que não precise deste app.",
+    "subtitle": "Um caminho em etapas para mais conexão, compreensão e sintonia.",
     "stage": "Etapa",
     "pulseCheck": "Checagem de pulso",
     "nextStep": "Seu próximo passo",
     "stageComplete": "Etapa concluída",
     "advance": "Começar a próxima etapa",
-    "graduated": "Vocês conseguiram. Podem nos apagar.",
-    "designedToEnd": "O Mend foi feito para ser apagado: a meta é um relacionamento que não precise mais dele."
+    "graduated": "Vocês construíram algo real. Continuem.",
+    "designedToEnd": "Usem o Mend para as conversas e os hábitos que ajudam vocês a continuar conectados."
   }
 }

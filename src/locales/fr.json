@@ -26,7 +26,7 @@
   },
   "auth": {
     "welcomeTitle": "Bienvenue sur Mend",
-    "welcomeBody": "Un médiateur gratuit et privé pour vous deux : du temps protégé pour parler, des outils pour les saisons difficiles et un chemin l'un vers l'autre.",
+    "welcomeBody": "Un guide privé pour mieux vous comprendre, vous rapprocher et rester en harmonie.",
     "email": "E-mail",
     "password": "Mot de passe",
     "signIn": "Se connecter",
@@ -46,7 +46,7 @@
     "language": "Langue",
     "languageNote": "Les guides, les jeux de cartes et le contenu des séances sont pour l'instant en anglais uniquement. Les traductions arrivent.",
     "aboutTitle": "À propos de Mend",
-    "aboutBody": "Mend est un outil éducatif, pas une thérapie. Il ne remplace pas un thérapeute relationnel agréé et ne pose jamais de diagnostic. S'il y a de la violence, de la peur ou du contrôle dans votre relation, les conversations guidées en couple ne sont pas l'outil sûr. Gratuit, privé et conçu pour être supprimé.",
+    "aboutBody": "Mend aide deux personnes à communiquer, à se comprendre et à créer plus de lien. C'est un outil éducatif, pas une thérapie ; il ne pose jamais de diagnostic et ne remplace pas un thérapeute relationnel agréé. En cas de violence, de peur ou de contrôle, les conversations guidées ne sont pas l'outil sûr. Gratuit, privé et conçu pour soutenir votre relation sans créer de dépendance.",
     "safety": "Ressources d'urgence",
     "names": "Vos prénoms",
     "partnerA": "Partenaire A",
@@ -54,13 +54,13 @@
   },
   "journey": {
     "title": "Votre parcours",
-    "subtitle": "Un chemin par étapes, d'où vous êtes aujourd'hui vers une relation qui n'a plus besoin de cette app.",
+    "subtitle": "Un chemin par étapes vers plus de connexion, de compréhension et d'harmonie.",
     "stage": "Étape",
     "pulseCheck": "Prise de pouls",
     "nextStep": "Votre prochaine étape",
     "stageComplete": "Étape terminée",
     "advance": "Commencer l'étape suivante",
-    "graduated": "Vous y êtes arrivés. Supprimez-nous.",
-    "designedToEnd": "Mend est conçue pour être supprimée : l'objectif est une relation qui n'en a plus besoin."
+    "graduated": "Vous avez construit quelque chose de solide. Continuez.",
+    "designedToEnd": "Utilisez Mend pour les conversations et les habitudes qui vous aident à rester connectés."
   }
 }

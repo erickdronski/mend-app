@@ -14,11 +14,11 @@ type Section = { key: string; title: string; hue: Hue; heavy?: boolean; rows: Ro
 const sections: Section[] = [
   {
     key: "talk",
-    title: "Talk it out",
+    title: "Talk and listen",
     hue: "moss",
     rows: [
-      { href: "/talk", icon: "chatbubbles-outline", title: "Guided session", sub: "The timed floor" },
-      { href: "/topics", icon: "chatbox-ellipses-outline", title: "Conversation topics", sub: "Soft ways in" },
+      { href: "/talk", icon: "chatbubbles-outline", title: "Guided conversation", sub: "Both people get heard" },
+      { href: "/topics", icon: "chatbox-ellipses-outline", title: "Conversation topics", sub: "Meaningful ways in" },
     ],
   },
   {
@@ -38,13 +38,13 @@ const sections: Section[] = [
     rows: [
       { href: "/toolkit", icon: "construct-outline", title: "Communication toolkit", sub: "Nine real skills" },
       { href: "/quiz", icon: "help-circle-outline", title: "How you love & fight", sub: "Your lens and role" },
-      { href: "/stories", icon: "people-outline", title: "Stories", sub: "Couples who made it" },
+      { href: "/stories", icon: "people-outline", title: "Stories", sub: "Real dynamics, useful turns" },
       { href: "/library", icon: "library-outline", title: "Library", sub: "Books, programs, podcasts" },
     ],
   },
   {
     key: "path",
-    title: "Your path",
+    title: "Grow together",
     hue: "ember",
     rows: [
       { href: "/plan", icon: "heart-outline", title: "Our plan", sub: "Rituals and commitments" },
@@ -53,11 +53,11 @@ const sections: Section[] = [
   },
   {
     key: "heavy",
-    title: "When it's heavy",
+    title: "When you need more support",
     hue: "plum",
     heavy: true,
     rows: [
-      { href: "/tracks", icon: "map-outline", title: "Healing tracks", sub: "Affair, loss, illness, money, baby" },
+      { href: "/tracks", icon: "map-outline", title: "Focused support", sub: "Affair, loss, illness, money, baby" },
       { href: "/safety", icon: "medkit-outline", title: "Get help now", sub: "Crisis lines and low-cost counseling" },
     ],
   },
@@ -84,7 +84,7 @@ export default function Explore() {
 
   return (
     <Screen safeTop>
-      <Hero hue="moss" title="Explore" sub="Everything Mend offers, whenever you want it." style={{ marginTop: 4 }} />
+      <Hero hue="moss" title="Explore" sub="Talk, play, learn, and build more connection together." style={{ marginTop: 4 }} />
 
       {/* Personalized track shortcut */}
       {sit?.track ? (
@@ -94,12 +94,12 @@ export default function Explore() {
               <View style={{ flexDirection: "row", gap: 12, alignItems: "center" }}>
                 <IconChip name={sit.icon} hue="plum" size={44} />
                 <View style={{ flex: 1 }}>
-                  <Eyebrow hue="plum" style={{ fontSize: 11 }}>Your track</Eyebrow>
+                  <Eyebrow hue="plum" style={{ fontSize: 11 }}>Focused for you</Eyebrow>
                   <Text style={{ marginTop: 3, fontSize: 16, fontWeight: "700", color: p.ink }}>{sit.trackTitle}</Text>
                 </View>
                 <Ionicons name="chevron-forward" size={18} color={p.muted} />
               </View>
-              <Chip label="For what you're carrying" hue="plum" icon="heart-outline" style={{ marginTop: 10 }} />
+              <Chip label="For what would help right now" hue="plum" icon="heart-outline" style={{ marginTop: 10 }} />
             </Card>
           </Press>
         </Reveal>

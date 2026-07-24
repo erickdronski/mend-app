@@ -33,8 +33,8 @@ export default function Topics() {
       <Hero
         hue="moss"
         eyebrow="Talk it out"
-        title="The talks you keep not having"
-        sub="Pick one and it becomes tonight's guided session."
+        title="Conversations worth making room for"
+        sub="Pick one and Mend gives both of you a clear, balanced way through it."
         style={{ marginTop: 4 }}
       />
       {groups.map((g) => (

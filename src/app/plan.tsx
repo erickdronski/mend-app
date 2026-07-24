@@ -49,7 +49,7 @@ export default function PlanScreen() {
         hue="rose"
         eyebrow="Between sessions"
         title="The game plan"
-        sub="Relationships aren't repaired in one conversation. They're repaired in the moments between them."
+        sub="Connection grows in the moments you repeat: attention, appreciation, honesty, and follow-through."
         style={{ marginTop: 12 }}
       />
 

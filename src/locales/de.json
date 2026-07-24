@@ -26,7 +26,7 @@
   },
   "auth": {
     "welcomeTitle": "Willkommen bei Mend",
-    "welcomeBody": "Ein kostenloser, privater Vermittler für euch beide: geschützte Redezeit, Werkzeuge für schwere Zeiten und ein Weg zurück zueinander.",
+    "welcomeBody": "Ein privater Begleiter, um euch besser zu verstehen, näherzukommen und mehr im Einklang zu bleiben.",
     "email": "E-Mail",
     "password": "Passwort",
     "signIn": "Anmelden",
@@ -46,7 +46,7 @@
     "language": "Sprache",
     "languageNote": "Leitfäden, Kartendecks und Sitzungsinhalte sind vorerst nur auf Englisch verfügbar. Übersetzungen folgen.",
     "aboutTitle": "Über Mend",
-    "aboutBody": "Mend ist ein Bildungswerkzeug, keine Therapie. Es ersetzt keine lizenzierte Paar- und Familientherapie und stellt niemals Diagnosen. Wenn es in eurer Beziehung Gewalt, Angst oder Kontrolle gibt, sind angeleitete Paargespräche nicht das sichere Werkzeug. Kostenlos, privat und gebaut, um gelöscht zu werden.",
+    "aboutBody": "Mend hilft zwei Menschen, besser zu kommunizieren, einander zu verstehen und mehr Verbindung aufzubauen. Es ist ein Bildungswerkzeug, keine Therapie; es stellt keine Diagnosen und ersetzt keine lizenzierte Beziehungstherapie. Bei Gewalt, Angst oder Kontrolle sind angeleitete Gespräche nicht das sichere Werkzeug. Kostenlos, privat und dafür gemacht, eure Beziehung zu unterstützen, ohne Abhängigkeit zu schaffen.",
     "safety": "Krisenhilfe",
     "names": "Eure Namen",
     "partnerA": "Partner A",
@@ -54,13 +54,13 @@
   },
   "journey": {
     "title": "Euer Weg",
-    "subtitle": "Ein Weg in Etappen: von heute zu einer Beziehung, die diese App nicht mehr braucht.",
+    "subtitle": "Ein Weg in Etappen zu mehr Verbindung, Verständnis und Einklang.",
     "stage": "Etappe",
     "pulseCheck": "Puls-Check",
     "nextStep": "Euer nächster Schritt",
     "stageComplete": "Etappe abgeschlossen",
     "advance": "Nächste Etappe beginnen",
-    "graduated": "Ihr habt es geschafft. Löscht uns.",
-    "designedToEnd": "Mend ist dafür gebaut, gelöscht zu werden: Das Ziel ist eine Beziehung, die es nicht mehr braucht."
+    "graduated": "Ihr habt etwas Echtes aufgebaut. Macht weiter.",
+    "designedToEnd": "Nutzt Mend für Gespräche und Gewohnheiten, die euch verbunden halten."
   }
 }

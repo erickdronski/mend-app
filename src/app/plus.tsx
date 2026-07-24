@@ -19,7 +19,7 @@ import { Btn, Card, Chip, Eyebrow, Hero, IconChip, Muted, P, Screen, usePalette 
 import { Press, Reveal } from "@/components/motion";
 
 const FREE_FOREVER: { icon: keyof typeof Ionicons.glyphMap; label: string }[] = [
-  { icon: "trail-sign-outline", label: "The five-stage journey, start to graduation" },
+  { icon: "trail-sign-outline", label: "The complete five-stage relationship journey" },
   { icon: "chatbubbles-outline", label: "Guided sessions with the timed floor" },
   { icon: "medkit-outline", label: "The safety net: crisis lines, red flags, get-help-now" },
   { icon: "sunny-outline", label: "The daily question and your shared space" },
@@ -29,7 +29,7 @@ const FREE_FOREVER: { icon: keyof typeof Ionicons.glyphMap; label: string }[] = 
 const PLUS_ADDS: { icon: keyof typeof Ionicons.glyphMap; label: string }[] = [
   { icon: "albums-outline", label: "Every card deck. First Steps and Repair stay free" },
   { icon: "dice-outline", label: "The full game shelf and every 7-day challenge" },
-  { icon: "map-outline", label: "Complete healing-track programs. First sessions and red flags stay free" },
+  { icon: "map-outline", label: "Complete focused-support programs. First sessions and red flags stay free" },
   { icon: "leaf-outline", label: "Everything new we build, first" },
 ];
 
@@ -56,7 +56,7 @@ export default function Plus() {
         sub={
           purchasesEnabled
             ? "The heart of Mend is free forever. Plus opens the full breadth."
-            : "Every deck, game, challenge, and healing track is included in this build."
+            : "Every deck, game, challenge, and focused-support track is included in this build."
         }
         style={{ marginTop: 12 }}
       >
@@ -80,7 +80,7 @@ export default function Plus() {
           ))}
         </Card>
         <Muted style={{ marginTop: 8, fontSize: 12.5 }}>
-          Money never gates safety. If you can&apos;t pay, the parts that keep a relationship alive are still yours.
+          Money never gates safety or the core tools for talking, listening, and staying connected.
         </Muted>
       </Reveal>
 

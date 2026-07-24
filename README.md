@@ -4,7 +4,7 @@
   <img src="assets/images/icon.png" alt="Mend app icon" width="120" />
 </p>
 
-<p align="center"><strong>A free, private app for two people doing relationship repair together.</strong></p>
+<p align="center"><strong>A free, private app for two people who want to understand each other better, grow closer, and stay in sync.</strong></p>
 
 <p align="center">
   <a href="#product">Product</a> |
@@ -13,18 +13,19 @@
   <a href="SECURITY.md">Security</a>
 </p>
 
-Mend guides two people through a staged journey: an easy start, deeper work over time, practiced repair, and eventually graduation from the app. Its exercises draw from attributed relationship frameworks including Gottman, EFT, PREP, and NVC. Mend does not diagnose, replace professional care, or invent clinical guidance.
+Mend guides two people through a staged journey of attention, curiosity, communication, trust, and shared direction. It supports everyday relationship growth as well as repair when things feel difficult. Its exercises draw from attributed relationship frameworks including Gottman, EFT, PREP, and NVC. Mend does not diagnose, replace professional care, or invent clinical guidance.
 
 **Stack:** Expo 57, React Native, TypeScript, Expo Router, Supabase, AsyncStorage, i18next, EAS local builds, and GitHub Actions.
 
 ## Product
 
-- **The Journey:** exercises, tests, games, and experiences designed for two people
-- **Spaces:** a private shared place for answers, notes, plans, and progress
-- **Repair tools:** guided conversations, tracks, card decks, pulse checks, and challenges
+- **The Journey:** a practical path for building connection, understanding, and alignment together
+- **Shared Space:** a private place for answers, notes, plans, appreciation, and progress
+- **Connection tools:** guided conversations, games, card decks, pulse checks, and challenges
+- **Focused support:** optional tracks for conflict, trust, intimacy, major changes, and other specific seasons
 - **Safety routing:** crisis and professional-help resources remain reachable without a paywall
 - **Privacy:** optional device lock, private local records, explicit account controls, and no advertising
-- **Graduation:** the product measures practiced effort and forward motion, not endless engagement
+- **Independence:** Mend builds repeatable skills without streak pressure or dependence on the app
 
 The complete product contract is in [SPEC.md](SPEC.md). Research, safety, honesty, inclusivity, and content-review artifacts live under [`docs/`](docs/).
 

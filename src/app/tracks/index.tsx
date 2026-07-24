@@ -27,9 +27,9 @@ export default function Tracks() {
     <Screen>
       <Hero
         hue="plum"
-        eyebrow="When it's heavy"
-        title="For relationships carrying something heavy"
-        sub="Some seasons need a map, not just better habits."
+        eyebrow="Focused support"
+        title="Extra guidance for a specific season"
+        sub="Some situations benefit from a clearer map and more focused conversations."
         style={{ marginTop: 4 }}
       />
       {/* This line is a promise, not decoration. It stays visible. */}

@@ -1,7 +1,7 @@
 /**
  * The Journey: Mend's spine. A staged, progressive program that takes a
- * struggling relationship from "we can barely talk" to "we don't need this app,"
- * on the Hinge principle: designed to be deleted.
+ * relationship from its current season toward deeper connection, clearer communication,
+ * and stronger shared habits without manufacturing dependence on the app.
  *
  * Stages gate on real, detectable work (sessions held, challenges finished,
  * both quizzes taken) plus a two-partner pulse check. Where the app can't
@@ -61,15 +61,15 @@ export const PULSE_QUESTIONS = [
 export const stages: Stage[] = [
   {
     n: 1,
-    title: "Steady the ground",
-    arc: "Stop the bleeding. Prove that ten calm minutes together is possible.",
+    title: "Make room for each other",
+    arc: "Slow down, pay attention, and create ten good minutes together.",
     weeksHint: "Usually 1 to 2 weeks",
-    why: "Nothing can be rebuilt on a battlefield. Stage one asks almost nothing: no verdicts on the relationship, no hard topics, no promises. Just evidence, collected together, that the two of you can still share ten safe minutes. That evidence is the foundation everything else stands on.",
+    why: "Connection needs room. Stage one starts with simple proof that the two of you can pause, listen, and share ten intentional minutes without solving everything. Those small moments create the foundation for every deeper conversation that follows.",
     steps: [
       {
         id: "s1-pulse",
         title: "Take your baseline pulse",
-        body: "Five statements, rated honestly. This is the 'before' photo. If your partner isn't here yet, take yours alone; theirs joins later. Nobody fixes anything today.",
+        body: "Five statements, rated honestly. This is a simple starting point, not a score. If your partner isn't here yet, take yours alone; theirs can join later.",
         href: "/pulse",
         hrefLabel: "Take the pulse check",
         auto: (ctx) => onePulsed(ctx, 1),
@@ -100,10 +100,10 @@ export const stages: Stage[] = [
   },
   {
     n: 2,
-    title: "Learn each other again",
+    title: "Stay curious about each other",
     arc: "Replace assumptions with current information. Turn toward each other on purpose.",
     weeksHint: "Usually 3 to 4 weeks",
-    why: "Most struggling couples aren't reacting to each other; they're reacting to five-year-old maps of each other. Stage two rebuilds the maps: how you each love, how you each fight, what a day inside your partner actually feels like right now. Understanding first; the hard repairs come after, and land softer because of this.",
+    why: "People keep changing, even inside long relationships. Stage two updates the map: how you each give and receive care, what pressure feels like lately, and what life looks like from the other person's side. Curiosity keeps closeness current.",
     steps: [
       {
         id: "s2-quiz",
@@ -155,10 +155,10 @@ export const stages: Stage[] = [
   },
   {
     n: 3,
-    title: "Change how you fight",
-    arc: "Same disagreements, different physics. The fights stop leaving marks.",
+    title: "Communicate through differences",
+    arc: "Same two people, better patterns for disagreement, repair, and return.",
     weeksHint: "Usually 4 to 6 weeks",
-    why: "You will never stop disagreeing; happy couples don't. What changes is the machinery: how fights start, whether repairs land, and whether anyone can call a pause without it meaning abandonment. Stage three rebuilds the machinery while things are calm enough to practice.",
+    why: "Alignment does not mean agreeing about everything. What changes is the pattern: how a hard conversation starts, whether each person stays heard, how a pause works, and how you reconnect afterward. Stage three lets you practice those skills before the stakes are high.",
     steps: [
       {
         id: "s3-session-needs",
@@ -211,15 +211,15 @@ export const stages: Stage[] = [
   },
   {
     n: 4,
-    title: "Rebuild what was lost",
-    arc: "Warmth, desire, trust: the things the hard years spent down.",
+    title: "Deepen trust and closeness",
+    arc: "Warmth, affection, desire, and trust grow where attention goes.",
     weeksHint: "Usually 4 to 8 weeks",
-    why: "Stopping the damage isn't the same as refilling what drained. Stage four goes at the tender things directly: affection and desire, the money wounds, the specific heavy thing your relationship has been carrying. This stage asks the most courage; it's also where partners start reporting that things feel different, not just better-managed.",
+    why: "A relationship can function well and still want more warmth, trust, affection, or shared meaning. Stage four turns toward those tender areas directly, while offering focused support when a heavier season is part of the picture.",
     steps: [
       {
         id: "s4-heavy",
-        title: "Face the heavy thing, if you're carrying one",
-        body: "If your relationship holds a big wound (an affair, a loss, an illness, a money collapse), open its healing track and hold the first two conversations. If you're not carrying one, run a round of the Go Deeper deck instead.",
+        title: "Choose depth or focused support",
+        body: "If your relationship is navigating an affair, loss, illness, money pressure, or another heavy season, open its focused track. If not, use the Go Deeper deck to learn something new about each other.",
         href: "/tracks",
         hrefLabel: "Find your track",
       },
@@ -242,7 +242,7 @@ export const stages: Stage[] = [
       {
         id: "s4-challenge",
         title: "Complete The Appreciation Week",
-        body: "Seven days of retraining attention from flaws back to strengths. Struggling partners audit each other's failures on autopilot; this interrupts the audit.",
+        body: "Seven days of directing attention toward strengths, effort, and the small things that are easy to miss. What you notice more often becomes easier to appreciate out loud.",
         href: "/challenges",
         hrefLabel: "Start the week",
         auto: (ctx) => ctx.challengesDone.includes("appreciation"),
@@ -266,10 +266,10 @@ export const stages: Stage[] = [
   },
   {
     n: 5,
-    title: "Build the relationship you meant",
-    arc: "From repaired to chosen. Then you graduate, and delete us.",
-    weeksHint: "Usually 4 weeks, then done",
-    why: "A repaired relationship isn't the goal; it's the floor. Stage five points forward: the dreams under your old gridlock, the future you're actually building, and the rituals that will hold it all up after the app is gone. Because that's the deal: Mend is designed to be deleted.",
+    title: "Build what comes next together",
+    arc: "Turn connection into alignment, shared direction, and habits that last.",
+    weeksHint: "Usually 4 weeks, then keep what works",
+    why: "Connection grows stronger when it has somewhere to go. Stage five points forward: the dreams underneath recurring disagreements, the future you are shaping, and the rituals that keep you aligned as life changes. Mend should support the relationship, never become the relationship.",
     steps: [
       {
         id: "s5-session-gridlock",
@@ -288,15 +288,15 @@ export const stages: Stage[] = [
       },
       {
         id: "s5-stories",
-        title: "Read two stories that could have been yours",
-        body: "Pick the two composite stories closest to your own worst season and read them together. Not for comfort; for the reminder that the practices you now own are the same ones that carried other relationships through.",
+        title: "Read two stories that feel familiar",
+        body: "Pick two composite stories with a dynamic you recognize and read them together. Notice the practices that helped those people understand each other and move differently.",
         href: "/stories",
         hrefLabel: "Read the stories",
       },
       {
         id: "s5-rituals",
         title: "Hold your rituals for four straight weeks",
-        body: "Whatever you adopted (the check-in, the State of the Union, the six-second kiss), keep it for a month without the app reminding you. This is the load-bearing test: the rituals are what remain when Mend is gone.",
+        body: "Whatever you adopted (the check-in, the State of the Union, the six-second kiss), keep it for a month. The goal is not perfect consistency; it is learning which rituals genuinely help you stay connected.",
         href: "/plan",
         hrefLabel: "Review your rituals",
       },
@@ -333,11 +333,11 @@ export function pulseAvg(pulses: PulseEntry[], stage: number, who: 0 | 1): numbe
 }
 
 /**
- * Graduation: stage 5 fully complete and both partners' final pulse averages
+ * Completion: stage 5 fully complete and both partners' final pulse averages
  * at 4 or above. If the work is done but the numbers aren't there, the app
  * says so honestly and suggests the right next move instead of a diploma.
  */
-export function readyToGraduate(ctx: StepContext, journey: JourneyState): boolean {
+export function readyToComplete(ctx: StepContext, journey: JourneyState): boolean {
   const s5 = getStage(5)!;
   if (journey.stage < 5 || !stageComplete(s5, ctx, journey)) return false;
   const a = pulseAvg(ctx.pulses, 5, 0);

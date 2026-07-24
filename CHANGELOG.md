@@ -7,7 +7,16 @@ All notable changes to Mend are documented in this file. The project follows
 
 ### Added
 
-- Reserved for changes after the current public engineering baseline.
+- A positioning regression test for universal product surfaces.
+
+### Changed
+
+- Reframed the default experience around relationship connection, growth,
+  understanding, and alignment while preserving direct repair and safety tools.
+- Renamed journey stages and discovery sections to support relationships in
+  everyday growth as well as difficult seasons.
+- Updated maintained translations and product documentation to match the broader
+  relationship-improvement promise.
 
 ## [1.0.0-beta.1] - 2026-07-23
 

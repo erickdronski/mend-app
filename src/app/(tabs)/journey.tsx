@@ -17,7 +17,7 @@ import {
 import {
   getStage,
   pulseAvg,
-  readyToGraduate,
+  readyToComplete,
   stageComplete,
   stages,
   stepDone,
@@ -30,7 +30,7 @@ import { Bloom, Bounce, Reveal } from "@/components/motion";
 
 /**
  * The Journey tab: the app's home. One current stage, its steps, the next
- * action, and the honest exit at the end.
+ * action, and an honest progress reflection at the end.
  */
 export default function JourneyScreen() {
   const p = usePalette();
@@ -60,7 +60,7 @@ export default function JourneyScreen() {
 
   if (!ctx || !journey) return <Screen scroll={false} safeTop>{null}</Screen>;
 
-  // graduated
+  // Keep the persisted field name for backward compatibility with existing journeys.
   if (journey.graduatedAt) {
     const base = pulseAvg(ctx.pulses, 1, 0);
     const final = pulseAvg(ctx.pulses, 5, 0);
@@ -68,9 +68,9 @@ export default function JourneyScreen() {
       <Screen safeTop>
         <H1 style={{ marginTop: 24 }}>{t("journey.graduated")}</H1>
         <P style={{ marginTop: 12 }}>
-          You did the unglamorous thing: showed up, week after week, for months. The rituals are
-          yours now, not the app&apos;s. Keep the weekly meeting, keep the six-second kiss, and
-          come back only if a hard season needs a referee again.
+          You showed up for each other, week after week. The rituals are yours now. Keep the
+          weekly meeting, keep the small moments of affection, and return whenever you want a
+          fresh conversation, shared activity, or a little extra support.
         </P>
         {base !== null && final !== null && (
           <Card tone="fern" style={{ marginTop: 20 }}>
@@ -90,8 +90,8 @@ export default function JourneyScreen() {
   const complete = stageComplete(stage, ctx, journey);
   const doneCount = stage.steps.filter((s) => stepDone(s, ctx, journey)).length;
   const nextStep = stage.steps.find((s) => !stepDone(s, ctx, journey));
-  const graduating = journey.stage >= 5 && complete;
-  const canGraduate = readyToGraduate(ctx, journey);
+  const finishing = journey.stage >= 5 && complete;
+  const canComplete = readyToComplete(ctx, journey);
   const names = ctx.profile ? [ctx.profile.a, ctx.profile.b].filter(Boolean).join(" & ") : "";
 
   return (
@@ -213,7 +213,7 @@ export default function JourneyScreen() {
       </View>
 
       {/* stage gate */}
-      {complete && !graduating && (
+      {complete && !finishing && (
         <Bounce trigger={complete}>
           <Card tone="moss" style={{ marginTop: 18 }}>
             <Chip label={`Stage ${stage.n} complete`} hue="ember" />
@@ -231,23 +231,23 @@ export default function JourneyScreen() {
         </Bounce>
       )}
 
-      {graduating && (
+      {finishing && (
         <Card tone="moss" style={{ marginTop: 18 }}>
           <Chip label="Stage 5 complete" hue="ember" />
           <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 10, marginTop: 10 }}>
             <Ionicons name="ribbon-outline" size={22} color={p.surface} style={{ marginTop: 2 }} />
             <H2 style={{ color: p.surface, flex: 1 }}>
-              {canGraduate ? "You're ready to graduate" : "The work is done. The numbers aren't, yet"}
+              {canComplete ? "Your journey is ready to complete" : "The stages are done. Check in before you close this chapter"}
             </H2>
           </View>
           <P style={{ marginTop: 8, color: p.surface, opacity: 0.9 }}>
-            {canGraduate
-              ? "Stage five is complete and both of your pulses are strong. There's one feature left: leaving."
-              : "Every stage-five step is complete, but at least one of your pulses is still under 4. That's not failure; it's information. Repeat what worked (sessions, the rituals), or consider bringing a professional in for the last stretch. Graduate when the numbers are honest."}
+            {canComplete
+              ? "Stage five is complete and both of your pulses are strong. Mark this journey complete, then keep using whatever helps you stay connected."
+              : "Every stage-five step is complete, but at least one pulse is still under 4. That's not failure; it's useful information. Repeat what helped, talk honestly about what still feels hard, or consider bringing in a qualified professional."}
           </P>
-          {canGraduate && (
+          {canComplete && (
             <Btn
-              label={t("journey.graduated")}
+              label="Mark journey complete"
               onPress={async () => {
                 const j = await getJourney();
                 j.graduatedAt = new Date().toISOString();

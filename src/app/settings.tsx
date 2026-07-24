@@ -202,8 +202,8 @@ export default function Settings() {
       <Divider />
 
       {/* Situation */}
-      <H2>What you&apos;re carrying</H2>
-      <Muted style={{ marginTop: 6, fontSize: 13 }}>Shapes what Mend shows you first. Change it whenever things shift.</Muted>
+      <H2>What would help most</H2>
+      <Muted style={{ marginTop: 6, fontSize: 13 }}>Shapes what Mend shows you first. Change it whenever your focus shifts.</Muted>
       <View style={{ marginTop: 10, gap: 8 }}>
         {situations.map((s) => (
           <Pressable key={s.id} onPress={() => changeSituation(s.id)}>

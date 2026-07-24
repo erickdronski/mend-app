@@ -3,37 +3,41 @@
 The native flagship. The web repo (`../mend`) is the companion; content modules
 (`src/lib/content/*`) are copied from it and stay in sync by hand for now.
 
-## Product thesis (owner, 2026-07-09)
+## Product thesis (updated 2026-07-24)
 
-The Hinge model: a couple arrives struggling, understands exactly what is asked
-of them, walks a **staged journey** from an easy start to advanced work over
-months, feels real change, and **graduates off the app**. Premium
-counseling-grade knowledge (Gottman, EFT, PREP, NVC — attributed, never
-invented), tests, games, and experiences for two partners. Free.
+Mend helps any two people improve their relationship: becoming more connected,
+more aligned, and more in sync in everyday life, while also having trustworthy
+support when something needs repair. Partners walk a **staged journey** from
+small moments of attention to communication, trust, and shared direction.
+Attributed relationship frameworks (Gottman, EFT, PREP, and NVC), tests, games,
+guided conversations, and focused-support tracks turn insight into repeatable
+habits. Mend is free, private, inclusive, and designed to strengthen the
+relationship rather than maximize time in the app.
 
 ## The Journey (`src/lib/journey.ts`)
 
 Five stages, each with 4-6 steps that deep-link into real features:
 
-1. **Steady the ground** (1-2 wks): baseline pulse, First Steps deck, first
-   session (outside-stress: fix nothing), micro-moves.
-2. **Learn each other again** (3-4 wks): both take the lens quiz, toolkit
+1. **Make room for each other** (1-2 wks): baseline pulse, First Steps deck,
+   first session, and small daily moments of attention.
+2. **Stay curious about each other** (3-4 wks): both take the lens quiz, toolkit
    basics read aloud, love-maps session, Turning Toward week, guessing game.
-3. **Change how you fight** (4-6 wks): rules-of-engagement session, Repair
-   week, the unfinished-fight autopsy, Repair deck, State of the Union ritual.
-4. **Rebuild what was lost** (4-8 wks): healing track (or Go Deeper deck),
+3. **Communicate through differences** (4-6 wks): rules-of-engagement session,
+   Repair week, the unfinished-fight autopsy, Repair deck, and check-in ritual.
+4. **Deepen trust and closeness** (4-8 wks): optional focused-support track,
    affection & desire session, money-history session, Appreciation week,
    five love notes.
-5. **Build the one you're choosing now** (4 wks): gridlock-dream session, Dreams
-   deck, stories, rituals held four straight weeks, final pulse.
+5. **Build what comes next together** (4 wks): gridlock-dream session, Dreams
+   deck, stories, rituals held four straight weeks, and a final pulse.
 
 Mechanics: step completion is **auto-detected from stored evidence** where
 possible (sessions by topic, finished challenges, both quiz results, adopted
 rituals) and honor-system otherwise. Each stage gates on a **two-partner pulse
 check** (5 statements, 1-5, pass-the-phone). Pulse ≤2 → professional-help
-card. **Graduation** requires stage 5 complete + both final pulses ≥4;
-otherwise the app says, honestly, that the work is done but the numbers
-aren't, and suggests repeating what worked or bringing in a professional.
+card. Completing stage 5 recognizes the partners' practiced progress and helps
+them choose what to keep doing. Lower final pulse scores lead to honest guidance
+to repeat what helped or involve a qualified professional, without presenting
+the app as a substitute for care.
 
 ## Stack
 
@@ -69,15 +73,15 @@ crisis lines; per-track red flags; "not therapy" everywhere. Non-negotiable.
   the build number; the 2026-07-16 upload landed as TestFlight build 12
   (11 was skipped). Trust TestFlight numbering, not commit messages.
 
-## Couple Spaces (shipped 2026-07-09)
+## Shared Space (shipped 2026-07-09)
 
 A shared two-person space, joined by a six-letter invite code (unambiguous
 alphabet, collision-safe). The **Space tab is the app's home**: question of
 the day both partners answer from their own phones (**answer-to-reveal**: a
 partner's answer stays sealed until you send yours, no anchoring), a shared
 "Little notes" pinboard, invite-code sharing while solo, and the full
-directory of every capability organized in sections (Talk it out / Play
-together / Learn the craft / When it's heavy / Your path). Tabs are now
+directory of every capability organized in sections (Talk and listen / Play
+together / Learn the craft / Grow together / Focused support). Tabs are now
 Space · Journey · Talk · Play · Plan.
 
 Backend: `mend_spaces`, `mend_space_members` (max 2, one space per user v1),

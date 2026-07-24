@@ -41,10 +41,10 @@ export type SituationDef = {
 export const situations: SituationDef[] = [
   {
     id: "drift",
-    chip: "We've drifted apart",
+    chip: "We want to feel closer",
     icon: "boat-outline",
     hereForYou:
-      "You're here to close the distance. We'll start small, with the easy conversations first.",
+      "You're here to create more closeness. We'll start small, with easy moments of attention and curiosity.",
     track: "",
     trackTitle: "",
     stories: ["roommate-drift", "empty-nest"],
@@ -149,10 +149,10 @@ export const situations: SituationDef[] = [
   },
   {
     id: "just-us",
-    chip: "Just us, working on us",
+    chip: "We want to keep growing",
     icon: "sparkles-outline",
     hereForYou:
-      "No crisis, just care. You're here to build something stronger on purpose.",
+      "You're investing in something good: more understanding, more connection, and habits that keep you aligned.",
     track: "",
     trackTitle: "",
     stories: ["roommate-drift", "desire-gap"],

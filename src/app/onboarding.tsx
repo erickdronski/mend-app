@@ -16,18 +16,18 @@ type Step = "welcome" | "tour" | "deal" | "gate" | "names" | "situation";
 const tour: { icon: keyof typeof Ionicons.glyphMap; title: string; body: string }[] = [
   {
     icon: "trail-sign",
-    title: "A journey, not a jar of tips",
-    body: "Five stages, from ten calm minutes to the hard rebuilding, paced by real progress. It ends with you deleting the app.",
+    title: "A path you grow through",
+    body: "Five stages that turn small moments into better understanding, stronger habits, and a relationship that feels more in sync.",
   },
   {
     icon: "chatbubbles",
-    title: "A timer that referees",
-    body: "One of you speaks, protected. The other proves they heard. The counselor's structure, free, at your kitchen table.",
+    title: "A better way to talk",
+    body: "One of you speaks without interruption. The other listens to understand. Then you switch, with a structure that keeps both people heard.",
   },
   {
     icon: "dice",
-    title: "Play your way back",
-    body: "Card decks, guessing games, 7-day challenges. Easier conversations that make the harder ones possible.",
+    title: "Play your way closer",
+    body: "Card decks, guessing games, and 7-day challenges that build curiosity, warmth, and more moments you both enjoy.",
   },
   {
     icon: "people",
@@ -78,16 +78,16 @@ export default function Onboarding() {
           </Rise>
           <Rise delay={150}>
             <Text style={{ fontSize: 26, fontWeight: "700", color: "#f4f4ee", marginTop: 18, lineHeight: 34 }}>
-              Relationships rarely break over one big thing.
+              Better relationships are built
             </Text>
             <Text style={{ fontSize: 26, fontWeight: "700", color: "#d9a057", marginTop: 4, lineHeight: 34 }}>
-              They starve on unheard sentences.
+              in the moments between you.
             </Text>
           </Rise>
           <Rise delay={300}>
             <Text style={{ fontSize: 16, color: "#f4f4ee", opacity: 0.75, marginTop: 18, lineHeight: 24 }}>
-              A private guide for the two of you. The heart of it free forever, no ads, your
-              data never sold. Just the way back.
+              Understand each other better, grow closer, and stay more in sync. Private, practical,
+              free at its core, and never supported by ads or selling your data.
             </Text>
           </Rise>
           <View style={{ flex: 1 }} />
@@ -203,8 +203,8 @@ export default function Onboarding() {
                 <View style={{ flex: 1 }}>
                   <H2>What it gives</H2>
                   <Muted style={{ marginTop: 6 }}>
-                    Guided exercises for listening, repairing, and rebuilding trust. Staged,
-                    practical, and free.
+                    Guided exercises for listening, understanding, reconnecting, and building trust.
+                    Staged, practical, and free.
                   </Muted>
                 </View>
               </View>
@@ -215,10 +215,10 @@ export default function Onboarding() {
               <View style={{ flexDirection: "row", gap: 14, alignItems: "flex-start" }}>
                 <IconChip name="exit" tone="fern" />
                 <View style={{ flex: 1 }}>
-                  <H2>How it ends</H2>
+                  <H2>What success looks like</H2>
                   <Muted style={{ marginTop: 6 }}>
-                    With you deleting it. Mend is designed to get you off the app and back into a
-                    relationship that holds itself up. Graduation is the feature.
+                    The skills become yours: clearer conversations, stronger rituals, and more
+                    confidence finding your way back into sync whenever life shifts.
                   </Muted>
                 </View>
               </View>
@@ -276,7 +276,7 @@ export default function Onboarding() {
     return (
       <Screen safeTop>
         <Rise>
-          <H1 style={{ marginTop: 12 }}>Who&apos;s mending?</H1>
+          <H1 style={{ marginTop: 12 }}>Who&apos;s growing together?</H1>
           <P style={{ marginTop: 10 }}>
             First names only. They label the timer and the games. On this phone they stay private;
             {session ? " your account backs up your progress so you don't lose it." : " nothing syncs unless you make an account."}
@@ -301,14 +301,14 @@ export default function Onboarding() {
     );
   }
 
-  // ————— situation: what are you carrying —————
+  // ————— situation: what would help most —————
   return (
     <Screen safeTop>
       <Rise>
         <Muted style={{ marginTop: 12, textTransform: "uppercase", letterSpacing: 2, fontWeight: "700", color: p.ember }}>
           So we can meet you where you are
         </Muted>
-        <H1 style={{ marginTop: 8 }}>What are you carrying?</H1>
+        <H1 style={{ marginTop: 8 }}>What would help most right now?</H1>
         <P style={{ marginTop: 10 }}>
           Pick the closest one. It shapes what Mend shows you first. Nothing gets locked away, and
           you can change it any time in settings.

@@ -172,7 +172,7 @@ function Shell() {
           <Stack.Screen name="notes" options={{ title: "Little notes" }} />
           <Stack.Screen name="plan" options={{ title: "Our plan" }} />
           <Stack.Screen name="pulse" options={{ title: "Pulse check" }} />
-          <Stack.Screen name="tracks/index" options={{ title: "Healing tracks" }} />
+          <Stack.Screen name="tracks/index" options={{ title: "Focused support" }} />
           <Stack.Screen name="tracks/[slug]" options={{ title: "" }} />
         </Stack>
       </Gate>

@@ -265,8 +265,8 @@ export default function Today() {
       {journeyDone ? (
         <Rise delay={80}>
           <Card tone="fern" style={{ marginTop: 12 }}>
-            <Text style={{ fontWeight: "700", color: p.ink, fontSize: 16 }}>You graduated</Text>
-            <Muted style={{ marginTop: 6 }}>The rituals are yours now. Come back only if a hard season needs a referee again.</Muted>
+            <Text style={{ fontWeight: "700", color: p.ink, fontSize: 16 }}>Journey complete</Text>
+            <Muted style={{ marginTop: 6 }}>The skills and rituals are yours now. Keep using what helps you feel connected and aligned.</Muted>
           </Card>
         </Rise>
       ) : nextStep ? (
@@ -335,7 +335,7 @@ export default function Today() {
       </Press>
 
       <Muted style={{ marginTop: 18, textAlign: "center", fontSize: 12 }}>
-        Mend is designed to be deleted. The goal is a relationship that doesn&apos;t need it.
+        Small moments, practiced often, help two people stay connected.
       </Muted>
     </Screen>
   );

@@ -118,8 +118,8 @@ export default function Games() {
         <Hero
           hue="honey"
           eyebrow="Games"
-          title="Play your way back to each other"
-          sub="Curiosity, laughter, and the old stories retold. None of these need a good mood to start."
+          title="Play your way closer"
+          sub="Curiosity, laughter, and shared stories that help you enjoy knowing each other."
           style={{ marginTop: 8 }}
         />
         <View style={{ marginTop: 16, gap: 12 }}>
