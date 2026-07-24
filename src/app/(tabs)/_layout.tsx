@@ -20,7 +20,7 @@ export default function TabsLayout() {
         name="index"
         options={{
           title: t("tabs.today"),
-          tabBarIcon: ({ color, size }) => <Ionicons name="today-outline" size={size} color={color} />,
+          tabBarIcon: ({ color, size }) => <Ionicons name="home-outline" size={size} color={color} />,
         }}
       />
       <Tabs.Screen

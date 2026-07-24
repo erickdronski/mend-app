@@ -29,10 +29,11 @@ import {
 } from "@/lib/space";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { onHero } from "@/lib/theme";
-import { Card, Chip, Eyebrow, Hero, IconChip, Input, Muted, Rise, Screen, usePalette, Wordmark } from "@/components/ui";
-import { Bounce, GlideBar, Press } from "@/components/motion";
+import { Btn, Card, Chip, Eyebrow, Hero, IconChip, Input, Muted, Rise, Screen, usePalette, Wordmark } from "@/components/ui";
+import { Bounce, Press } from "@/components/motion";
+import { ProgressRing } from "@/components/rings";
 
-/** Warm, time-aware hello. No stats, no streaks, just a greeting. */
+/** Warm, time-aware hello. */
 function greetingForNow(): string {
   const hour = new Date().getHours();
   if (hour < 12) return "Good morning";
@@ -48,12 +49,9 @@ const EXPLORE_DOTS = [
   { hue: "plum", icon: "map-outline" },
 ] as const;
 
-/**
- * Today: the calm home. Three things and nothing else, the daily question,
- * one next step, one gentle nudge, with everything else one tap away in
- * Explore. First paint stays under ~120 words and a handful of tap targets.
- */
-export default function Today() {
+type Evidence = { conversations: number; rituals: number; commitments: number };
+
+export default function Home() {
   const p = usePalette();
   const router = useRouter();
   const { session } = useAuth();
@@ -70,6 +68,7 @@ export default function Today() {
   const [nextStep, setNextStep] = useState<{ title: string; body: string; href: string; label: string } | null>(null);
   const [journeyDone, setJourneyDone] = useState(false);
   const [journeyProgress, setJourneyProgress] = useState<JourneyProgress | null>(null);
+  const [evidence, setEvidence] = useState<Evidence>({ conversations: 0, rituals: 0, commitments: 0 });
 
   const question = questionForDate(new Date());
   const nudge = nudgeForDate(new Date());
@@ -107,6 +106,11 @@ export default function Today() {
       ]);
       setName(profile?.a?.trim() || "");
       setHereForYou(getSituation(profile?.situation)?.hereForYou ?? "");
+      setEvidence({
+        conversations: sessions.length,
+        rituals: plan.rituals.length,
+        commitments: plan.commitments.filter((commitment) => commitment.done).length,
+      });
       computeNextStep({ profile, sessions, plan, challengesDone, pulses }, journey);
       setLocalAnswer(local);
       setLoaded(true);
@@ -134,6 +138,7 @@ export default function Today() {
   const theirs = answers.find((a) => a.user_id !== myId);
   const partner = space?.members.find((m) => m.user_id !== myId);
   const answered = space ? Boolean(mine) : Boolean(localAnswer);
+  const currentStage = journeyProgress ? getStage(journeyProgress.currentStage) : null;
 
   async function send() {
     if (!draft.trim()) return;
@@ -175,140 +180,155 @@ export default function Today() {
       ) : null}
       {hereForYou ? <Muted style={{ marginTop: name ? 3 : 10 }}>{hereForYou}</Muted> : null}
 
-      {/* 1. Today's question */}
+      {/* The journey is the product's spine: establish progress and the next
+          useful action before offering the rest of the day's tools. */}
       <Rise>
         <Hero
           hue="moss"
-          eyebrow="Today's question"
-          title={question.text}
+          eyebrow={journeyDone ? "Your relationship journey" : `Chapter ${journeyProgress?.currentStage ?? 1} of 5`}
+          title={journeyDone ? "A stronger way of being together" : currentStage?.title ?? "Your path together"}
+          sub={journeyDone ? "Keep practicing the skills and rituals that help you stay connected." : currentStage?.arc}
           right={
-            <View style={{ alignSelf: "flex-start", backgroundColor: "rgba(244,244,238,0.14)", paddingHorizontal: 10, paddingVertical: 5, borderRadius: 99 }}>
-              <Text style={{ fontSize: 11, textTransform: "capitalize", color: onHero.text, opacity: 0.8 }}>
-                {question.category}
-              </Text>
-            </View>
+            <ProgressRing
+              progress={journeyProgress?.fraction ?? 0}
+              size={84}
+              stroke={7}
+              trackColor="rgba(244,244,238,0.17)"
+              color={onHero.accent}
+            >
+              <View style={{ alignItems: "center" }}>
+                <Text style={{ color: onHero.text, fontSize: 20, fontWeight: "800", letterSpacing: -0.5 }}>
+                  {journeyProgress?.percent ?? 0}%
+                </Text>
+                <Text style={{ color: onHero.dim, fontSize: 9.5, fontWeight: "600" }}>complete</Text>
+              </View>
+            </ProgressRing>
           }
           style={{ marginTop: 14 }}
         >
+          <Press
+            onPress={() => router.push((journeyDone ? "/journey" : nextStep?.href ?? "/journey") as Href)}
+            haptic
+            style={{ marginTop: 16 }}
+          >
+            <View style={{ borderRadius: 15, padding: 13, backgroundColor: "rgba(244,244,238,0.12)", borderWidth: 1, borderColor: "rgba(244,244,238,0.16)", flexDirection: "row", alignItems: "center", gap: 11 }}>
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: onHero.accent, fontSize: 11, fontWeight: "700", textTransform: "uppercase", letterSpacing: 1.1 }}>
+                  {journeyDone ? "Keep growing" : "Next up"}
+                </Text>
+                <Text numberOfLines={2} style={{ color: onHero.text, fontSize: 15, lineHeight: 20, fontWeight: "700", marginTop: 3 }}>
+                  {journeyDone ? "Revisit your path and choose what helps now" : nextStep?.title ?? "Open your relationship path"}
+                </Text>
+              </View>
+              <Ionicons name="arrow-forward-circle" size={27} color={onHero.accent} />
+            </View>
+          </Press>
+        </Hero>
+      </Rise>
+
+      <Rise delay={70}>
+        <Card style={{ marginTop: 12, paddingVertical: 14, paddingHorizontal: 8 }}>
+          <View style={{ flexDirection: "row" }}>
+            {[
+              { value: evidence.conversations, label: "Conversations" },
+              { value: evidence.rituals, label: "Rituals" },
+              { value: evidence.commitments, label: "Promises kept" },
+            ].map((item, index) => (
+              <View
+                key={item.label}
+                style={{ flex: 1, alignItems: "center", paddingHorizontal: 4, borderLeftWidth: index ? 1 : 0, borderLeftColor: p.line }}
+              >
+                <Text style={{ color: p.ink, fontSize: 22, fontWeight: "800", letterSpacing: -0.5 }}>{item.value}</Text>
+                <Text style={{ color: p.muted, fontSize: 10.5, fontWeight: "600", marginTop: 2, textAlign: "center" }}>{item.label}</Text>
+              </View>
+            ))}
+          </View>
+          <Press onPress={() => router.push("/achievements" as Href)} style={{ marginTop: 12 }}>
+            <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 4 }}>
+              <Text style={{ color: p.ember, fontSize: 12.5, fontWeight: "700" }}>See what you’ve built together</Text>
+              <Ionicons name="chevron-forward" size={13} color={p.ember} />
+            </View>
+          </Press>
+        </Card>
+      </Rise>
+
+      {/* Daily connection stays close at hand without crowding out the larger journey. */}
+      <Rise delay={110}>
+        <Card tone="panel" style={{ marginTop: 12 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 9 }}>
+              <IconChip name="chatbubble-ellipses-outline" hue="moss" size={34} />
+              <Text style={{ color: p.ink, fontSize: 16, fontWeight: "800" }}>Today’s connection</Text>
+            </View>
+            <Chip label={question.category} hue="moss" />
+          </View>
+          <Text style={{ color: p.ink, fontSize: 19, lineHeight: 25, fontWeight: "700", letterSpacing: -0.25, marginTop: 14 }}>
+            {question.text}
+          </Text>
+
           {!answered ? (
             <View style={{ marginTop: 12 }}>
-              {space && theirs && (
-                <Text style={{ color: onHero.text, opacity: 0.85, marginBottom: 8, fontSize: 13 }}>
-                  {theirs.display_name} answered already. Yours unlocks it.
-                </Text>
-              )}
+              {space && theirs ? (
+                <Muted style={{ marginBottom: 8, fontSize: 12.5 }}>{theirs.display_name} answered already. Yours unlocks it.</Muted>
+              ) : null}
               <Input
                 value={draft}
                 onChangeText={setDraft}
                 placeholder="A sentence or three, honestly"
-                placeholderTextColor="rgba(244,244,238,0.5)"
                 multiline
                 maxLength={2000}
-                style={{ minHeight: 64, backgroundColor: "rgba(244,244,238,0.1)", borderColor: "rgba(244,244,238,0.25)", color: onHero.text }}
+                style={{ minHeight: 70 }}
               />
-              <Pressable onPress={send} disabled={busy || !draft.trim()} style={({ pressed }) => ({ marginTop: 10, backgroundColor: onHero.text, borderRadius: 12, paddingVertical: 12, alignItems: "center", opacity: !draft.trim() ? 0.5 : pressed ? 0.85 : 1 })}>
-                <Text style={{ color: "#233c2c", fontWeight: "700" }}>Send mine in</Text>
-              </Pressable>
+              <Btn label={busy ? "Sending…" : "Share my answer"} onPress={send} kind="moss" disabled={busy || !draft.trim()} style={{ marginTop: 10 }} />
             </View>
           ) : (
-            <View style={{ marginTop: 12, gap: 10 }}>
+            <View style={{ marginTop: 12, gap: 9 }}>
               <Bounce trigger={justSent}>
-                <View style={{ backgroundColor: "rgba(244,244,238,0.12)", borderRadius: 12, padding: 12 }}>
-                  <Text style={{ color: onHero.accent, fontWeight: "700", fontSize: 12 }}>You</Text>
-                  <Text style={{ color: onHero.text, marginTop: 4 }}>{space ? mine?.answer : localAnswer}</Text>
+                <View style={{ backgroundColor: p.raised, borderRadius: 13, padding: 12, borderWidth: 1, borderColor: p.line }}>
+                  <Text style={{ color: p.mossDeep, fontWeight: "700", fontSize: 12 }}>You</Text>
+                  <Text style={{ color: p.ink, marginTop: 4, lineHeight: 20 }}>{space ? mine?.answer : localAnswer}</Text>
                 </View>
               </Bounce>
               {space ? (
                 theirs ? (
-                  <Animated.View
-                    entering={FadeIn.duration(420)}
-                    style={{ backgroundColor: "rgba(244,244,238,0.12)", borderRadius: 12, padding: 12 }}
-                  >
-                    <Text style={{ color: onHero.accent, fontWeight: "700", fontSize: 12 }}>{theirs.display_name}</Text>
-                    <Text style={{ color: onHero.text, marginTop: 4 }}>{theirs.answer}</Text>
+                  <Animated.View entering={FadeIn.duration(420)} style={{ backgroundColor: p.raised, borderRadius: 13, padding: 12, borderWidth: 1, borderColor: p.line }}>
+                    <Text style={{ color: p.mossDeep, fontWeight: "700", fontSize: 12 }}>{theirs.display_name}</Text>
+                    <Text style={{ color: p.ink, marginTop: 4, lineHeight: 20 }}>{theirs.answer}</Text>
                   </Animated.View>
                 ) : (
-                  <Text style={{ color: onHero.text, opacity: 0.75, fontSize: 13 }}>
-                    {partner ? `Waiting on ${partner.display_name}. ` : ""}Yours is in, sealed until theirs arrives.
-                  </Text>
+                  <Muted style={{ fontSize: 12.5 }}>{partner ? `Waiting on ${partner.display_name}. ` : ""}Yours is sealed until theirs arrives.</Muted>
                 )
               ) : (
                 <Pressable onPress={() => router.push(session ? "/space" : "/sign-in")}>
-                  <Text style={{ color: onHero.accent, fontWeight: "600", fontSize: 13 }}>
-                    {session ? "Answer these together: set up your space" : "Answer these together: make a free account"} →
+                  <Text style={{ color: p.ember, fontWeight: "700", fontSize: 13 }}>
+                    {session ? "Set up your shared space" : "Make a free account to answer together"} →
                   </Text>
                 </Pressable>
               )}
             </View>
           )}
-        </Hero>
+        </Card>
       </Rise>
 
-      {/* Space + notes access, when a space exists (keeps the invite code and
-          the notes board reachable, which the tour and copy promise). */}
-      {space && (
+      {space ? (
         <View style={{ flexDirection: "row", gap: 8, marginTop: 10 }}>
           <Press onPress={() => router.push("/space")} style={{ flex: 1 }}>
-            <Card style={{ paddingVertical: 12, paddingHorizontal: 14, flexDirection: "row", alignItems: "center", gap: 10 }}>
-              <IconChip name="people-outline" hue="rose" size={30} />
-              <Text style={{ color: p.ink, fontWeight: "600", fontSize: 14 }}>Our space</Text>
+            <Card style={{ paddingVertical: 11, paddingHorizontal: 13, flexDirection: "row", alignItems: "center", gap: 9 }}>
+              <IconChip name="people-outline" hue="rose" size={28} />
+              <Text style={{ color: p.ink, fontWeight: "600", fontSize: 13.5 }}>Our space</Text>
             </Card>
           </Press>
           <Press onPress={() => router.push("/notes")} style={{ flex: 1 }}>
-            <Card style={{ paddingVertical: 12, paddingHorizontal: 14, flexDirection: "row", alignItems: "center", gap: 10 }}>
-              <IconChip name="heart-outline" hue="rose" size={30} />
-              <Text style={{ color: p.ink, fontWeight: "600", fontSize: 14 }}>Love notes</Text>
+            <Card style={{ paddingVertical: 11, paddingHorizontal: 13, flexDirection: "row", alignItems: "center", gap: 9 }}>
+              <IconChip name="heart-outline" hue="rose" size={28} />
+              <Text style={{ color: p.ink, fontWeight: "600", fontSize: 13.5 }}>Love notes</Text>
             </Card>
           </Press>
         </View>
-      )}
-
-      {/* 2. One next step */}
-      {journeyDone ? (
-        <Rise delay={80}>
-          <Card tone="fern" style={{ marginTop: 12 }}>
-            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
-              <Text style={{ fontWeight: "700", color: p.ink, fontSize: 16 }}>Journey complete</Text>
-              <Chip label="5 chapters · 100%" hue="moss" />
-            </View>
-            <Muted style={{ marginTop: 6 }}>The skills and rituals are yours now. Keep using what helps you feel connected and aligned.</Muted>
-          </Card>
-        </Rise>
-      ) : nextStep ? (
-        <Rise delay={80}>
-          <Press onPress={() => router.push(nextStep.href as Href)}>
-            <Card style={{ marginTop: 12 }}>
-              <View style={{ flexDirection: "row", gap: 12, alignItems: "flex-start" }}>
-                <IconChip name="footsteps-outline" hue="ember" size={40} />
-                <View style={{ flex: 1 }}>
-                  <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
-                    <Eyebrow hue="ember">Your next step</Eyebrow>
-                    {journeyProgress ? (
-                      <Text style={{ color: p.muted, fontWeight: "600", fontSize: 11.5 }}>
-                        Chapter {journeyProgress.currentStage} · {journeyProgress.percent}%
-                      </Text>
-                    ) : null}
-                  </View>
-                  <Text style={{ marginTop: 5, fontSize: 16.5, fontWeight: "700", color: p.ink }}>{nextStep.title}</Text>
-                  <Muted style={{ marginTop: 5 }}>{nextStep.body}</Muted>
-                  {journeyProgress ? (
-                    <View style={{ marginTop: 10 }}>
-                      <GlideBar progress={journeyProgress.fraction} color={p.ember} track={p.panel} height={5} />
-                    </View>
-                  ) : null}
-                  <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}>
-                    <Text style={{ color: p.ember, fontWeight: "600", fontSize: 14 }}>{nextStep.label}</Text>
-                    <Ionicons name="arrow-forward" size={15} color={p.ember} style={{ marginLeft: 4 }} />
-                  </View>
-                </View>
-              </View>
-            </Card>
-          </Press>
-        </Rise>
       ) : null}
 
       {/* 3. One gentle extra */}
-      <Rise delay={140}>
+      <Rise delay={160}>
         <Card tone="panel" style={{ marginTop: 12 }}>
           <View style={{ flexDirection: "row", gap: 12, alignItems: "flex-start" }}>
             <IconChip name="sparkles-outline" hue="honey" size={40} />
@@ -319,20 +339,6 @@ export default function Today() {
           </View>
         </Card>
       </Rise>
-
-      {/* Milestones: the quiet proof that the work is adding up */}
-      <Press onPress={() => router.push("/achievements" as Href)}>
-        <Card style={{ marginTop: 12, flexDirection: "row", alignItems: "center", gap: 12 }}>
-          <IconChip name="ribbon-outline" hue="honey" size={38} />
-          <View style={{ flex: 1 }}>
-            <Eyebrow hue="honey">Your milestones</Eyebrow>
-            <Muted style={{ marginTop: 2, fontSize: 12.5 }}>
-              What the two of you have practiced so far.
-            </Muted>
-          </View>
-          <Ionicons name="chevron-forward" size={16} color={p.muted} />
-        </Card>
-      </Press>
 
       {/* Browse everything: one calm tap target, four little rooms hinted */}
       <Press onPress={() => router.push("/explore")}>
