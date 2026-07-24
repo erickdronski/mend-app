@@ -15,10 +15,10 @@ const expected = {
     "mend_daily_reveal",
     "mend_join_space",
     "mend_leave_space",
-    "mend_my_tier",
+    "mend_my_access",
     "mend_space_progress",
   ]),
-  functions: new Set(["mend-checkout", "mend-delete-account"]),
+  functions: new Set(["mend-billing-portal", "mend-checkout", "mend-delete-account"]),
 };
 
 async function sourceFiles(dir) {

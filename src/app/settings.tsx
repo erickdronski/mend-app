@@ -26,7 +26,7 @@ export default function Settings() {
   const router = useRouter();
   const { t } = useTranslation();
   const { session, guest, signOut } = useAuth();
-  const { tier, previewOnly } = usePremium();
+  const { tier, previewOnly, partnerIncluded, source } = usePremium();
   const [lang, setLang] = useState<LanguageCode>((i18n.language as LanguageCode) ?? "en");
   const [profile, setProfile] = useState<Profile | null>(null);
   const [names, setNames] = useState<[string, string]>(["", ""]);
@@ -102,10 +102,14 @@ export default function Settings() {
             <Text style={{ color: p.ink, fontSize: 15.5, fontWeight: "700" }}>Mend Plus</Text>
             <Muted style={{ marginTop: 2, fontSize: 12.5 }}>
               {tier === "plus"
-                ? "Founding member. Everything is unlocked for you."
+                ? source === "founder_grant"
+                  ? "Founding access covers your private room."
+                  : partnerIncluded
+                    ? "One shared plan covers both partners."
+                    : "Plus is active; your partner is included when they join."
                 : previewOnly
                   ? "Full access is unlocked in this build."
-                  : "See what Plus includes."}
+                  : "One subscription unlocks the full journey for both of you."}
             </Muted>
           </View>
           {tier === "plus" ? <Chip label="Plus" hue="honey" icon="ribbon-outline" /> : null}

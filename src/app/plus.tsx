@@ -15,31 +15,42 @@ import { Ionicons } from "@expo/vector-icons";
 import { PRICING, usePremium, type Plan } from "@/lib/premium";
 import { useAuth } from "@/lib/auth";
 import { useRouter } from "expo-router";
-import { Btn, Card, Chip, Eyebrow, Hero, IconChip, Muted, P, Screen, usePalette } from "@/components/ui";
+import { Btn, Card, Chip, Eyebrow, H2, Hero, IconChip, Muted, P, Screen, usePalette } from "@/components/ui";
 import { Text } from "@/components/text";
 import { Press, Reveal } from "@/components/motion";
 
 const FREE_FOREVER: { icon: keyof typeof Ionicons.glyphMap; label: string }[] = [
-  { icon: "trail-sign-outline", label: "The complete five-stage relationship journey" },
-  { icon: "chatbubbles-outline", label: "Guided sessions with the timed floor" },
+  { icon: "trail-sign-outline", label: "The complete first chapter of your relationship journey" },
+  { icon: "dice-outline", label: "Starter card decks, a couple game, and starter activities" },
   { icon: "medkit-outline", label: "The safety net: crisis lines, red flags, get-help-now" },
-  { icon: "sunny-outline", label: "The daily question and your shared space" },
-  { icon: "heart-outline", label: "Love notes, your plan, and pulse checks" },
+  { icon: "people-outline", label: "Your private two-person room and invite code" },
+  { icon: "sunny-outline", label: "Daily questions, shared notes, and pulse checks" },
 ];
 
 const PLUS_ADDS: { icon: keyof typeof Ionicons.glyphMap; label: string }[] = [
-  { icon: "albums-outline", label: "Every card deck. First Steps and Repair stay free" },
-  { icon: "dice-outline", label: "The full game shelf and every 7-day challenge" },
-  { icon: "map-outline", label: "Complete focused-support programs. First sessions and red flags stay free" },
+  { icon: "map-outline", label: "Journey chapters two through five, with progress preserved" },
+  { icon: "albums-outline", label: "Every card deck, game, guided activity, and 7-day challenge" },
+  { icon: "heart-circle-outline", label: "Complete focused paths for repair, connection, trust, and life changes" },
   { icon: "newspaper-outline", label: "The complete Mend Notes research and practice archive" },
-  { icon: "leaf-outline", label: "Everything new we build, first" },
+  { icon: "people-outline", label: "Full access for both partners with one subscription" },
 ];
 
 export default function Plus() {
   const p = usePalette();
   const router = useRouter();
   const { session } = useAuth();
-  const { tier, previewOnly, purchasesEnabled, startCheckout, busy } = usePremium();
+  const {
+    tier,
+    previewOnly,
+    purchasesEnabled,
+    startCheckout,
+    manageBilling,
+    busy,
+    spaceId,
+    partnerIncluded,
+    canManage,
+    source,
+  } = usePremium();
   const [plan, setPlan] = useState<Plan>("annual");
   const [error, setError] = useState<string | null>(null);
 
@@ -49,22 +60,34 @@ export default function Plus() {
     if (err) setError(err);
   }
 
+  async function manage() {
+    setError(null);
+    const err = await manageBilling();
+    if (err) setError(err);
+  }
+
   return (
     <Screen>
       <Hero
         hue="ember"
-        eyebrow="Mend Plus"
-        title={purchasesEnabled ? "A year of Plus costs less than one counseling session" : "The full library is unlocked"}
+        eyebrow={tier === "plus" ? "Your room has Mend Plus" : "Mend Plus for two"}
+        title={tier === "plus" ? "Both of you are covered" : "One subscription. Two partners. One private room."}
         sub={
-          purchasesEnabled
-            ? "The heart of Mend is free forever. Plus opens the full breadth."
-            : "Every deck, game, challenge, and focused-support track is included in this build."
+          tier === "plus"
+            ? partnerIncluded
+              ? "Full access follows this room on both phones."
+              : "Your partner receives full access automatically when they join your room."
+            : "Either partner subscribes once. The full journey and library unlock for both of you."
         }
         style={{ marginTop: 12 }}
       >
         <View style={{ marginTop: 14, flexDirection: "row", gap: 8 }}>
           {tier === "plus" ? (
-            <Chip label="Founding member, Plus is yours" hue="honey" icon="ribbon-outline" />
+            <Chip
+              label={source === "founder_grant" ? "Founding access" : "Shared room plan"}
+              hue="honey"
+              icon="ribbon-outline"
+            />
           ) : previewOnly ? (
             <Chip label="Full access included" hue="honey" icon="ribbon-outline" />
           ) : null}
@@ -72,7 +95,7 @@ export default function Plus() {
       </Hero>
 
       <Reveal index={0} style={{ marginTop: 20 }}>
-        <Eyebrow hue="moss">Free forever, no exceptions</Eyebrow>
+        <Eyebrow hue="moss">A useful free start</Eyebrow>
         <Card style={{ marginTop: 8, gap: 12 }}>
           {FREE_FOREVER.map((f) => (
             <View key={f.label} style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
@@ -82,12 +105,12 @@ export default function Plus() {
           ))}
         </Card>
         <Muted style={{ marginTop: 8, fontSize: 12.5 }}>
-          Money never gates safety or the core tools for talking, listening, and staying connected.
+          Safety resources always stay open. Your room and completed progress are never deleted if you do not subscribe.
         </Muted>
       </Reveal>
 
       <Reveal index={1} style={{ marginTop: 22 }}>
-        <Eyebrow hue="ember">What Plus adds</Eyebrow>
+        <Eyebrow hue="ember">What one shared plan adds</Eyebrow>
         <Card style={{ marginTop: 8, gap: 12, borderColor: p.hues.ember.accent }}>
           {PLUS_ADDS.map((f) => (
             <View key={f.label} style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
@@ -110,10 +133,9 @@ export default function Plus() {
           <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
             <IconChip name="cash-outline" hue="sky" size={32} />
             <P style={{ flex: 1, fontSize: 14 }}>
-              A national therapy provider puts couples counseling at $150 to $250 a session out of
-              pocket, and a typical course at eight to twenty sessions. Insurance often will not
-              cover it on its own, because plans pay to treat a diagnosed condition in one person,
-              and relationship trouble is not a diagnosis.
+              Thriveworks lists couples counseling at $150 to $250 per session out of pocket and
+              says couples commonly attend eight to twenty sessions. Mend Plus is $99 per room for
+              a year, not per person.
             </P>
           </View>
           {/* P4. Ships exactly as written, never shortened. It is the reason
@@ -155,7 +177,8 @@ export default function Plus() {
             })}
           </View>
           <Muted style={{ marginTop: 10, fontSize: 12.5 }}>
-            A year of Mend Plus costs less than one typical counseling session. Cancel anytime.
+            At Thriveworks&apos; published $150 to $250 range, a year of Mend Plus costs less than one
+            session. This is a cost comparison only. Cancel anytime.
           </Muted>
         </Reveal>
       )}
@@ -164,8 +187,13 @@ export default function Plus() {
         {tier === "plus" ? (
           <Card tone="fern">
             <P style={{ fontSize: 14 }}>
-              You hold a founding entitlement on this account. Everything above is unlocked for you, permanently.
+              {partnerIncluded
+                ? "Your two-person room is fully unlocked. You and your partner use separate accounts and share one plan."
+                : "Your room is fully unlocked. Send your invite code and your partner will be included automatically."}
             </P>
+            {canManage && purchasesEnabled ? (
+              <Btn label={busy ? "Opening billing..." : "Manage subscription"} kind="ghost" onPress={manage} disabled={busy} style={{ marginTop: 12 }} />
+            ) : null}
           </Card>
         ) : previewOnly && !purchasesEnabled ? (
           <Card tone="fern">
@@ -174,18 +202,24 @@ export default function Plus() {
               guided sessions, and shared space remain free either way.
             </P>
           </Card>
-        ) : (
+        ) : purchasesEnabled ? (
           <View>
+            {!spaceId ? (
+              <Card tone="panel" style={{ marginBottom: 12 }}>
+                <P style={{ fontSize: 13.5 }}>Create or join your room first so one purchase can cover both partners.</P>
+                <Btn label="Set up our room" kind="ghost" onPress={() => router.push("/space")} style={{ marginTop: 10 }} />
+              </Card>
+            ) : null}
             <Btn
               label={busy ? "Opening checkout..." : `Get Plus for ${PRICING[plan].amount} ${PRICING[plan].cadence}`}
               onPress={buy}
-              disabled={busy}
+              disabled={busy || !spaceId}
             />
             {error ? (
               <Muted style={{ marginTop: 10, color: p.ember }}>{error}</Muted>
             ) : (
               <Muted style={{ marginTop: 10, fontSize: 12, textAlign: "center" }}>
-                Secure checkout opens in your browser. Cancel anytime, no questions asked.
+                One secure payment covers both people in your room. Cancel anytime.
               </Muted>
             )}
             {previewOnly ? (
@@ -203,6 +237,16 @@ export default function Plus() {
               </Pressable>
             ) : null}
           </View>
+        ) : (
+          <Card tone="panel">
+            <H2>One shared plan, never two bills</H2>
+            <P style={{ marginTop: 8, fontSize: 14 }}>
+              Mend Plus purchasing is being enabled through the App Store. Your free chapter and private room are ready now.
+            </P>
+            {!spaceId ? (
+              <Btn label="Create our room" kind="ghost" onPress={() => router.push("/space")} style={{ marginTop: 12 }} />
+            ) : null}
+          </Card>
         )}
       </Reveal>
     </Screen>

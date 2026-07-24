@@ -29,6 +29,7 @@ import { Text } from "@/components/text";
 import { ProgressRing } from "@/components/rings";
 import { acknowledgeSuccess, Bloom, Bounce, GlideBar, Press, Reveal } from "@/components/motion";
 import { SuccessMoment } from "@/components/momentum";
+import { usePremium } from "@/lib/premium";
 
 /**
  * The Journey tab: the app's home. One current stage, its steps, the next
@@ -38,6 +39,7 @@ export default function JourneyScreen() {
   const p = usePalette();
   const router = useRouter();
   const { t } = useTranslation();
+  const { plus, partnerIncluded } = usePremium();
   const [ctx, setCtx] = useState<StepContext | null>(null);
   const [journey, setJourney] = useState<JourneyState | null>(null);
   const [completedStep, setCompletedStep] = useState<{ id: string; title: string } | null>(null);
@@ -103,6 +105,37 @@ export default function JourneyScreen() {
           </Card>
         )}
         <Muted style={{ marginTop: 20 }}>{t("journey.designedToEnd")}</Muted>
+      </Screen>
+    );
+  }
+
+  if (!plus && journey.stage > 1) {
+    return (
+      <Screen safeTop>
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: 8 }}>
+          <Wordmark />
+          <Pressable onPress={() => router.push("/settings")} hitSlop={10}>
+            <Ionicons name="settings-outline" size={22} color={p.muted} />
+          </Pressable>
+        </View>
+        <Hero
+          hue="ember"
+          eyebrow="Your next chapter"
+          title="Keep building the full journey together"
+          sub="Chapter one stays yours. Mend Plus opens chapters two through five, every focused path, and the complete activity library."
+          style={{ marginTop: 16 }}
+        />
+        <Card tone="fern" style={{ marginTop: 16 }}>
+          <Chip label="One plan covers both partners" hue="honey" icon="people-outline" />
+          <H2 style={{ marginTop: 12 }}>Your progress is safe</H2>
+          <P style={{ marginTop: 8 }}>
+            Nothing you completed is removed. Subscribe once for your private room and both phones unlock together.
+          </P>
+          <Btn label="See Mend Plus" kind="moss" onPress={() => router.push("/plus")} style={{ marginTop: 14 }} />
+        </Card>
+        {partnerIncluded ? (
+          <Muted style={{ marginTop: 12 }}>Your partner is already linked to this room and will be included automatically.</Muted>
+        ) : null}
       </Screen>
     );
   }
@@ -341,18 +374,25 @@ export default function JourneyScreen() {
         <Bounce trigger={complete}>
           <Card tone="moss" style={{ marginTop: 18 }}>
             <Chip label={`Chapter ${stage.n} complete`} hue="ember" />
-            <H2 style={{ color: p.surface, marginTop: 10 }}>Chapter complete</H2>
+            <H2 style={{ color: p.surface, marginTop: 10 }}>
+              {!plus && stage.n === 1 ? "Your free chapter is complete" : "Chapter complete"}
+            </H2>
             <P style={{ marginTop: 8, color: p.surface, opacity: 0.9 }}>
-              Every step of chapter {stage.n} is done. Move when you&apos;re both ready; the chapters ahead
-              build on the ground this one created.
+              {!plus && stage.n === 1
+                ? "You built the foundation. Mend Plus opens the four chapters ahead, and one subscription covers both people in your room."
+                : `Every step of chapter ${stage.n} is done. Move when you're both ready; the chapters ahead build on the ground this one created.`}
             </P>
             <Btn
-              label={t("journey.advance")}
-              onPress={async () => {
-                setJourney(await advanceStage());
-                setCompletedStep(null);
-                acknowledgeSuccess();
-              }}
+              label={!plus && stage.n === 1 ? "Open the full journey" : t("journey.advance")}
+              onPress={
+                !plus && stage.n === 1
+                  ? () => router.push("/plus")
+                  : async () => {
+                      setJourney(await advanceStage());
+                      setCompletedStep(null);
+                      acknowledgeSuccess();
+                    }
+              }
               style={{ marginTop: 14, backgroundColor: p.surface, borderColor: p.surface }}
             />
           </Card>

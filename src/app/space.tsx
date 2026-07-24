@@ -29,12 +29,14 @@ import {
   usePalette,
 } from "@/components/ui";
 import { Text } from "@/components/text";
+import { usePremium } from "@/lib/premium";
 
 const MEMBER_HUES = ["rose", "moss"] as const;
 
 export default function SpaceScreen() {
   const p = usePalette();
   const router = useRouter();
+  const { tier, partnerIncluded, refresh: refreshAccess } = usePremium();
   const [space, setSpace] = useState<Space | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [name, setName] = useState("");
@@ -81,6 +83,7 @@ export default function SpaceScreen() {
     setError(null);
     try {
       setSpace(await createSpace(name));
+      await refreshAccess();
     } catch (e) {
       setError(e instanceof Error ? e.message : "That didn't work.");
     } finally {
@@ -93,6 +96,7 @@ export default function SpaceScreen() {
     setError(null);
     try {
       setSpace(await joinSpace(code, name));
+      await refreshAccess();
     } catch (e) {
       const msg = e instanceof Error ? e.message : "";
       setError(
@@ -124,6 +128,31 @@ export default function SpaceScreen() {
           }
           style={{ marginTop: 8 }}
         />
+
+        <Card tone={tier === "plus" ? "fern" : "panel"} style={{ marginTop: 14 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+            <Ionicons
+              name={tier === "plus" ? "ribbon" : "sparkles-outline"}
+              size={22}
+              color={tier === "plus" ? p.moss : p.ember}
+            />
+            <View style={{ flex: 1 }}>
+              <Text style={{ color: p.ink, fontWeight: "700", fontSize: 15 }}>
+                {tier === "plus" ? "This room has Mend Plus" : "One plan covers this whole room"}
+              </Text>
+              <Muted style={{ marginTop: 3, fontSize: 12.5 }}>
+                {tier === "plus"
+                  ? partnerIncluded
+                    ? "Both partners have full access on their own phones."
+                    : "Your partner is included automatically when they join."
+                  : "Either partner can subscribe once; both people unlock together."}
+              </Muted>
+            </View>
+            {tier !== "plus" ? (
+              <Btn label="See Plus" kind="ghost" onPress={() => router.push("/plus")} />
+            ) : null}
+          </View>
+        </Card>
 
         <Card style={{ marginTop: 14, backgroundColor: rose.bg, borderColor: "transparent", alignItems: "center" }}>
           <Eyebrow hue="rose">Invite code</Eyebrow>
@@ -243,6 +272,7 @@ export default function SpaceScreen() {
                 kind="ghost"
                 onPress={async () => {
                   await leaveSpace();
+                  await refreshAccess();
                   setSpace(null);
                   setConfirmLeave(false);
                 }}

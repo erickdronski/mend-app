@@ -1,0 +1,13 @@
+project_id = "cmqrhoelexmtgudcupvx"
+
+[functions.mend-checkout]
+verify_jwt = true
+
+[functions.mend-billing-portal]
+verify_jwt = true
+
+[functions.mend-stripe-webhook]
+verify_jwt = false
+
+[functions.mend-delete-account]
+verify_jwt = true
