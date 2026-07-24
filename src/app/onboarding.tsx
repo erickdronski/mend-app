@@ -205,6 +205,7 @@ export default function Onboarding() {
   const [page, setPage] = useState(0);
   const scrollRef = useRef<ScrollView>(null);
   const width = Dimensions.get("window").width;
+  const welcomeHeadlineSize = width < 390 ? 23 : 24;
 
   // names step
   const [a, setA] = useState("");
@@ -237,10 +238,16 @@ export default function Onboarding() {
             <Wordmark size={56} color="#f4f4ee" accent="#d9a057" />
           </Rise>
           <Rise delay={150}>
-            <Text style={{ fontSize: 26, fontWeight: "700", color: "#f4f4ee", marginTop: 18, lineHeight: 34 }}>
+            <Text
+              numberOfLines={1}
+              style={{ fontSize: welcomeHeadlineSize, fontWeight: "700", color: "#f4f4ee", marginTop: 18, lineHeight: 32 }}
+            >
               Better relationships are built
             </Text>
-            <Text style={{ fontSize: 26, fontWeight: "700", color: "#d9a057", marginTop: 4, lineHeight: 34 }}>
+            <Text
+              numberOfLines={1}
+              style={{ fontSize: welcomeHeadlineSize, fontWeight: "700", color: "#d9a057", marginTop: 2, lineHeight: 32 }}
+            >
               in the moments between you.
             </Text>
           </Rise>
