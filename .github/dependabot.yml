@@ -9,6 +9,30 @@ updates:
         dependency-type: production
       development-dependencies:
         dependency-type: development
+    # The Expo SDK pins compatible versions of these packages. Move them with
+    # `npx expo install --fix` or a deliberate SDK upgrade, not one bump at a
+    # time: a jump past the SDK's versions fails `expo install --check` and
+    # has crashed the app at launch before (see CHANGELOG). Updates inside
+    # the SDK line still come through, and alerts are unaffected.
+    ignore:
+      - dependency-name: "expo"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "expo-*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@expo/*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint-config-expo"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "react-native"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "react-native-*"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "@react-native-async-storage/async-storage"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
     open-pull-requests-limit: 5
   - package-ecosystem: github-actions
     directory: /
