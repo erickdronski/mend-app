@@ -47,9 +47,9 @@
     "eslint": "^9.0.0",
     "eslint-config-expo": "~57.0.2",
     "eslint-import-resolver-typescript": "^3.10.1",
-    "sharp": "^0.35.3",
+    "sharp": "^0.35.5",
     "typescript": "~6.0.3",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   },
   "scripts": {
     "start": "expo start",
