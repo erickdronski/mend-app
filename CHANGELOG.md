@@ -22,6 +22,17 @@ All notable changes to Mend are documented in this file. The project follows
   everyday growth as well as difficult seasons.
 - Updated maintained translations and product documentation to match the broader
   relationship-improvement promise.
+- Rewrote the README around the app's actual privacy model, data flows, and
+  release status.
+
+### Security
+
+- Updated Expo SDK 57 packages to the versions Expo expects and refreshed the
+  lockfile, resolving advisories in @xmldom/xmldom, brace-expansion,
+  browserslist, baseline-browser-mapping, js-yaml, nanoid, postcss,
+  source-map-js, sharp, vitest, shell-quote, compression, and image-size.
+- Upgraded vitest to 5.x.
+- Stopped Dependabot from proposing version jumps that break the Expo SDK pins.
 
 ### Fixed
 
