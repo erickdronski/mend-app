@@ -7,6 +7,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as LocalAuthentication from "expo-local-authentication";
 
 const KEY = "mend.lock";
+const listeners = new Set<() => void>();
+
+export function subscribeToLockSetting(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => { listeners.delete(listener); };
+}
 
 export async function isLockEnabled(): Promise<boolean> {
   return (await AsyncStorage.getItem(KEY)) === "1";
@@ -14,6 +20,7 @@ export async function isLockEnabled(): Promise<boolean> {
 
 export async function setLockEnabled(on: boolean): Promise<void> {
   await AsyncStorage.setItem(KEY, on ? "1" : "0");
+  listeners.forEach(listener => listener());
 }
 
 /** True if the device can actually gate (has enrolled biometrics or a passcode). */

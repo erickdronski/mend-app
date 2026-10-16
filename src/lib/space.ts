@@ -85,10 +85,11 @@ export async function joinSpace(code: string, myName: string): Promise<Space | n
 }
 
 export async function leaveSpace(): Promise<void> {
-  await withBackendTimeout(
+  const { error } = await withBackendTimeout(
     supabase.rpc("mend_leave_space"),
     "Mend could not leave the space. Check your connection and try again."
   );
+  if (error) throw new Error(error.message);
 }
 
 export type SpaceProgress = {

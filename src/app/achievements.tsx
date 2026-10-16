@@ -1,3 +1,4 @@
+import { storageForCurrentAccount } from "@/lib/account-storage";
 /**
  * Achievements: proof that the work is adding up.
  *
@@ -55,17 +56,18 @@ export default function Achievements() {
   const [loaded, setLoaded] = useState(false);
 
   const reload = useCallback(() => {
+    const storage = storageForCurrentAccount();
     (async () => {
       const [profile, sessions, plan, challengesDone, pulses, journey, dailyAnswers, claimed] =
         await Promise.all([
-          getProfile(),
-          getSessions(),
-          getPlan(),
-          getChallengesDone(),
-          getPulses(),
-          getJourney(),
-          getDailyAnswerCount(),
-          getClaimed(),
+          getProfile(storage),
+          getSessions(storage),
+          getPlan(storage),
+          getChallengesDone(storage),
+          getPulses(storage),
+          getJourney(storage),
+          getDailyAnswerCount(storage),
+          getClaimed(storage),
         ]);
 
       // Shared-space facts are a bonus: if the network is slow or the couple
@@ -94,7 +96,7 @@ export default function Achievements() {
         bothInSpace,
         daysBoth,
         claimed,
-      });
+      }, storage);
       setEarned(map);
       setFresh(newly.map((a) => a.id));
       setLoaded(true);

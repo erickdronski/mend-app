@@ -1,3 +1,4 @@
+import { storageForCurrentAccount } from "@/lib/account-storage";
 import { useState } from "react";
 import { View } from "react-native";
 import {
@@ -78,6 +79,7 @@ export default function Quiz() {
   }
 
   async function pickRole(role: ConflictRole) {
+    const storage = storageForCurrentAccount();
     const tally = { ...roleTally, [role]: roleTally[role] + 1 };
     setRoleTally(tally);
     if (qIndex + 1 >= conflictQuestions.length) {
@@ -85,12 +87,12 @@ export default function Quiz() {
       const ranked = (Object.entries(lensTally) as [LensId, number][]).sort((a, b) => b[1] - a[1]);
       const topLens = ranked[0][0];
       const topRole: ConflictRole = tally.pursuer >= tally.withdrawer ? "pursuer" : "withdrawer";
-      const prof = await getProfile();
+      const prof = await getProfile(storage);
       if (prof && who !== null) {
         const key = who === 0 ? "a" : "b";
         prof.lenses = { ...prof.lenses, [key]: topLens };
         prof.roles = { ...prof.roles, [key]: topRole };
-        await saveProfile(prof);
+        await saveProfile(prof, storage);
       }
       setStage("result");
     } else setQIndex(qIndex + 1);

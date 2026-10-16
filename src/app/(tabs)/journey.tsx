@@ -1,3 +1,4 @@
+import { storageForCurrentAccount } from "@/lib/account-storage";
 import { useCallback, useState } from "react";
 import { Pressable, View } from "react-native";
 import { Link, useFocusEffect, useRouter, type Href } from "expo-router";
@@ -417,10 +418,11 @@ export default function JourneyScreen() {
             <Btn
               label="Mark journey complete"
               onPress={async () => {
-                const j = await getJourney();
+                const storage = storageForCurrentAccount();
+                const j = await getJourney(storage);
                 j.graduatedAt = new Date().toISOString();
                 const { saveJourney } = await import("@/lib/store");
-                await saveJourney(j);
+                await saveJourney(j, storage);
                 setJourney({ ...j });
                 acknowledgeSuccess();
               }}

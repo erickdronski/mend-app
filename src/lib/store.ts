@@ -1,9 +1,9 @@
 /**
- * Local-first storage on AsyncStorage. The device owns the relationship's data;
+ * Local-first storage on storage. The device owns the relationship's data;
  * Supabase auth exists for identity and (later) shared sync, never as a
  * requirement to heal.
  */
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { storageForCurrentAccount } from "./account-storage";
 import type { LensId, ConflictRole } from "./content/quiz";
 import type { Situation } from "./situation";
 import type { RelationshipType, Together, LivingSituation } from "./content/relationships";
@@ -65,32 +65,39 @@ const KEYS = {
   recommendations: "mend.recommendations",
 } as const;
 
-async function read<T>(key: string, fallback: T): Promise<T> {
+async function read<T>(key: string, fallback: T, storage = storageForCurrentAccount()): Promise<T> {
   try {
-    const raw = await AsyncStorage.getItem(key);
-    return raw ? (JSON.parse(raw) as T) : fallback;
+    const raw = await storage.getItem(key);
+    return raw ? ((JSON.parse(raw) as T | null) ?? fallback) : fallback;
   } catch {
     return fallback;
   }
 }
 
-async function write(key: string, value: unknown) {
+async function write(key: string, value: unknown, storage = storageForCurrentAccount()) {
   try {
-    await AsyncStorage.setItem(key, JSON.stringify(value));
+    await storage.setItem(key, JSON.stringify(value));
   } catch {
     // storage failure: degrade to stateless
   }
 }
 
 // ——— profile ———
-export const getProfile = () => read<Profile | null>(KEYS.profile, null);
-export const saveProfile = (p: Profile) => write(KEYS.profile, p);
+export const getProfile = (storage = storageForCurrentAccount()) => read<Profile | null>(KEYS.profile, null, storage);
+/** Gate/restore must distinguish an unreadable local profile from no profile. */
+export async function getProfileForRestore(storage = storageForCurrentAccount()): Promise<Profile | null> {
+  const raw = await storage.getItem(KEYS.profile);
+  const profile = raw ? JSON.parse(raw) as Profile | null : null;
+  if (profile && (typeof profile.a !== "string" || typeof profile.b !== "string")) throw new Error("Local profile could not be read.");
+  return profile;
+}
+export const saveProfile = (p: Profile, storage = storageForCurrentAccount()) => write(KEYS.profile, p, storage);
 
-/** Wipe every Mend key from this device. Used on account deletion and on a
- *  guest "erase everything" so no relationship data survives locally. */
-export async function clearAllLocal() {
-  const keys = await AsyncStorage.getAllKeys();
-  await AsyncStorage.multiRemove(keys.filter((key) => key.startsWith("mend.")));
+/** Wipe the current account's relationship data (or the local guest data).
+ * Other signed-out accounts retain their own offline progress. */
+export async function clearAllLocal(storage = storageForCurrentAccount()) {
+  const keys = await storage.getAllKeys();
+  await storage.multiRemove(keys.filter((key) => key.startsWith("mend.")));
 }
 
 /** The full snapshot backed up to Supabase and restored on a new device. */
@@ -110,34 +117,48 @@ export type BackupState = {
   claimedAchievements?: string[];
 };
 
-/** Write a backup snapshot into local storage (restore on sign-in / reinstall). */
-export async function restoreLocal(state: BackupState) {
-  const pairs: [string, string][] = [];
-  if (state.profile) pairs.push([KEYS.profile, JSON.stringify(state.profile)]);
-  if (state.sessions) pairs.push([KEYS.sessions, JSON.stringify(state.sessions)]);
-  if (state.plan) pairs.push([KEYS.plan, JSON.stringify(state.plan)]);
-  if (state.challenge) pairs.push([KEYS.challenge, JSON.stringify(state.challenge)]);
-  if (state.challengesDone) pairs.push([KEYS.challengesDone, JSON.stringify(state.challengesDone)]);
-  if (state.localDaily) pairs.push([KEYS.localDaily, JSON.stringify(state.localDaily)]);
-  if (state.dailyDays) pairs.push([KEYS.dailyDays, JSON.stringify(state.dailyDays)]);
-  if (state.pulses) pairs.push([KEYS.pulses, JSON.stringify(state.pulses)]);
-  if (state.journey) pairs.push([KEYS.journey, JSON.stringify(state.journey)]);
-  if (state.language) pairs.push([KEYS.language, JSON.stringify(state.language)]);
-  if (state.recommendations) pairs.push([KEYS.recommendations, JSON.stringify(state.recommendations)]);
-  if (pairs.length) await AsyncStorage.multiSet(pairs);
+const RESTORE_PENDING = "mend.restore.pending";
+const BACKUP_KEYS = { ...KEYS, achievements: "mend.achievements", claimedAchievements: "mend.achievements.claimed" } as const;
+
+/** Strict reads for backup: storage errors must not become an empty cloud copy. */
+export async function readLocalBackup(storage = storageForCurrentAccount()): Promise<BackupState> {
+  if (await storage.getItem(RESTORE_PENDING)) throw new Error("Restore is incomplete.");
+  const entries = await Promise.all(Object.entries(BACKUP_KEYS).map(async ([field, key]) => {
+    const value = await storage.getItem(key);
+    return [field, value === null ? undefined : JSON.parse(value)] as const;
+  }));
+  return Object.fromEntries(entries) as BackupState;
+}
+
+/** Replay the complete snapshot after an interrupted/partial multiSet. */
+export async function resumePendingRestore(storage = storageForCurrentAccount()): Promise<void> {
+  const pending = await storage.getItem(RESTORE_PENDING);
+  if (!pending) return;
+  const state = JSON.parse(pending) as BackupState;
+  const pairs: [string, string][] = Object.entries(BACKUP_KEYS).map(([field, key]) =>
+    [key, JSON.stringify(state[field as keyof BackupState] ?? null)]
+  );
+  await storage.multiSet(pairs);
+  await storage.removeItem(RESTORE_PENDING);
+}
+
+/** Restore all progress, including milestones, with a durable retry journal. */
+export async function restoreLocal(state: BackupState, storage = storageForCurrentAccount()) {
+  await storage.setItem(RESTORE_PENDING, JSON.stringify(state));
+  await resumePendingRestore(storage);
 }
 
 // ——— local daily answer (guests / solo, before a shared space exists) ———
 type LocalDaily = { date: string; answer: string };
-export const getLocalDailyState = () => read<LocalDaily | null>(KEYS.localDaily, null);
-export const getDailyDays = () => read<string[]>(KEYS.dailyDays, []);
-export async function getLocalDaily(dateKey: string): Promise<string | null> {
-  const d = await getLocalDailyState();
+export const getLocalDailyState = (storage = storageForCurrentAccount()) => read<LocalDaily | null>(KEYS.localDaily, null, storage);
+export const getDailyDays = (storage = storageForCurrentAccount()) => read<string[]>(KEYS.dailyDays, [], storage);
+export async function getLocalDaily(dateKey: string, storage = storageForCurrentAccount()): Promise<string | null> {
+  const d = await getLocalDailyState(storage);
   return d && d.date === dateKey ? d.answer : null;
 }
-export async function saveLocalDaily(dateKey: string, answer: string) {
-  await write(KEYS.localDaily, { date: dateKey, answer });
-  await countDailyAnswer(dateKey);
+export async function saveLocalDaily(dateKey: string, answer: string, storage = storageForCurrentAccount()) {
+  await write(KEYS.localDaily, { date: dateKey, answer }, storage);
+  await countDailyAnswer(dateKey, storage);
 }
 
 /**
@@ -146,111 +167,111 @@ export async function saveLocalDaily(dateKey: string, answer: string) {
  * means re-editing today's answer never inflates it, and there is no streak
  * to break: a missed day costs nothing, it simply is not counted.
  */
-export async function countDailyAnswer(dateKey: string): Promise<number> {
-  const days = await read<string[]>(KEYS.dailyDays, []);
+export async function countDailyAnswer(dateKey: string, storage = storageForCurrentAccount()): Promise<number> {
+  const days = await read<string[]>(KEYS.dailyDays, [], storage);
   if (days.includes(dateKey)) return days.length;
   const next = [...days, dateKey];
-  await write(KEYS.dailyDays, next);
+  await write(KEYS.dailyDays, next, storage);
   return next.length;
 }
-export const getDailyAnswerCount = async () => (await getDailyDays()).length;
+export const getDailyAnswerCount = async (storage = storageForCurrentAccount()) => (await getDailyDays(storage)).length;
 
 // ——— recommendation history ———
-export const getRecommendationHistory = () => read<RecommendationOpen[]>(KEYS.recommendations, []);
-export async function recordRecommendationOpened(id: string) {
-  const history = await getRecommendationHistory();
+export const getRecommendationHistory = (storage = storageForCurrentAccount()) => read<RecommendationOpen[]>(KEYS.recommendations, [], storage);
+export async function recordRecommendationOpened(id: string, storage = storageForCurrentAccount()) {
+  const history = await getRecommendationHistory(storage);
   const next = [
     { id, openedAt: new Date().toISOString() },
     ...history.filter((item) => item.id !== id),
   ].slice(0, 40);
-  await write(KEYS.recommendations, next);
+  await write(KEYS.recommendations, next, storage);
 }
 
 // ——— sessions ———
-export const getSessions = () => read<SessionRecord[]>(KEYS.sessions, []);
-export async function addSession(r: SessionRecord) {
-  const s = await getSessions();
-  await write(KEYS.sessions, [r, ...s]);
+export const getSessions = (storage = storageForCurrentAccount()) => read<SessionRecord[]>(KEYS.sessions, [], storage);
+export async function addSession(r: SessionRecord, storage = storageForCurrentAccount()) {
+  const s = await getSessions(storage);
+  await write(KEYS.sessions, [r, ...s], storage);
 }
 
 // ——— plan ———
-export const getPlan = () => read<Plan>(KEYS.plan, { rituals: [], commitments: [] });
-export const savePlan = (p: Plan) => write(KEYS.plan, p);
+export const getPlan = (storage = storageForCurrentAccount()) => read<Plan>(KEYS.plan, { rituals: [], commitments: [] }, storage);
+export const savePlan = (p: Plan, storage = storageForCurrentAccount()) => write(KEYS.plan, p, storage);
 
-export async function toggleRitual(id: string): Promise<Plan> {
-  const plan = await getPlan();
+export async function toggleRitual(id: string, storage = storageForCurrentAccount()): Promise<Plan> {
+  const plan = await getPlan(storage);
   plan.rituals = plan.rituals.includes(id)
     ? plan.rituals.filter((r) => r !== id)
     : [...plan.rituals, id];
-  await savePlan(plan);
+  await savePlan(plan, storage);
   return plan;
 }
 
-export async function addCommitments(items: Commitment[]): Promise<Plan> {
-  const plan = await getPlan();
+export async function addCommitments(items: Commitment[], storage = storageForCurrentAccount()): Promise<Plan> {
+  const plan = await getPlan(storage);
   plan.commitments = [...items.filter((c) => c.text.trim()), ...plan.commitments];
-  await savePlan(plan);
+  await savePlan(plan, storage);
   return plan;
 }
 
-export async function toggleCommitment(index: number): Promise<Plan> {
-  const plan = await getPlan();
+export async function toggleCommitment(index: number, storage = storageForCurrentAccount()): Promise<Plan> {
+  const plan = await getPlan(storage);
   if (plan.commitments[index]) {
     plan.commitments[index].done = !plan.commitments[index].done;
-    await savePlan(plan);
+    await savePlan(plan, storage);
   }
   return plan;
 }
 
 // ——— challenges ———
-export const getChallengeState = () => read<ChallengeState | null>(KEYS.challenge, null);
-export const getChallengesDone = () => read<string[]>(KEYS.challengesDone, []);
+export const getChallengeState = (storage = storageForCurrentAccount()) => read<ChallengeState | null>(KEYS.challenge, null, storage);
+export const getChallengesDone = (storage = storageForCurrentAccount()) => read<string[]>(KEYS.challengesDone, [], storage);
 
-export async function startChallenge(id: string): Promise<ChallengeState> {
+export async function startChallenge(id: string, storage = storageForCurrentAccount()): Promise<ChallengeState> {
   const state: ChallengeState = { id, startDate: new Date().toISOString(), doneDays: [] };
-  await write(KEYS.challenge, state);
+  await write(KEYS.challenge, state, storage);
   return state;
 }
 
-export async function completeChallengeDay(day: number): Promise<ChallengeState | null> {
-  const state = await getChallengeState();
+export async function completeChallengeDay(day: number, storage = storageForCurrentAccount()): Promise<ChallengeState | null> {
+  const state = await getChallengeState(storage);
   if (!state) return null;
   if (!state.doneDays.includes(day)) state.doneDays = [...state.doneDays, day];
-  await write(KEYS.challenge, state);
+  await write(KEYS.challenge, state, storage);
   if (state.doneDays.length >= 7) {
-    const done = await getChallengesDone();
-    if (!done.includes(state.id)) await write(KEYS.challengesDone, [...done, state.id]);
+    const done = await getChallengesDone(storage);
+    if (!done.includes(state.id)) await write(KEYS.challengesDone, [...done, state.id], storage);
   }
   return state;
 }
 
-export const clearChallenge = () => AsyncStorage.removeItem(KEYS.challenge);
+export const clearChallenge = () => storageForCurrentAccount().removeItem(KEYS.challenge);
 
 // ——— pulses ———
-export const getPulses = () => read<PulseEntry[]>(KEYS.pulses, []);
-export async function addPulse(entry: PulseEntry) {
-  const all = await getPulses();
-  await write(KEYS.pulses, [...all, entry]);
+export const getPulses = (storage = storageForCurrentAccount()) => read<PulseEntry[]>(KEYS.pulses, [], storage);
+export async function addPulse(entry: PulseEntry, storage = storageForCurrentAccount()) {
+  const all = await getPulses(storage);
+  await write(KEYS.pulses, [...all, entry], storage);
 }
 
 // ——— journey ———
-export const getJourney = () => read<JourneyState>(KEYS.journey, { stage: 1, doneSteps: [] });
-export const saveJourney = (j: JourneyState) => write(KEYS.journey, j);
+export const getJourney = (storage = storageForCurrentAccount()) => read<JourneyState>(KEYS.journey, { stage: 1, doneSteps: [] }, storage);
+export const saveJourney = (j: JourneyState, storage = storageForCurrentAccount()) => write(KEYS.journey, j, storage);
 
-export async function markStep(id: string, done: boolean): Promise<JourneyState> {
-  const j = await getJourney();
+export async function markStep(id: string, done: boolean, storage = storageForCurrentAccount()): Promise<JourneyState> {
+  const j = await getJourney(storage);
   j.doneSteps = done ? [...new Set([...j.doneSteps, id])] : j.doneSteps.filter((s) => s !== id);
-  await saveJourney(j);
+  await saveJourney(j, storage);
   return j;
 }
 
-export async function advanceStage(): Promise<JourneyState> {
-  const j = await getJourney();
+export async function advanceStage(storage = storageForCurrentAccount()): Promise<JourneyState> {
+  const j = await getJourney(storage);
   j.stage = Math.min(6, j.stage + 1);
-  await saveJourney(j);
+  await saveJourney(j, storage);
   return j;
 }
 
 // ——— language ———
-export const getLanguage = () => read<string | null>(KEYS.language, null);
-export const saveLanguage = (lang: string) => write(KEYS.language, lang);
+export const getLanguage = (storage = storageForCurrentAccount()) => read<string | null>(KEYS.language, null, storage);
+export const saveLanguage = (lang: string, storage = storageForCurrentAccount()) => write(KEYS.language, lang, storage);

@@ -4,6 +4,7 @@ import { useRouter, type Href } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 import i18n, { LANGUAGES, type LanguageCode } from "@/lib/i18n";
+import { accountDataScope, ownsAccountData, storageForCurrentAccount } from "@/lib/account-storage";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { getProfile, saveLanguage, saveProfile, type Profile } from "@/lib/store";
@@ -33,6 +34,8 @@ export default function Settings() {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [signOutError, setSignOutError] = useState<string | null>(null);
+  const [signingOut, setSigningOut] = useState(false);
   const [lockOn, setLockOn] = useState(false);
   const [lockAvail, setLockAvail] = useState(false);
 
@@ -45,17 +48,32 @@ export default function Settings() {
     setLockOn(!lockOn);
   }
 
+  async function leaveAccount() {
+    setSigningOut(true);
+    setSignOutError(null);
+    try { await signOut(); }
+    catch { setSignOutError("Sign-out could not finish. Your saved progress is safe. Please try again."); }
+    finally { setSigningOut(false); }
+  }
+
   async function deleteAccount() {
+    const scope = accountDataScope();
+    const storage = storageForCurrentAccount();
+    const deletingUser = session?.user ?? null;
     setDeleting(true);
     setDeleteError(null);
     try {
-      const { error } = await supabase.functions.invoke("mend-delete-account", { method: "POST" });
+      if (!session) throw new Error("Sign in before deleting an account.");
+      const { error } = await supabase.functions.invoke("mend-delete-account", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
       if (error) throw error;
       // Also wipe everything on this device so no relationship data survives
       // locally, matching the "permanently removes" promise.
       const { clearAllLocal } = await import("@/lib/store");
-      await clearAllLocal();
-      await signOut();
+      await clearAllLocal(storage);
+      if (ownsAccountData(scope, deletingUser)) await signOut();
     } catch {
       setDeleteError("Deletion failed. Check your connection and try again, or email support.");
       setDeleting(false);
@@ -72,9 +90,10 @@ export default function Settings() {
   }, []);
 
   async function changeLanguage(code: LanguageCode) {
+    const storage = storageForCurrentAccount();
     setLang(code);
     await i18n.changeLanguage(code);
-    await saveLanguage(code);
+    await saveLanguage(code, storage);
   }
 
   async function saveNames() {
@@ -165,7 +184,8 @@ export default function Settings() {
           <Muted>
             {t("auth.signedInAs")} {session.user.email}
           </Muted>
-          <Btn label={t("auth.signOut")} kind="ghost" onPress={signOut} style={{ marginTop: 12 }} />
+          <Btn label={t("auth.signOut")} kind="ghost" onPress={leaveAccount} disabled={signingOut} style={{ marginTop: 12 }} />
+          {signOutError && <Muted>{signOutError}</Muted>}
         </View>
       ) : (
         <View style={{ marginTop: 10 }}>

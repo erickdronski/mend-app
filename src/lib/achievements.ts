@@ -16,7 +16,7 @@
  * award (a hollow badge is worse than none), but we never require perfection.
  * Honor-system achievements are claimed explicitly by the user instead.
  */
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { storageForCurrentAccount } from "./account-storage";
 import { achievements, type Achievement } from "./content/achievements";
 import { tracks } from "./content/tracks";
 import type { JourneyState, PulseEntry, SessionRecord, Plan, Profile } from "./store";
@@ -121,19 +121,19 @@ function safeRule(rule: (c: AchievementContext) => boolean, c: AchievementContex
   }
 }
 
-export async function getEarnedMap(): Promise<EarnedMap> {
+export async function getEarnedMap(storage = storageForCurrentAccount()): Promise<EarnedMap> {
   try {
-    const raw = await AsyncStorage.getItem(EARNED_KEY);
-    return raw ? (JSON.parse(raw) as EarnedMap) : {};
+    const raw = await storage.getItem(EARNED_KEY);
+    return raw ? ((JSON.parse(raw) as EarnedMap | null) ?? {}) : {};
   } catch {
     return {};
   }
 }
 
-export async function getClaimed(): Promise<string[]> {
+export async function getClaimed(storage = storageForCurrentAccount()): Promise<string[]> {
   try {
-    const raw = await AsyncStorage.getItem(CLAIMED_KEY);
-    return raw ? (JSON.parse(raw) as string[]) : [];
+    const raw = await storage.getItem(CLAIMED_KEY);
+    return raw ? ((JSON.parse(raw) as string[] | null) ?? []) : [];
   } catch {
     return [];
   }
@@ -142,20 +142,21 @@ export async function getClaimed(): Promise<string[]> {
 /** Restore milestone history alongside the rest of a signed-in user's progress. */
 export async function restoreAchievementState(
   earned?: EarnedMap,
-  claimed?: string[]
+  claimed?: string[],
+  storage = storageForCurrentAccount()
 ): Promise<void> {
   const pairs: [string, string][] = [];
   if (earned) pairs.push([EARNED_KEY, JSON.stringify(earned)]);
   if (claimed) pairs.push([CLAIMED_KEY, JSON.stringify(claimed)]);
-  if (pairs.length) await AsyncStorage.multiSet(pairs);
+  if (pairs.length) await storage.multiSet(pairs);
 }
 
 /** Honor-system claim. Permanent, like every other achievement. */
-export async function claim(id: string): Promise<void> {
-  const claimed = await getClaimed();
+export async function claim(id: string, storage = storageForCurrentAccount()): Promise<void> {
+  const claimed = await getClaimed(storage);
   if (claimed.includes(id)) return;
   claimed.push(id);
-  await AsyncStorage.setItem(CLAIMED_KEY, JSON.stringify(claimed));
+  await storage.setItem(CLAIMED_KEY, JSON.stringify(claimed));
 }
 
 /**
@@ -165,11 +166,11 @@ export async function claim(id: string): Promise<void> {
  * Monotonic by construction: this only ever ADDS to the earned map. An
  * achievement can never be revoked, so a hard week cannot take one back.
  */
-export async function syncEarned(c: AchievementContext): Promise<{
+export async function syncEarned(c: AchievementContext, storage = storageForCurrentAccount()): Promise<{
   earned: EarnedMap;
   fresh: Achievement[];
 }> {
-  const earned = await getEarnedMap();
+  const earned = await getEarnedMap(storage);
   const now = new Date().toISOString();
   const fresh: Achievement[] = [];
   for (const id of computeEarned(c)) {
@@ -180,7 +181,7 @@ export async function syncEarned(c: AchievementContext): Promise<{
     }
   }
   try {
-    await AsyncStorage.setItem(EARNED_KEY, JSON.stringify(earned));
+    await storage.setItem(EARNED_KEY, JSON.stringify(earned));
   } catch {
     // a failed write just means we recompute next launch; nothing is lost
   }

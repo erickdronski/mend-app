@@ -6,8 +6,9 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import { AuthProvider, useAuth } from "@/lib/auth";
 import { PremiumProvider } from "@/lib/premium";
-import { getLanguage, getProfile } from "@/lib/store";
-import { authenticate, isLockEnabled } from "@/lib/lock";
+import { getLanguage, getProfileForRestore, resumePendingRestore } from "@/lib/store";
+import { authenticate, isLockEnabled, subscribeToLockSetting } from "@/lib/lock";
+import { createAppLockController, type AppLockState } from "@/lib/app-lock-controller";
 import { usePalette, Wordmark } from "@/components/ui";
 import { Text } from "@/components/text";
 import i18n from "@/lib/i18n";
@@ -18,36 +19,16 @@ import i18n from "@/lib/i18n";
  */
 function LockGate({ children }: { children: ReactNode }) {
   const p = usePalette();
-  const [enabled, setEnabled] = useState<boolean | null>(null);
-  const [locked, setLocked] = useState(true);
-  const prompting = useRef(false);
-
-  async function tryUnlock() {
-    if (prompting.current) return;
-    prompting.current = true;
-    try {
-      if (await authenticate()) setLocked(false);
-    } finally {
-      // Always reset, even if authenticate() throws, so the Unlock button and
-      // the AppState re-prompt can never be permanently disabled.
-      prompting.current = false;
-    }
-  }
+  const [{ enabled, locked }, setLockState] = useState<AppLockState>({ enabled: null, locked: true });
+  const controller = useRef<ReturnType<typeof createAppLockController> | null>(null);
 
   useEffect(() => {
-    isLockEnabled().then((on) => {
-      setEnabled(on);
-      if (on) tryUnlock();
-      else setLocked(false);
-    });
-    const sub = AppState.addEventListener("change", (s: AppStateStatus) => {
-      isLockEnabled().then((on) => {
-        if (!on) return;
-        if (s === "background") setLocked(true);
-        if (s === "active") tryUnlock();
-      });
-    });
-    return () => sub.remove();
+    const lock = createAppLockController({ readEnabled: isLockEnabled, authenticate, onState: setLockState });
+    controller.current = lock;
+    lock.onAppState(AppState.currentState);
+    const sub = AppState.addEventListener("change", (state: AppStateStatus) => lock.onAppState(state));
+    const unsubscribe = subscribeToLockSetting(() => { void lock.refresh(); });
+    return () => { sub.remove(); unsubscribe(); lock.dispose(); controller.current = null; };
   }, []);
 
   if (enabled === null) return null;
@@ -61,7 +42,7 @@ function LockGate({ children }: { children: ReactNode }) {
           <Ionicons name="lock-closed" size={40} color={p.muted} />
           <Text style={{ color: p.muted }}>Locked for your privacy</Text>
           <Pressable
-            onPress={tryUnlock}
+            onPress={() => { void controller.current?.unlock(); }}
             style={({ pressed }) => ({ backgroundColor: p.ink, borderRadius: 14, paddingVertical: 14, paddingHorizontal: 32, opacity: pressed ? 0.85 : 1 })}
           >
             <Text style={{ color: p.surface, fontWeight: "700", fontSize: 15 }}>Unlock</Text>
@@ -78,28 +59,40 @@ function LockGate({ children }: { children: ReactNode }) {
  * the safety gate). Otherwise the tabs.
  */
 function Gate({ children }: { children: ReactNode }) {
-  const { ready, session, guest } = useAuth();
+  const { ready, session, guest, signOut } = useAuth();
   const segments = useSegments();
   const router = useRouter();
   const [hasProfile, setHasProfile] = useState<boolean | null>(null);
+  const [restoreError, setRestoreError] = useState(false);
+  const [restoreAttempt, setRestoreAttempt] = useState(0);
 
   useEffect(() => {
+    let cancelled = false;
+    setRestoreError(false);
     (async () => {
-      let p = await getProfile();
+      await resumePendingRestore();
+      let p = await getProfileForRestore();
       // Signed in on a device with no local profile (reinstall / new phone):
       // pull the backup down before deciding where to route, so the account
       // actually restores progress as promised.
-      if (!p && session) {
+      if (!p && session && !session.user.is_anonymous) {
         const { restoreFromBackup } = await import("@/lib/sync");
-        if (await restoreFromBackup()) p = await getProfile();
+        const result = await restoreFromBackup();
+        if (cancelled) return;
+        if (result === "unavailable" && !session.user.is_anonymous) {
+          setRestoreError(true);
+          return;
+        }
+        p = await getProfileForRestore();
       }
-      setHasProfile(Boolean(p));
-    })();
+      if (!cancelled) setHasProfile(Boolean(p));
+    })().catch(() => { if (!cancelled) setRestoreError(true); });
     getLanguage().then((lang) => {
-      if (lang && lang !== i18n.language) i18n.changeLanguage(lang);
-    });
+      if (!cancelled && lang && lang !== i18n.language) return i18n.changeLanguage(lang);
+    }).catch(() => {});
+    return () => { cancelled = true; };
     // re-check when the route or session changes
-  }, [segments, session]);
+  }, [segments, session, restoreAttempt]);
 
   useEffect(() => {
     if (!ready || hasProfile === null) return;
@@ -130,6 +123,14 @@ function Gate({ children }: { children: ReactNode }) {
     if (inOnboarding || (inAuth && session && !session.user.is_anonymous)) router.replace("/");
   }, [ready, session, guest, hasProfile, segments, router]);
 
+  if (restoreError && segments[0] !== "safety") return (
+    <View style={{ flex: 1, justifyContent: "center", padding: 24, gap: 16 }}>
+      <Text>We could not check your account backup. Your local progress is safe. Reconnect and try again to restore this account.</Text>
+      <Pressable accessibilityRole="button" onPress={() => setRestoreAttempt(n => n + 1)}><Text>Try again</Text></Pressable>
+      <Pressable accessibilityRole="button" onPress={() => { void signOut().catch(() => setRestoreError(true)); }}><Text>Sign out and use local mode</Text></Pressable>
+    </View>
+  );
+  if (hasProfile === null && segments[0] !== "safety") return null;
   return <>{children}</>;
 }
 
