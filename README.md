@@ -4,7 +4,7 @@
 
 <h1 align="center">Mend</h1>
 
-<p align="center"><strong>A private iOS app that helps two people connect, grow, and stay in sync.</strong></p>
+<p align="center"><strong>A shared practice for couples to connect, grow, and stay in sync.</strong></p>
 
 <p align="center">
   <img alt="Expo SDK 57" src="https://img.shields.io/badge/Expo_SDK-57-000020?logo=expo&logoColor=white" />
@@ -15,6 +15,7 @@
 </p>
 
 <p align="center">
+  <a href="#status">Status</a> ·
   <a href="#privacy-model">Privacy model</a> ·
   <a href="#architecture">Architecture</a> ·
   <a href="#run-it-locally">Run it locally</a> ·
@@ -36,6 +37,15 @@ standing in for them.
 milestone is the [`v1.0.0-beta.1`](https://github.com/erickdronski/mend-app/releases/tag/v1.0.0-beta.1)
 pre-release, and [CHANGELOG.md](CHANGELOG.md) tracks changes since. Android and web targets are
 configured but not released.
+
+## Explore the project
+
+| Start with | What to look for |
+| --- | --- |
+| [Product specification](SPEC.md) | The journey, shared space, and intended user experience |
+| [Privacy model](#privacy-model) | What stays on the device, what is backed up, and what partners can see |
+| [Architecture](#architecture) | Local state, identity, two-person rooms, and access boundaries |
+| [Quality gates](#quality-gates) | Tests for progress, safety routes, content, and backend contracts |
 
 ## Features
 
@@ -175,9 +185,11 @@ npm start       # start Metro for a development build that is already installed
 npm run web     # run the web target in a browser
 ```
 
-The app talks to the project's Supabase instance by default. To use your own, set
-`EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_KEY` (a publishable key). Never put a service-role
-key in an `EXPO_PUBLIC_*` variable; those values are bundled into the app.
+The default configuration connects to the project's Supabase instance. To point the app to a
+separate project, set `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_KEY` (a publishable key).
+The migrations in this repository do not include the original schema, and the deployed account-deletion
+function is not included, so these variables alone are not sufficient to recreate the backend.
+Never put a service-role key in an `EXPO_PUBLIC_*` variable; those values are bundled into the app.
 
 ## Quality gates
 
