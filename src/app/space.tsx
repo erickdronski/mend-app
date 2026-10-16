@@ -260,6 +260,7 @@ export default function SpaceScreen() {
         <Btn label="Little notes between us" kind="ghost" onPress={() => router.push("/notes")} style={{ marginTop: 14 }} />
 
         <Divider />
+        {error && <Muted style={{ color: p.ember }}>{error}</Muted>}
         {confirmLeave ? (
           <View style={{ gap: 10 }}>
             <P>
@@ -269,12 +270,19 @@ export default function SpaceScreen() {
             <View style={{ flexDirection: "row", gap: 10 }}>
               <Btn
                 label="Yes, leave"
+                disabled={busy}
                 kind="ghost"
                 onPress={async () => {
-                  await leaveSpace();
-                  await refreshAccess();
-                  setSpace(null);
-                  setConfirmLeave(false);
+                  setBusy(true);
+                  setError(null);
+                  try {
+                    await leaveSpace();
+                    await refreshAccess();
+                    setSpace(null);
+                    setConfirmLeave(false);
+                  } catch (e) {
+                    setError(e instanceof Error ? e.message : "Could not leave. Please try again.");
+                  } finally { setBusy(false); }
                 }}
                 style={{ flex: 1 }}
               />

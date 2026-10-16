@@ -1,13 +1,19 @@
 import {
   createContext,
+  Fragment,
+  useCallback,
+  useRef,
   useContext,
   useEffect,
   useState,
   type ReactNode,
 } from "react";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "./supabase";
+
+import { activateAccountData, accountDataReadyFor, accountStorageReadyFor, shouldResetAccountView, signOutAccount } from "./account-storage";
 
 const GUEST_KEY = "mend.guest";
 
@@ -55,9 +61,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
   const [guest, setGuest] = useState(false);
+  const [dataError, setDataError] = useState(false);
+  const transition = useRef(0);
+  const acceptedSession = useRef<Session | null>(null);
+  const [viewRevision, setViewRevision] = useState(0);
+
+  const acceptSession = useCallback(async (next: Session | null) => {
+    const revision = ++transition.current;
+    const resetView = shouldResetAccountView(acceptedSession.current?.user ?? null, next?.user ?? null);
+    if (!accountDataReadyFor(next?.user ?? null)) {
+      if (resetView || !accountStorageReadyFor(next?.user ?? null)) setReady(false);
+      setDataError(false);
+      try {
+        await activateAccountData(next?.user ?? null);
+      } catch {
+        if (revision === transition.current) { setDataError(true); setReady(false); }
+        return;
+      }
+    }
+    if (revision !== transition.current) return;
+    if (resetView) setViewRevision(value => value + 1);
+    acceptedSession.current = next;
+    setSession(next);
+    setReady(true);
+  }, []);
+
+  async function retryLocalData() {
+    const result = await withTimeout(supabase.auth.getSession(), 5000);
+    if (result?.data && !result.error) await acceptSession(result.data.session);
+  }
 
   useEffect(() => {
     let mounted = true;
+    const initialRevision = transition.current;
     (async () => {
       // getSession reads local storage, but give it a ceiling anyway so a
       // wedged client can never hold the whole app on a blank screen.
@@ -65,24 +101,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         withTimeout(supabase.auth.getSession(), 5000),
         AsyncStorage.getItem(GUEST_KEY),
       ]);
-      if (!mounted) return;
-      const existing = sessionRes?.data?.session ?? null;
-      setSession(existing);
+      if (!mounted || initialRevision !== transition.current) return;
+      if (!sessionRes || sessionRes.error) {
+        setDataError(true);
+        return;
+      }
+      const existing = sessionRes.data.session;
       setGuest(guestFlag === "1");
-      setReady(true);
+      await acceptSession(existing);
       // A guest from an earlier launch (or a first run where the network was
       // slow) quietly gets an invisible account once the network allows, so
       // the shared space and backup work with no login screen ever.
       if (guestFlag === "1" && !existing) void mintAnonAccount();
-    })();
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
-      setSession(s);
+    })().catch(() => { if (mounted && initialRevision === transition.current) setDataError(true); });
+    const { data: sub } = supabase.auth.onAuthStateChange((event, next) => {
+      if (event === "INITIAL_SESSION") return; // the guarded bootstrap owns this event
+      // Do not await a Supabase call inside this callback (the auth lock is held).
+      if (event === "SIGNED_OUT") {
+        setGuest(false);
+        void AsyncStorage.removeItem(GUEST_KEY).catch(() => {});
+      }
+      void acceptSession(next);
     });
     return () => {
       mounted = false;
+      transition.current += 1;
       sub.subscription.unsubscribe();
     };
-  }, []);
+  }, [acceptSession]);
 
   /**
    * "No account" mode. Marks the device as guest and returns IMMEDIATELY, so
@@ -101,14 +147,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signOut() {
-    await supabase.auth.signOut();
-    await AsyncStorage.removeItem(GUEST_KEY);
-    setGuest(false);
+    await signOutAccount(() => supabase.auth.signOut(), async () => {
+      // Another sign-in may have completed as the SDK released its auth lock.
+      const { data } = await supabase.auth.getSession();
+      if (data.session) {
+        await acceptSession(data.session);
+        return;
+      }
+      await AsyncStorage.removeItem(GUEST_KEY);
+      setGuest(false);
+      await acceptSession(null);
+    });
   }
 
   return (
     <AuthContext.Provider value={{ ready, session, guest, continueAsGuest, signOut }}>
-      {children}
+      {ready ? <Fragment key={viewRevision}>{children}</Fragment> : (
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center", padding: 24, gap: 16 }}>
+          {dataError ? (
+            <>
+              <Text>Mend could not open your local data. Your saved progress has been kept.</Text>
+              <Pressable accessibilityRole="button" onPress={retryLocalData}><Text>Try again</Text></Pressable>
+            </>
+          ) : <ActivityIndicator accessibilityLabel="Opening Mend" />}
+        </View>
+      )}
     </AuthContext.Provider>
   );
 }

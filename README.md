@@ -176,7 +176,7 @@ The product specification is in [SPEC.md](SPEC.md).
 
 ## Run it locally
 
-Requirements: Node.js 22.12+ or 24 (CI uses 22), npm, and Xcode for the iOS Simulator.
+Requirements: Node.js 22.13+ or 24 (CI uses 22), npm, and Xcode for the iOS Simulator.
 
 ```sh
 npm ci

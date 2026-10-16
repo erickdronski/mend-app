@@ -5,112 +5,65 @@
  * Fire-and-forget: sync failures never block the relationship's work.
  */
 import { supabase, withBackendTimeout } from "./supabase";
-import {
-  getChallengesDone,
-  getChallengeState,
-  getDailyDays,
-  getJourney,
-  getLanguage,
-  getLocalDailyState,
-  getPlan,
-  getProfile,
-  getPulses,
-  getRecommendationHistory,
-  getSessions,
-  restoreLocal,
-  type BackupState,
-} from "./store";
-import {
-  getClaimed,
-  getEarnedMap,
-  restoreAchievementState,
-} from "./achievements";
+import { readLocalBackup, restoreLocal, type BackupState } from "./store";
 
-let lastBackup = 0;
+import { accountDataScope, ownsAccountData, storageForCurrentAccount, adoptGuestData } from "./account-storage";
+
+const lastBackup = new Map<string, number>();
+const backingUp = new Set<string>();
 
 /**
  * Pull the signed-in user's backup from Supabase into local storage. Called
  * on sign-in when this device has no local profile (reinstall / new phone)
  * so the account actually restores progress, as the onboarding copy promises.
- * Returns true if a profile was restored.
+ * Distinguishes an empty backup from a network failure before guest adoption.
  */
-export async function restoreFromBackup(): Promise<boolean> {
+export async function restoreFromBackup(): Promise<"restored" | "empty" | "unavailable"> {
+  const scope = accountDataScope();
+  const storage = storageForCurrentAccount();
   try {
     const { data: auth } = await supabase.auth.getSession();
     const user = auth.session?.user;
-    if (!user) return false;
-    const { data } = await withBackendTimeout(
+    if (!user || !ownsAccountData(scope, user)) return "unavailable";
+    const { data, error } = await withBackendTimeout(
       supabase.from("mend_state").select("state").eq("user_id", user.id).maybeSingle(),
       "Mend could not restore your backup in time.",
       8000
     );
     const state = data?.state as BackupState | undefined;
-    if (!state || !state.profile) return false;
-    await restoreLocal(state);
-    await restoreAchievementState(state.achievements, state.claimedAchievements);
-    return true;
+    if (error || !ownsAccountData(scope, user)) return "unavailable";
+    if (!state?.profile) {
+      await adoptGuestData(scope, user);
+      return ownsAccountData(scope, user) ? "empty" : "unavailable";
+    }
+    await restoreLocal(state, storage);
+    return ownsAccountData(scope, user) ? "restored" : "unavailable";
   } catch {
-    return false;
+    return "unavailable";
   }
 }
 
 export async function backupIfSignedIn() {
+  const scope = accountDataScope();
+  const storage = storageForCurrentAccount();
   const now = Date.now();
-  if (now - lastBackup < 60_000) return; // at most once a minute
+  const identityKey = scope.identity ?? scope.owner;
+  if (backingUp.has(identityKey) || now - (lastBackup.get(identityKey) ?? 0) < 60_000) return;
+  backingUp.add(identityKey);
   try {
     const { data } = await supabase.auth.getSession();
     const user = data.session?.user;
-    if (!user) return;
-    lastBackup = now;
-    const [
-      profile,
-      sessions,
-      plan,
-      challenge,
-      challengesDone,
-      localDaily,
-      dailyDays,
-      pulses,
-      journey,
-      language,
-      recommendations,
-      achievements,
-      claimedAchievements,
-    ] = await Promise.all([
-      getProfile(),
-      getSessions(),
-      getPlan(),
-      getChallengeState(),
-      getChallengesDone(),
-      getLocalDailyState(),
-      getDailyDays(),
-      getPulses(),
-      getJourney(),
-      getLanguage(),
-      getRecommendationHistory(),
-      getEarnedMap(),
-      getClaimed(),
-    ]);
-    await supabase.from("mend_state").upsert({
+    if (!user || !ownsAccountData(scope, user)) return;
+    const state = await readLocalBackup(storage);
+    const profile = state.profile;
+    if (!profile || !ownsAccountData(scope, user)) return;
+    const { error } = await supabase.from("mend_state").upsert({
       user_id: user.id,
-      state: {
-        profile,
-        sessions,
-        plan,
-        challenge,
-        challengesDone,
-        localDaily,
-        dailyDays,
-        pulses,
-        journey,
-        language,
-        recommendations,
-        achievements,
-        claimedAchievements,
-        v: 4,
-      },
+      state: { ...state, v: 4 },
       updated_at: new Date().toISOString(),
     });
+    if (error || !ownsAccountData(scope, user)) return;
+    lastBackup.set(identityKey, now);
     if (profile) {
       await supabase.from("mend_profiles").upsert({
         user_id: user.id,
@@ -120,5 +73,7 @@ export async function backupIfSignedIn() {
     }
   } catch {
     // never block healing on a network hiccup
+  } finally {
+    backingUp.delete(identityKey);
   }
 }

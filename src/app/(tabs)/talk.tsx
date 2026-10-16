@@ -1,3 +1,4 @@
+import { storageForCurrentAccount } from "@/lib/account-storage";
 import { useEffect, useMemo, useRef, useState, type ComponentProps } from "react";
 import { Pressable, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -280,6 +281,7 @@ export default function Talk() {
   }
 
   async function finishSession() {
+    const storage = storageForCurrentAccount();
     const record = {
       id: `s_${Date.now()}`,
       date: new Date().toISOString(),
@@ -288,11 +290,11 @@ export default function Talk() {
       appreciations,
       commitments,
     };
-    await addSession(record);
+    await addSession(record, storage);
     await addCommitments([
       { text: commitments[0], who: nameOf(0), date: record.date, done: false },
       { text: commitments[1], who: nameOf(1), date: record.date, done: false },
-    ]);
+    ], storage);
     setPhase("done");
   }
 

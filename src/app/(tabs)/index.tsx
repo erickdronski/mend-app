@@ -1,3 +1,4 @@
+import { storageForCurrentAccount } from "@/lib/account-storage";
 import { useCallback, useEffect, useState } from "react";
 import { Pressable, View } from "react-native";
 import { useRouter, type Href } from "expo-router";
@@ -101,20 +102,21 @@ export default function Home() {
   }, []);
 
   const reload = useCallback(() => {
+    const storage = storageForCurrentAccount();
     (async () => {
       setMyId(session?.user.id ?? null);
       // Local reads first, then paint. The screen never waits on the network.
       const [profile, sessions, plan, challengesDone, pulses, journey, local, recommendationHistory, dailyDays, claimed] = await Promise.all([
-        getProfile(),
-        getSessions(),
-        getPlan(),
-        getChallengesDone(),
-        getPulses(),
-        getJourney(),
-        getLocalDaily(todayKey()),
-        getRecommendationHistory(),
-        getDailyDays(),
-        getClaimed(),
+        getProfile(storage),
+        getSessions(storage),
+        getPlan(storage),
+        getChallengesDone(storage),
+        getPulses(storage),
+        getJourney(storage),
+        getLocalDaily(todayKey(), storage),
+        getRecommendationHistory(storage),
+        getDailyDays(storage),
+        getClaimed(storage),
       ]);
       setName(profile?.a?.trim() || "");
       setHereForYou(getSituation(profile?.situation)?.hereForYou ?? "");
@@ -138,7 +140,7 @@ export default function Home() {
         daysBoth: 0,
         claimed,
       };
-      const localMilestones = await syncEarned(achievementContext);
+      const localMilestones = await syncEarned(achievementContext, storage);
       if (localMilestones.fresh.length) {
         setFreshMilestone(localMilestones.fresh.at(-1) ?? null);
       }
@@ -156,7 +158,7 @@ export default function Home() {
             ...achievementContext,
             bothInSpace: s.members.length >= 2,
             daysBoth: sharedProgress?.days_both ?? 0,
-          });
+          }, storage);
           if (sharedMilestones.fresh.length) {
             setFreshMilestone(sharedMilestones.fresh.at(-1) ?? null);
           }
@@ -182,6 +184,7 @@ export default function Home() {
   const currentStage = journeyProgress ? getStage(journeyProgress.currentStage) : null;
 
   async function send() {
+    const storage = storageForCurrentAccount();
     if (!draft.trim()) return;
     setBusy(true);
     try {
@@ -191,9 +194,9 @@ export default function Home() {
         // Milestones count days answered, whether the answer went to a shared
         // space or stayed on this phone, so joining a space later never resets
         // the record of showing up.
-        await countDailyAnswer(todayKey());
+        await countDailyAnswer(todayKey(), storage);
       } else {
-        await saveLocalDaily(todayKey(), draft.trim());
+        await saveLocalDaily(todayKey(), draft.trim(), storage);
         setLocalAnswer(draft.trim());
       }
       setDraft("");
